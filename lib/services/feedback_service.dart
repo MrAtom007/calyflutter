@@ -45,12 +45,12 @@ class FeedbackService {
     } catch (_) {}
   }
 
-  static void tap() => _play('tap', volume: 0.6);
-  static void beep() => _play('beep', volume: 0.7);
-  static void success() => _play('success');
-  static void complete() => _play('complete');
-  static void levelUp() => _play('levelup');
-  static void unlock() => _play('unlock');
+  static void tap() => _play('tap', volume: 0.85);
+  static void beep() => _play('beep', volume: 1.0);
+  static void success() => _play('success', volume: 1.0);
+  static void complete() => _play('complete', volume: 1.0);
+  static void levelUp() => _play('levelup', volume: 1.0);
+  static void unlock() => _play('unlock', volume: 1.0);
 
   // ---------------- Vibrazioni ----------------
   static void _vibrate({List<int>? pattern}) {
