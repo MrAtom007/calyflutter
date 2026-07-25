@@ -1,0 +1,217 @@
+// Spacing e raggi sono costanti; i colori dipendono dal tema scelto.
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+};
+
+export const radius = {
+  sm: 8,
+  md: 12,
+  lg: 20,
+};
+
+// Ogni preset definisce una palette completa. `mode` guida la status bar.
+export const themes = {
+  midnight: {
+    id: 'midnight',
+    name: 'Midnight',
+    description: 'Scuro classico con verde energico',
+    mode: 'dark',
+    colors: {
+      bg: '#0f1115',
+      card: '#1a1d24',
+      cardAlt: '#232732',
+      text: '#f5f6fa',
+      textMuted: '#9aa0ad',
+      primary: '#4cd964',
+      primaryDark: '#37a94b',
+      border: '#2c313c',
+      danger: '#ff5252',
+    },
+  },
+  ocean: {
+    id: 'ocean',
+    name: 'Ocean',
+    description: 'Blu profondo, calmo e concentrato',
+    mode: 'dark',
+    colors: {
+      bg: '#0b1622',
+      card: '#132434',
+      cardAlt: '#1b3247',
+      text: '#eaf2fb',
+      textMuted: '#8ba3ba',
+      primary: '#38bdf8',
+      primaryDark: '#0ea5e9',
+      border: '#22384c',
+      danger: '#f87171',
+    },
+  },
+  sunset: {
+    id: 'sunset',
+    name: 'Sunset',
+    description: 'Toni caldi arancio/rosa per chi ama l\u2019energia',
+    mode: 'dark',
+    colors: {
+      bg: '#1a1013',
+      card: '#2a1a1f',
+      cardAlt: '#3a2329',
+      text: '#fdeef0',
+      textMuted: '#c4a2a8',
+      primary: '#ff6b6b',
+      primaryDark: '#e14f6b',
+      border: '#43292f',
+      danger: '#ff3b6b',
+    },
+  },
+  grape: {
+    id: 'grape',
+    name: 'Grape',
+    description: 'Viola deciso, look moderno e premium',
+    mode: 'dark',
+    colors: {
+      bg: '#12101c',
+      card: '#1e1a2e',
+      cardAlt: '#2a2440',
+      text: '#f2effb',
+      textMuted: '#a99fc4',
+      primary: '#a78bfa',
+      primaryDark: '#8b5cf6',
+      border: '#312a47',
+      danger: '#fb7185',
+    },
+  },
+  paper: {
+    id: 'paper',
+    name: 'Paper',
+    description: 'Chiaro e pulito, ideale di giorno',
+    mode: 'light',
+    colors: {
+      bg: '#f5f6f8',
+      card: '#ffffff',
+      cardAlt: '#eef0f4',
+      text: '#1a1d24',
+      textMuted: '#6b7280',
+      primary: '#16a34a',
+      primaryDark: '#15803d',
+      border: '#e2e5ea',
+      danger: '#dc2626',
+    },
+  },
+  carbon: {
+    id: 'carbon',
+    name: 'Carbon',
+    description: 'Monocromatico AMOLED, massimo contrasto',
+    mode: 'dark',
+    colors: {
+      bg: '#000000',
+      card: '#0d0d0d',
+      cardAlt: '#171717',
+      text: '#ffffff',
+      textMuted: '#8a8a8a',
+      primary: '#e5e5e5',
+      primaryDark: '#bdbdbd',
+      border: '#262626',
+      danger: '#ef4444',
+    },
+  },
+
+  // ---- Temi NEON (premium, sbloccabili dallo store) ----
+  neonGreen: {
+    id: 'neonGreen',
+    name: 'Neon Toxic',
+    description: 'Verde neon acido su nero, effetto glow',
+    mode: 'dark',
+    neon: true,
+    premium: true,
+    glow: '#39ff14',
+    colors: {
+      bg: '#05070a',
+      card: '#0b1016',
+      cardAlt: '#111a22',
+      text: '#eafff0',
+      textMuted: '#6f8a79',
+      primary: '#39ff14',
+      primaryDark: '#22c40a',
+      border: '#123018',
+      danger: '#ff3b6b',
+    },
+  },
+  neonCyan: {
+    id: 'neonCyan',
+    name: 'Neon Ice',
+    description: 'Ciano elettrico, look cyberpunk',
+    mode: 'dark',
+    neon: true,
+    premium: true,
+    glow: '#00f0ff',
+    colors: {
+      bg: '#04070b',
+      card: '#0a121a',
+      cardAlt: '#0f1d29',
+      text: '#e6feff',
+      textMuted: '#6b8b99',
+      primary: '#00f0ff',
+      primaryDark: '#00b8cc',
+      border: '#0e2b36',
+      danger: '#ff4d6d',
+    },
+  },
+  neonPink: {
+    id: 'neonPink',
+    name: 'Neon Blaze',
+    description: 'Rosa/magenta neon, energia pura',
+    mode: 'dark',
+    neon: true,
+    premium: true,
+    glow: '#ff2ec4',
+    colors: {
+      bg: '#0a040a',
+      card: '#160a14',
+      cardAlt: '#22101f',
+      text: '#ffeafa',
+      textMuted: '#9a6f8f',
+      primary: '#ff2ec4',
+      primaryDark: '#d40e9f',
+      border: '#331030',
+      danger: '#ff5252',
+    },
+  },
+  neonPurple: {
+    id: 'neonPurple',
+    name: 'Neon Void',
+    description: 'Viola/indaco luminoso, futuristico',
+    mode: 'dark',
+    neon: true,
+    premium: true,
+    glow: '#9d4bff',
+    colors: {
+      bg: '#070510',
+      card: '#0f0b1c',
+      cardAlt: '#171029',
+      text: '#f0eaff',
+      textMuted: '#8577a3',
+      primary: '#9d4bff',
+      primaryDark: '#7a26e0',
+      border: '#241a3d',
+      danger: '#ff4d8d',
+    },
+  },
+};
+
+export const themeList = Object.values(themes);
+export const freeThemeIds = ['midnight', 'ocean', 'sunset', 'grape', 'paper', 'carbon'];
+export const defaultThemeId = 'midnight';
+
+// Stile "glow" neon riutilizzabile.
+export function glowShadow(color, radiusPx = 12) {
+  return {
+    shadowColor: color,
+    shadowOpacity: 0.9,
+    shadowRadius: radiusPx,
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 8,
+  };
+}

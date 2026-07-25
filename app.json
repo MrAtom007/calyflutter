@@ -1,0 +1,74 @@
+{
+  "expo": {
+    "name": "CaliStrack",
+    "slug": "calistrack",
+    "version": "2.6.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.mratom007.calistrack",
+      "adaptiveIcon": {
+        "backgroundColor": "#05070a",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-sharing",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#05070a"
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "CaliStrack usa Face ID per sbloccare l'app in modo sicuro."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "CaliStrack usa le tue foto e i tuoi video per personalizzare i media degli esercizi."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#39ff14"
+        }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": false,
+          "supportsPictureInPicture": false
+        }
+      ],
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a1463762-cf24-429e-ba48-87122b5555d6"
+      }
+    },
+    "owner": "mratoms-team"
+  }
+}
