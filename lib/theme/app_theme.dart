@@ -1,0 +1,298 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+/// Spacing costanti (come nel tema Expo originale).
+class Spacing {
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 16;
+  static const double lg = 24;
+  static const double xl = 32;
+}
+
+/// Raggi costanti.
+class Radii {
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 20;
+}
+
+Color _hex(String h) {
+  h = h.replaceAll('#', '');
+  if (h.length == 6) h = 'FF$h';
+  return Color(int.parse(h, radix: 16));
+}
+
+/// Palette colori di uno skin.
+class AppColors {
+  final Color bg;
+  final Color card;
+  final Color cardAlt;
+  final Color text;
+  final Color textMuted;
+  final Color primary;
+  final Color primaryDark;
+  final Color border;
+  final Color danger;
+
+  const AppColors({
+    required this.bg,
+    required this.card,
+    required this.cardAlt,
+    required this.text,
+    required this.textMuted,
+    required this.primary,
+    required this.primaryDark,
+    required this.border,
+    required this.danger,
+  });
+
+  factory AppColors.hex({
+    required String bg,
+    required String card,
+    required String cardAlt,
+    required String text,
+    required String textMuted,
+    required String primary,
+    required String primaryDark,
+    required String border,
+    required String danger,
+  }) =>
+      AppColors(
+        bg: _hex(bg),
+        card: _hex(card),
+        cardAlt: _hex(cardAlt),
+        text: _hex(text),
+        textMuted: _hex(textMuted),
+        primary: _hex(primary),
+        primaryDark: _hex(primaryDark),
+        border: _hex(border),
+        danger: _hex(danger),
+      );
+}
+
+/// Un tema/skin completo.
+class AppSkin {
+  final String id;
+  final String name;
+  final String description;
+  final Brightness mode;
+  final bool neon;
+  final bool premium;
+  final Color? glow;
+  final AppColors colors;
+
+  const AppSkin({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.mode,
+    this.neon = false,
+    this.premium = false,
+    this.glow,
+    required this.colors,
+  });
+
+  bool get isDark => mode == Brightness.dark;
+}
+
+/// Tutti gli skin disponibili.
+final Map<String, AppSkin> appThemes = {
+  'midnight': AppSkin(
+    id: 'midnight',
+    name: 'Midnight',
+    description: 'Scuro classico con verde energico',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#0f1115', card: '#1a1d24', cardAlt: '#232732', text: '#f5f6fa',
+      textMuted: '#9aa0ad', primary: '#4cd964', primaryDark: '#37a94b',
+      border: '#2c313c', danger: '#ff5252',
+    ),
+  ),
+  'ocean': AppSkin(
+    id: 'ocean',
+    name: 'Ocean',
+    description: 'Blu profondo, calmo e concentrato',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#0b1622', card: '#132434', cardAlt: '#1b3247', text: '#eaf2fb',
+      textMuted: '#8ba3ba', primary: '#38bdf8', primaryDark: '#0ea5e9',
+      border: '#22384c', danger: '#f87171',
+    ),
+  ),
+  'sunset': AppSkin(
+    id: 'sunset',
+    name: 'Sunset',
+    description: 'Toni caldi arancio/rosa per chi ama l\u2019energia',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#1a1013', card: '#2a1a1f', cardAlt: '#3a2329', text: '#fdeef0',
+      textMuted: '#c4a2a8', primary: '#ff6b6b', primaryDark: '#e14f6b',
+      border: '#43292f', danger: '#ff3b6b',
+    ),
+  ),
+  'grape': AppSkin(
+    id: 'grape',
+    name: 'Grape',
+    description: 'Viola deciso, look moderno e premium',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#12101c', card: '#1e1a2e', cardAlt: '#2a2440', text: '#f2effb',
+      textMuted: '#a99fc4', primary: '#a78bfa', primaryDark: '#8b5cf6',
+      border: '#312a47', danger: '#fb7185',
+    ),
+  ),
+  'paper': AppSkin(
+    id: 'paper',
+    name: 'Paper',
+    description: 'Chiaro e pulito, ideale di giorno',
+    mode: Brightness.light,
+    colors: AppColors.hex(
+      bg: '#f5f6f8', card: '#ffffff', cardAlt: '#eef0f4', text: '#1a1d24',
+      textMuted: '#6b7280', primary: '#16a34a', primaryDark: '#15803d',
+      border: '#e2e5ea', danger: '#dc2626',
+    ),
+  ),
+  'carbon': AppSkin(
+    id: 'carbon',
+    name: 'Carbon',
+    description: 'Monocromatico AMOLED, massimo contrasto',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#000000', card: '#0d0d0d', cardAlt: '#171717', text: '#ffffff',
+      textMuted: '#8a8a8a', primary: '#e5e5e5', primaryDark: '#bdbdbd',
+      border: '#262626', danger: '#ef4444',
+    ),
+  ),
+  'neonGreen': AppSkin(
+    id: 'neonGreen',
+    name: 'Neon Toxic',
+    description: 'Verde neon acido su nero, effetto glow',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#39ff14'),
+    colors: AppColors.hex(
+      bg: '#05070a', card: '#0b1016', cardAlt: '#111a22', text: '#eafff0',
+      textMuted: '#6f8a79', primary: '#39ff14', primaryDark: '#22c40a',
+      border: '#123018', danger: '#ff3b6b',
+    ),
+  ),
+  'neonCyan': AppSkin(
+    id: 'neonCyan',
+    name: 'Neon Ice',
+    description: 'Ciano elettrico, look cyberpunk',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#00f0ff'),
+    colors: AppColors.hex(
+      bg: '#04070b', card: '#0a121a', cardAlt: '#0f1d29', text: '#e6feff',
+      textMuted: '#6b8b99', primary: '#00f0ff', primaryDark: '#00b8cc',
+      border: '#0e2b36', danger: '#ff4d6d',
+    ),
+  ),
+  'neonPink': AppSkin(
+    id: 'neonPink',
+    name: 'Neon Blaze',
+    description: 'Rosa/magenta neon, energia pura',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#ff2ec4'),
+    colors: AppColors.hex(
+      bg: '#0a040a', card: '#160a14', cardAlt: '#22101f', text: '#ffeafa',
+      textMuted: '#9a6f8f', primary: '#ff2ec4', primaryDark: '#d40e9f',
+      border: '#331030', danger: '#ff5252',
+    ),
+  ),
+  'neonPurple': AppSkin(
+    id: 'neonPurple',
+    name: 'Neon Void',
+    description: 'Viola/indaco luminoso, futuristico',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#9d4bff'),
+    colors: AppColors.hex(
+      bg: '#070510', card: '#0f0b1c', cardAlt: '#171029', text: '#f0eaff',
+      textMuted: '#8577a3', primary: '#9d4bff', primaryDark: '#7a26e0',
+      border: '#241a3d', danger: '#ff4d8d',
+    ),
+  ),
+};
+
+final List<AppSkin> themeList = appThemes.values.toList();
+const List<String> freeThemeIds = [
+  'midnight', 'ocean', 'sunset', 'grape', 'paper', 'carbon'
+];
+const String defaultThemeId = 'midnight';
+
+/// Ombra glow riutilizzabile per i temi neon.
+List<BoxShadow> glowShadow(Color color, {double blur = 12, double spread = 1}) {
+  return [
+    BoxShadow(
+      color: color.withValues(alpha: 0.9),
+      blurRadius: blur,
+      spreadRadius: spread,
+    ),
+  ];
+}
+
+/// Font display (titoli) e body coerenti in tutta l'app.
+TextTheme _appTextTheme(TextTheme base, Color text, Color muted) {
+  final body = GoogleFonts.interTextTheme(base);
+  final display = GoogleFonts.sora(
+    textStyle: TextStyle(color: text, fontWeight: FontWeight.w800),
+  );
+  return body.copyWith(
+    displayLarge: display.copyWith(fontSize: 40, letterSpacing: -0.5),
+    displayMedium: display.copyWith(fontSize: 32, letterSpacing: -0.5),
+    displaySmall: display.copyWith(fontSize: 26),
+    headlineMedium: display.copyWith(fontSize: 22),
+    headlineSmall: display.copyWith(fontSize: 18),
+    titleLarge: display.copyWith(fontSize: 20, fontWeight: FontWeight.w700),
+  ).apply(bodyColor: text, displayColor: text);
+}
+
+/// Costruisce un ThemeData Material a partire da uno skin.
+ThemeData buildThemeData(AppSkin skin) {
+  final c = skin.colors;
+  final base = skin.isDark ? ThemeData.dark() : ThemeData.light();
+  return base.copyWith(
+    scaffoldBackgroundColor: c.bg,
+    canvasColor: c.bg,
+    primaryColor: c.primary,
+    dividerColor: c.border,
+    colorScheme: (skin.isDark
+            ? const ColorScheme.dark()
+            : const ColorScheme.light())
+        .copyWith(
+      primary: c.primary,
+      secondary: c.primary,
+      surface: c.card,
+      error: c.danger,
+      onPrimary: skin.isDark ? Colors.black : Colors.white,
+      onSurface: c.text,
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: c.card,
+      foregroundColor: c.text,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        color: c.text,
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+    cardColor: c.card,
+    textTheme: _appTextTheme(base.textTheme, c.text, c.textMuted),
+    iconTheme: IconThemeData(color: c.text),
+    dialogTheme: DialogThemeData(backgroundColor: c.card),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: c.card,
+      selectedItemColor: c.primary,
+      unselectedItemColor: c.textMuted,
+    ),
+  );
+}
