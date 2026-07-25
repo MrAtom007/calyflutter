@@ -1,6 +1,10 @@
-# CaliStrack (Flutter)
+# CaliStrack (Flutter) — v3.0.0
 
 App mobile per il tracking degli allenamenti di **calisthenics** e **palestra**, riscritta in **Flutter/Dart** (port dalla versione originale Expo/React Native v2.6.0).
+
+La v3.0.0 introduce: animazioni fluide, effetti sonori e vibrazioni, tipografia
+custom (google_fonts), coriandoli al level-up, icone esercizi e supporto
+**multilingua (Italiano / English / Español)**.
 
 ## Funzionalità
 
