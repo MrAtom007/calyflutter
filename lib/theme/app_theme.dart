@@ -164,6 +164,72 @@ final Map<String, AppSkin> appThemes = {
       border: '#262626', danger: '#ef4444',
     ),
   ),
+  'forest': AppSkin(
+    id: 'forest',
+    name: 'Forest',
+    description: 'Verde bosco rilassante e naturale',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#0c140f', card: '#14201a', cardAlt: '#1d2e25', text: '#eaf5ee',
+      textMuted: '#8fae9c', primary: '#34d399', primaryDark: '#10b981',
+      border: '#223a2e', danger: '#f87171',
+    ),
+  ),
+  'crimson': AppSkin(
+    id: 'crimson',
+    name: 'Crimson',
+    description: 'Rosso passione su fondo scuro',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#160b0d', card: '#241315', cardAlt: '#331a1d', text: '#fdeaec',
+      textMuted: '#c39aa0', primary: '#f43f5e', primaryDark: '#e11d48',
+      border: '#3a2226', danger: '#ff5252',
+    ),
+  ),
+  'amber': AppSkin(
+    id: 'amber',
+    name: 'Amber',
+    description: 'Ambra calda ed energica',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#14100a', card: '#201a10', cardAlt: '#2e2617', text: '#fdf3e0',
+      textMuted: '#c4b090', primary: '#f59e0b', primaryDark: '#d97706',
+      border: '#3a2f1a', danger: '#ef4444',
+    ),
+  ),
+  'slate': AppSkin(
+    id: 'slate',
+    name: 'Slate',
+    description: 'Grigio-blu in stile GitHub dark',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#0d1117', card: '#161b22', cardAlt: '#21262d', text: '#e6edf3',
+      textMuted: '#8b949e', primary: '#58a6ff', primaryDark: '#388bfd',
+      border: '#30363d', danger: '#f85149',
+    ),
+  ),
+  'arctic': AppSkin(
+    id: 'arctic',
+    name: 'Arctic',
+    description: 'Chiaro e ghiacciato, azzurro nordico',
+    mode: Brightness.light,
+    colors: AppColors.hex(
+      bg: '#eef4fb', card: '#ffffff', cardAlt: '#e2ecf7', text: '#0f2033',
+      textMuted: '#5b7590', primary: '#0ea5e9', primaryDark: '#0284c7',
+      border: '#d3e0ee', danger: '#dc2626',
+    ),
+  ),
+  'rose': AppSkin(
+    id: 'rose',
+    name: 'Rose',
+    description: 'Chiaro elegante sui toni del rosa',
+    mode: Brightness.light,
+    colors: AppColors.hex(
+      bg: '#fdf2f6', card: '#ffffff', cardAlt: '#fbe4ec', text: '#2a1720',
+      textMuted: '#8a6b76', primary: '#e11d78', primaryDark: '#be185d',
+      border: '#f2d5e0', danger: '#dc2626',
+    ),
+  ),
   'neonGreen': AppSkin(
     id: 'neonGreen',
     name: 'Neon Toxic',
@@ -220,11 +286,68 @@ final Map<String, AppSkin> appThemes = {
       border: '#241a3d', danger: '#ff4d8d',
     ),
   ),
+  'neonOrange': AppSkin(
+    id: 'neonOrange',
+    name: 'Neon Ember',
+    description: 'Arancio incandescente, calore neon',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#ff6a00'),
+    colors: AppColors.hex(
+      bg: '#0a0603', card: '#150c05', cardAlt: '#22140a', text: '#fff0e6',
+      textMuted: '#9a7d6b', primary: '#ff6a00', primaryDark: '#cc5200',
+      border: '#331d0e', danger: '#ff3b6b',
+    ),
+  ),
+  'neonYellow': AppSkin(
+    id: 'neonYellow',
+    name: 'Neon Volt',
+    description: 'Giallo elettrico ad alta tensione',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#eaff00'),
+    colors: AppColors.hex(
+      bg: '#0a0a04', card: '#14140a', cardAlt: '#1f1f10', text: '#fbffe6',
+      textMuted: '#8a8b6f', primary: '#eaff00', primaryDark: '#b8c400',
+      border: '#30310e', danger: '#ff4d6d',
+    ),
+  ),
+  'neonRed': AppSkin(
+    id: 'neonRed',
+    name: 'Neon Inferno',
+    description: 'Rosso lava, aggressivo e vivo',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#ff1e3c'),
+    colors: AppColors.hex(
+      bg: '#0a0405', card: '#16090c', cardAlt: '#220f14', text: '#ffe6ea',
+      textMuted: '#9a6f78', primary: '#ff1e3c', primaryDark: '#cc1730',
+      border: '#33101a', danger: '#ff5252',
+    ),
+  ),
+  'neonBlue': AppSkin(
+    id: 'neonBlue',
+    name: 'Neon Pulse',
+    description: 'Blu elettrico profondo, pulsante',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#2e7bff'),
+    colors: AppColors.hex(
+      bg: '#050810', card: '#0a1020', cardAlt: '#0f1a33', text: '#e6eeff',
+      textMuted: '#6f82a3', primary: '#2e7bff', primaryDark: '#1a5ae0',
+      border: '#1a2340', danger: '#ff4d8d',
+    ),
+  ),
 };
 
 final List<AppSkin> themeList = appThemes.values.toList();
 const List<String> freeThemeIds = [
-  'midnight', 'ocean', 'sunset', 'grape', 'paper', 'carbon'
+  'midnight', 'ocean', 'sunset', 'grape', 'paper', 'carbon',
+  'forest', 'crimson', 'amber', 'slate', 'arctic', 'rose',
 ];
 const String defaultThemeId = 'midnight';
 
