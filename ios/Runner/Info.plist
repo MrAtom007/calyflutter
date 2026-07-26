@@ -66,5 +66,21 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- Google Sign-In: sostituisci con i valori del tuo OAuth client iOS.
+	     GIDClientID = "Client ID" (…apps.googleusercontent.com)
+	     URL scheme  = REVERSED_CLIENT_ID (com.googleusercontent.apps.…) -->
+	<key>GIDClientID</key>
+	<string>TODO_IOS_CLIENT_ID.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.TODO_IOS_REVERSED_CLIENT_ID</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
