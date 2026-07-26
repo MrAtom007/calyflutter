@@ -11,8 +11,15 @@ import '../widgets/ui_kit.dart';
 import '../widgets/design_system.dart';
 import '../widgets/health_charts.dart';
 
-class HealthScreen extends StatelessWidget {
+class HealthScreen extends StatefulWidget {
   const HealthScreen({super.key});
+
+  @override
+  State<HealthScreen> createState() => _HealthScreenState();
+}
+
+class _HealthScreenState extends State<HealthScreen> {
+  int _range = 7; // giorni mostrati nei grafici trend
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +53,68 @@ class HealthScreen extends StatelessWidget {
             children: [
               _ConnectCard(health: health),
               SizedBox(height: gap),
+              const _GoalsCard(),
+              SizedBox(height: gap),
               if (health.status == HealthStatus.loading && !health.hasData)
                 const Padding(
                   padding: EdgeInsets.all(40),
                   child: Center(child: CircularProgressIndicator()),
                 ),
-              if (health.hasData) ..._metrics(context, health, gap),
+              if (health.hasData) ...[
+                _rangeSelector(context),
+                SizedBox(height: gap),
+                ..._metrics(context, health, gap),
+              ],
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget _rangeSelector(BuildContext context) {
+    final c = context.watch<ThemeProvider>().colors;
+    final t = context.watch<LocaleProvider>().t;
+    Widget seg(int days, String label) {
+      final active = _range == days;
+      return Expanded(
+        child: GestureDetector(
+          onTap: () => setState(() => _range = days),
+          child: Container(
+            margin: const EdgeInsets.all(3),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: active ? c.primary : Colors.transparent,
+              borderRadius: BorderRadius.circular(Radii.md),
+            ),
+            child: Text(label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: active
+                        ? (c.bg.computeLuminance() > 0.5 ? Colors.white : Colors.black)
+                        : c.textMuted,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13)),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(Radii.md),
+        border: Border.all(color: c.border),
+      ),
+      child: Row(children: [
+        seg(7, '7 ${t('day_short')}'),
+        seg(30, '30 ${t('day_short')}'),
+      ]),
+    );
+  }
+
+  List<HealthSample> _sliced(List<HealthSample> src) =>
+      src.length > _range ? src.sublist(src.length - _range) : src;
 
   List<Widget> _metrics(BuildContext context, HealthProvider health, double gap) {
     final t = context.watch<LocaleProvider>().t;
@@ -72,7 +129,11 @@ class HealthScreen extends StatelessWidget {
     }
 
     // Pressione (doppia linea).
-    final bp = health.series(HealthMetric.bloodPressure);
+    final bp0 = health.series(HealthMetric.bloodPressure);
+    final bp = bp0 == null
+        ? null
+        : MetricSeries(
+            metric: bp0.metric, today: bp0.today, daily: _sliced(bp0.daily));
     if (bp != null && bp.daily.length > 1) {
       widgets.add(SurfaceCard(
         accent: HealthMetric.bloodPressure.accent,
@@ -121,7 +182,9 @@ class HealthScreen extends StatelessWidget {
     for (final m in grid) {
       final s = health.series(m);
       if (s == null) continue;
-      tiles.add(_MetricCard(series: s));
+      final sliced = MetricSeries(
+          metric: s.metric, today: s.today, daily: _sliced(s.daily));
+      tiles.add(_MetricCard(series: sliced));
     }
     if (tiles.isNotEmpty) {
       widgets.add(SectionHeader(
@@ -137,6 +200,100 @@ class HealthScreen extends StatelessWidget {
       }));
     }
     return widgets;
+  }
+}
+
+// ---------------------------------------------------------------------------
+class _GoalsCard extends StatelessWidget {
+  const _GoalsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = context.watch<LocaleProvider>().t;
+    final health = context.watch<HealthProvider>();
+    return SurfaceCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionHeader(title: t('goals').toUpperCase(), icon: Icons.flag_rounded),
+          _row(context, HealthMetric.steps.icon, t('hm_steps'),
+              health.goalSteps.round().toString(), HealthMetric.steps.accent,
+              () => _edit(context, health, 'steps', health.goalSteps)),
+          _row(context, HealthMetric.calories.icon, t('hm_calories'),
+              '${health.goalCalories.round()} kcal', HealthMetric.calories.accent,
+              () => _edit(context, health, 'calories', health.goalCalories)),
+          _row(context, HealthMetric.sleep.icon, t('hm_sleep'),
+              '${health.goalSleep.toStringAsFixed(1)} h', HealthMetric.sleep.accent,
+              () => _edit(context, health, 'sleep', health.goalSleep)),
+        ],
+      ),
+    );
+  }
+
+  Widget _row(BuildContext context, IconData icon, String label, String value,
+      Color color, VoidCallback onTap) {
+    final c = context.watch<ThemeProvider>().colors;
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Icon(icon, size: 18, color: color),
+            const SizedBox(width: 10),
+            Expanded(child: Text(label)),
+            Text(value,
+                style: TextStyle(fontWeight: FontWeight.w800, color: c.text)),
+            const SizedBox(width: 6),
+            Icon(Icons.edit_rounded, size: 15, color: c.textMuted),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _edit(BuildContext context, HealthProvider health, String key,
+      double current) async {
+    final t = context.read<LocaleProvider>().t;
+    final ctrl = TextEditingController(
+        text: key == 'sleep' ? current.toStringAsFixed(1) : current.round().toString());
+    final res = await showDialog<double>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(t('goals')),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          keyboardType:
+              const TextInputType.numberWithOptions(decimal: true),
+          decoration: InputDecoration(labelText: t('goals')),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: Text(t('cancel'))),
+          TextButton(
+            onPressed: () {
+              final v = double.tryParse(ctrl.text.replaceAll(',', '.'));
+              Navigator.pop(ctx, v);
+            },
+            child: Text(t('save')),
+          ),
+        ],
+      ),
+    );
+    if (res != null && res > 0) {
+      switch (key) {
+        case 'steps':
+          await health.setGoals(steps: res);
+          break;
+        case 'calories':
+          await health.setGoals(calories: res);
+          break;
+        case 'sleep':
+          await health.setGoals(sleep: res);
+          break;
+      }
+    }
   }
 }
 
@@ -331,6 +488,10 @@ class _HeroHeart extends StatelessWidget {
               _mini(context, t('max'), series.max?.round().toString() ?? '--'),
             ],
           ),
+          if (series.today.length > 3) ...[
+            const SizedBox(height: 12),
+            _HrZones(samples: series.today),
+          ],
         ],
       ),
     );
@@ -343,6 +504,76 @@ class _HeroHeart extends StatelessWidget {
         Text(v,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
         Text(k, style: TextStyle(fontSize: 11, color: c.textMuted)),
+      ],
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+class _HrZones extends StatelessWidget {
+  final List samples; // List<HealthSample>
+  const _HrZones({required this.samples});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.watch<ThemeProvider>().colors;
+    final t = context.watch<LocaleProvider>().t;
+    // Soglie bpm: riposo <60, leggero 60-100, cardio 100-140, picco >140.
+    final zones = [
+      (t('hz_rest'), const Color(0xff38bdf8), 0),
+      (t('hz_light'), const Color(0xff4cd964), 0),
+      (t('hz_cardio'), const Color(0xffff9f1c), 0),
+      (t('hz_peak'), const Color(0xffff2e63), 0),
+    ];
+    final counts = [0, 0, 0, 0];
+    for (final s in samples) {
+      final v = (s.value as num).toDouble();
+      if (v < 60) {
+        counts[0]++;
+      } else if (v < 100) {
+        counts[1]++;
+      } else if (v < 140) {
+        counts[2]++;
+      } else {
+        counts[3]++;
+      }
+    }
+    final total = counts.fold<int>(0, (a, b) => a + b).clamp(1, 1 << 30);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: Row(
+            children: [
+              for (int i = 0; i < 4; i++)
+                if (counts[i] > 0)
+                  Expanded(
+                    flex: counts[i],
+                    child: Container(height: 10, color: zones[i].$2),
+                  ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Wrap(
+          spacing: 12,
+          runSpacing: 4,
+          children: [
+            for (int i = 0; i < 4; i++)
+              Row(mainAxisSize: MainAxisSize.min, children: [
+                Container(
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(
+                        color: zones[i].$2, shape: BoxShape.circle)),
+                const SizedBox(width: 4),
+                Text(
+                    '${zones[i].$1} ${(counts[i] / total * 100).round()}%',
+                    style: TextStyle(fontSize: 10.5, color: c.textMuted)),
+              ]),
+          ],
+        ),
       ],
     );
   }

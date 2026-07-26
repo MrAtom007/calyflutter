@@ -33,6 +33,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _Slide('📋', 'ob4_t', 'ob4_s'),
     _Slide('📈', 'ob5_t', 'ob5_s'),
     _Slide('🏅', 'ob6_t', 'ob6_s'),
+    _Slide('❤️', 'ob8_t', 'ob8_s'),
+    _Slide('🏠', 'ob9_t', 'ob9_s'),
     _Slide('🎨', 'ob7_t', 'ob7_s'),
   ];
 

@@ -73,12 +73,12 @@ class HealthService {
     try {
       await _ensureConfigured();
       final now = DateTime.now();
-      final weekAgo = now.subtract(const Duration(days: 7));
+      final monthAgo = now.subtract(const Duration(days: 30));
       final todayStart = DateTime(now.year, now.month, now.day);
 
       final points = await _health.getHealthDataFromTypes(
         types: _types,
-        startTime: weekAgo,
+        startTime: monthAgo,
         endTime: now,
       );
       if (points.isEmpty) return null;
@@ -253,48 +253,48 @@ class HealthService {
     series[HealthMetric.heartRate] = MetricSeries(
       metric: HealthMetric.heartRate,
       today: hrToday,
-      daily: _demoDaily(7, () => 66 + rnd.nextInt(10).toDouble()),
+      daily: _demoDaily(30, () => 66 + rnd.nextInt(10).toDouble()),
     );
 
     series[HealthMetric.restingHeartRate] = MetricSeries(
       metric: HealthMetric.restingHeartRate,
       today: const [],
-      daily: _demoDaily(7, () => 54 + rnd.nextInt(8).toDouble()),
+      daily: _demoDaily(30, () => 54 + rnd.nextInt(8).toDouble()),
     );
 
     series[HealthMetric.hrv] = MetricSeries(
       metric: HealthMetric.hrv,
       today: const [],
-      daily: _demoDaily(7, () => 45 + rnd.nextInt(40).toDouble()),
+      daily: _demoDaily(30, () => 45 + rnd.nextInt(40).toDouble()),
     );
 
     series[HealthMetric.spo2] = MetricSeries(
       metric: HealthMetric.spo2,
       today: const [],
-      daily: _demoDaily(7, () => 96 + rnd.nextInt(4).toDouble()),
+      daily: _demoDaily(30, () => 96 + rnd.nextInt(4).toDouble()),
     );
 
     series[HealthMetric.steps] = MetricSeries(
       metric: HealthMetric.steps,
       today: const [],
-      daily: _demoDaily(7, () => 4200 + rnd.nextInt(9000).toDouble()),
+      daily: _demoDaily(30, () => 4200 + rnd.nextInt(9000).toDouble()),
     );
 
     series[HealthMetric.calories] = MetricSeries(
       metric: HealthMetric.calories,
       today: const [],
-      daily: _demoDaily(7, () => 320 + rnd.nextInt(680).toDouble()),
+      daily: _demoDaily(30, () => 320 + rnd.nextInt(680).toDouble()),
     );
 
     series[HealthMetric.sleep] = MetricSeries(
       metric: HealthMetric.sleep,
       today: const [],
-      daily: _demoDaily(7, () => 5.5 + rnd.nextDouble() * 3),
+      daily: _demoDaily(30, () => 5.5 + rnd.nextDouble() * 3),
     );
 
     // Pressione: sistolica/diastolica correlate.
     final bp = <HealthSample>[];
-    for (int i = 6; i >= 0; i--) {
+    for (int i = 29; i >= 0; i--) {
       final day = todayStart.subtract(Duration(days: i));
       final s = 115 + rnd.nextInt(18).toDouble();
       final d = 72 + rnd.nextInt(12).toDouble();

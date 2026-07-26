@@ -19,6 +19,15 @@ class HealthProvider extends ChangeNotifier {
   String? _googleName;
   String? _googlePhoto;
 
+  // Obiettivi personalizzabili.
+  double _goalSteps = 10000;
+  double _goalCalories = 600;
+  double _goalSleep = 8;
+
+  double get goalSteps => _goalSteps;
+  double get goalCalories => _goalCalories;
+  double get goalSleep => _goalSleep;
+
   HealthSnapshot? get snapshot => _snapshot;
   HealthStatus get status => _status;
   bool get connected => _connected;
@@ -45,6 +54,15 @@ class HealthProvider extends ChangeNotifier {
     _connected =
         (await StorageService.getBool(StorageService.healthConnectedKey)) ?? false;
     _googleEmail = await StorageService.getString(StorageService.googleAccountKey);
+    final goalsRaw = await StorageService.getString(StorageService.healthGoalsKey);
+    if (goalsRaw != null && goalsRaw.isNotEmpty) {
+      try {
+        final g = Map<String, dynamic>.from(jsonDecode(goalsRaw));
+        _goalSteps = (g['steps'] as num?)?.toDouble() ?? _goalSteps;
+        _goalCalories = (g['calories'] as num?)?.toDouble() ?? _goalCalories;
+        _goalSleep = (g['sleep'] as num?)?.toDouble() ?? _goalSleep;
+      } catch (_) {}
+    }
 
     // Prova a ripristinare la sessione Google silenziosamente.
     final acc = await GoogleAuthService.restore();
@@ -77,6 +95,17 @@ class HealthProvider extends ChangeNotifier {
       bpm: bpm?.round().toString(),
       steps: st?.round().toString(),
     );
+  }
+
+  Future<void> setGoals({double? steps, double? calories, double? sleep}) async {
+    if (steps != null) _goalSteps = steps;
+    if (calories != null) _goalCalories = calories;
+    if (sleep != null) _goalSleep = sleep;
+    await StorageService.setString(
+      StorageService.healthGoalsKey,
+      jsonEncode({'steps': _goalSteps, 'calories': _goalCalories, 'sleep': _goalSleep}),
+    );
+    notifyListeners();
   }
 
   // ---------------------------------------------------------------------------

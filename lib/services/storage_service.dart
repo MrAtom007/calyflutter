@@ -19,6 +19,7 @@ class StorageService {
   static const healthDataKey = '@calistrack/healthData';
   static const healthConnectedKey = '@calistrack/healthConnected';
   static const googleAccountKey = '@calistrack/googleAccount';
+  static const healthGoalsKey = '@calistrack/healthGoals';
   // Dashboard personalizzabile
   static const dashboardWidgetsKey = '@calistrack/dashboardWidgets';
   // Aspetto / personalizzazione

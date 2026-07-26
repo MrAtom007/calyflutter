@@ -15,6 +15,8 @@ import 'state/health_provider.dart';
 import 'state/dashboard_provider.dart';
 import 'services/notification_service.dart';
 import 'services/feedback_service.dart';
+import 'services/home_widget_service.dart';
+import 'data/ranks.dart';
 import 'theme/app_theme.dart';
 import 'app.dart';
 
@@ -45,6 +47,10 @@ void main() async {
     health.load(),
     dashboard.load(),
   ]);
+
+  // Popola il widget della schermata home col rango attuale (dati allenamento).
+  final pts = totalPoints(workouts.forDiscipline(discipline.discipline));
+  HomeWidgetService.update(rank: '${rankFor(pts).current.name} · $pts');
 
   runApp(
     MultiProvider(

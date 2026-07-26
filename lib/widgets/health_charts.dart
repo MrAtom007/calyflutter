@@ -355,7 +355,21 @@ class DualLineChart extends StatelessWidget {
           ),
           titlesData: const FlTitlesData(show: false),
           borderData: FlBorderData(show: false),
-          lineTouchData: const LineTouchData(enabled: false),
+          lineTouchData: LineTouchData(
+            enabled: true,
+            touchTooltipData: LineTouchTooltipData(
+              getTooltipColor: (_) => Colors.black.withValues(alpha: 0.8),
+              getTooltipItems: (spots) => spots
+                  .map((s) => LineTooltipItem(
+                        s.y.round().toString(),
+                        TextStyle(
+                            color: s.bar.color ?? Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12),
+                      ))
+                  .toList(),
+            ),
+          ),
           lineBarsData: [bar(primary, colorPrimary), bar(secondary, colorSecondary)],
         ),
       ),

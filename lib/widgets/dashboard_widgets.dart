@@ -217,8 +217,8 @@ class _ActivityRingsWidget extends StatelessWidget {
     final steps = health.series(HealthMetric.steps)?.daily.lastOrNull?.value ?? 0;
     final kcal =
         health.series(HealthMetric.calories)?.daily.lastOrNull?.value ?? 0;
-    const stepGoal = 10000.0;
-    const kcalGoal = 600.0;
+    final stepGoal = health.goalSteps;
+    final kcalGoal = health.goalCalories;
     final stepColor = HealthMetric.steps.accent;
     final kcalColor = HealthMetric.calories.accent;
     return SurfaceCard(

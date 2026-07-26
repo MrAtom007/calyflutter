@@ -4,7 +4,11 @@ import 'package:provider/provider.dart';
 import '../state/theme_provider.dart';
 import '../state/dashboard_provider.dart';
 import '../state/locale_provider.dart';
+import '../state/workout_provider.dart';
+import '../state/discipline_provider.dart';
 import '../services/feedback_service.dart';
+import '../services/home_widget_service.dart';
+import '../data/ranks.dart';
 import '../theme/app_theme.dart';
 import '../widgets/ui_kit.dart';
 import '../widgets/discipline_switch.dart';
@@ -21,6 +25,19 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   bool _editing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshWidgetRank());
+  }
+
+  void _refreshWidgetRank() {
+    if (!mounted) return;
+    final disc = context.read<DisciplineProvider>().discipline;
+    final pts = totalPoints(context.read<WorkoutProvider>().forDiscipline(disc));
+    HomeWidgetService.update(rank: '${rankFor(pts).current.name} · $pts');
+  }
 
   @override
   Widget build(BuildContext context) {
