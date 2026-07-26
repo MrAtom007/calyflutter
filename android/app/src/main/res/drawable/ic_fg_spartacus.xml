@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <path android:pathData="M62,22 L40,58 L55,58 L46,86 L74,50 L58,50 Z" android:strokeColor="#66FFE9A8" android:strokeWidth="6" android:fillColor="#00000000" />
-    <path android:pathData="M62,22 L40,58 L55,58 L46,86 L74,50 L58,50 Z" android:fillColor="#E2A63F" />
+    <!-- alone morbido -->
+    <path android:pathData="M60,20 L42,56 L54,56 L47,88 L74,48 L60,48 Z" android:strokeColor="#FFD98A" android:strokeWidth="16" android:strokeAlpha="0.35" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <!-- corpo con angoli arrotondati -->
+    <path android:pathData="M60,20 L42,56 L54,56 L47,88 L74,48 L60,48 Z" android:fillColor="#E9B45A" android:strokeColor="#E9B45A" android:strokeWidth="9" android:strokeLineJoin="round" android:strokeLineCap="round" />
+    <!-- riflesso lucido -->
+    <path android:pathData="M60,20 L42,56 L54,56 L47,88 L74,48 L60,48 Z" android:strokeColor="#40FFFFFF" android:strokeWidth="2.5" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
 </vector>

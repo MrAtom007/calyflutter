@@ -18,15 +18,15 @@ class AppIconService {
   // I nomi combaciano con i temi epici dell'app.
   static const List<AppIconStyle> styles = [
     AppIconStyle('IconDefault', 'Ulisse',
-        [Color(0xff1B4A63), Color(0xff07131C)], Color(0xffF0C85A)),
+        [Color(0xff1F526D), Color(0xff08161F)], Color(0xffF3C75A)),
     AppIconStyle('IconZeus', 'Zeus',
-        [Color(0xff2A3350), Color(0xff0A0C12)], Color(0xffFFD85A)),
+        [Color(0xff303B5C), Color(0xff0B0E16)], Color(0xffFFD85A)),
     AppIconStyle('IconCyberpunk', 'Cyberpunk',
-        [Color(0xff2A0A3A), Color(0xff05020A)], Color(0xffFF2EC4)),
+        [Color(0xff320E44), Color(0xff07030D)], Color(0xffFF3AD0)),
     AppIconStyle('IconSpartacus', 'Spartacus',
-        [Color(0xffC0392B), Color(0xff160807)], Color(0xffE2A63F)),
+        [Color(0xffCF4233), Color(0xff1A0A09)], Color(0xffE9B45A)),
     AppIconStyle('IconKratos', 'Kratos',
-        [Color(0xff3A2020), Color(0xff0C0D0F)], Color(0xffE63329)),
+        [Color(0xff442727), Color(0xff0E0F12)], Color(0xffEE4A40)),
   ];
 
   static Future<String> current() async {

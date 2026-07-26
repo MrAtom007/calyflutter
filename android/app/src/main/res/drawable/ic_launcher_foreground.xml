@@ -1,28 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-    <!-- Alone luminoso -->
-    <path
-        android:pathData="M62,22 L40,58 L55,58 L46,86 L74,50 L58,50 Z"
-        android:strokeColor="#66FFE9A8"
-        android:strokeWidth="6"
-        android:fillColor="#00000000" />
-    <!-- Fulmine dorato -->
-    <path
-        android:pathData="M62,22 L40,58 L55,58 L46,86 L74,50 L58,50 Z">
-        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt"
-            name="android:fillColor">
-            <gradient
-                android:type="linear"
-                android:startX="46"
-                android:startY="22"
-                android:endX="62"
-                android:endY="86"
-                android:startColor="#FFF3B0"
-                android:endColor="#E2A63F" />
-        </aapt:attr>
-    </path>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- alone morbido -->
+    <path android:pathData="M60,20 L42,56 L54,56 L47,88 L74,48 L60,48 Z" android:strokeColor="#FFE9A8" android:strokeWidth="16" android:strokeAlpha="0.35" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <!-- corpo con angoli arrotondati -->
+    <path android:pathData="M60,20 L42,56 L54,56 L47,88 L74,48 L60,48 Z" android:fillColor="#F3C75A" android:strokeColor="#F3C75A" android:strokeWidth="9" android:strokeLineJoin="round" android:strokeLineCap="round" />
+    <!-- riflesso lucido -->
+    <path android:pathData="M60,20 L42,56 L54,56 L47,88 L74,48 L60,48 Z" android:strokeColor="#40FFFFFF" android:strokeWidth="2.5" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
 </vector>
