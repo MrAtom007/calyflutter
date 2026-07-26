@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
     <!-- alone morbido -->
-    <path android:pathData="M55.2,32.9 L44.1,55.2 L51.5,55.2 L47.2,75.1 L63.9,50.3 L55.2,50.3 Z" android:strokeColor="#66F0FF" android:strokeWidth="11" android:strokeAlpha="0.35" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
-    <!-- corpo con angoli arrotondati -->
-    <path android:pathData="M55.2,32.9 L44.1,55.2 L51.5,55.2 L47.2,75.1 L63.9,50.3 L55.2,50.3 Z" android:fillColor="#FF3AD0" android:strokeColor="#FF3AD0" android:strokeWidth="6" android:strokeLineJoin="round" android:strokeLineCap="round" />
-    <!-- riflesso lucido -->
-    <path android:pathData="M55.2,32.9 L44.1,55.2 L51.5,55.2 L47.2,75.1 L63.9,50.3 L55.2,50.3 Z" android:strokeColor="#40FFFFFF" android:strokeWidth="2" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <path android:pathData="M60,27 L47,52 L56,52 L44,83" android:strokeColor="#66F0FF" android:strokeWidth="10" android:strokeAlpha="0.30" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <!-- saetta sottile -->
+    <path android:pathData="M60,27 L47,52 L56,52 L44,83" android:strokeColor="#FF3AD0" android:strokeWidth="4.5" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
 </vector>
