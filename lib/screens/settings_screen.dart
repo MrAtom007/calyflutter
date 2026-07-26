@@ -160,6 +160,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       Row(
                         children: [
+                          if (themeEmblemAsset(skin.id) != null) ...[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: Image.asset(themeEmblemAsset(skin.id)!,
+                                  width: 26, height: 26, fit: BoxFit.cover),
+                            ),
+                            const SizedBox(width: 6),
+                          ],
                           _sw(skin.colors.bg),
                           _sw(skin.colors.card),
                           _sw(skin.colors.primary),
@@ -312,17 +320,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
-                          gradient: RadialGradient(
-                            center: const Alignment(-0.3, -0.4),
-                            radius: 1.1,
-                            colors: s.bg,
-                          ),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                               color: active ? c.primary : c.border,
                               width: active ? 2.5 : 1),
                         ),
-                        child: Icon(Icons.bolt, color: s.bolt, size: 30),
+                        clipBehavior: Clip.antiAlias,
+                        child: Image.asset(s.asset, fit: BoxFit.cover),
                       ),
                       const SizedBox(height: 4),
                       Text(s.name,
@@ -494,7 +498,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const SizedBox(height: Spacing.xl),
           Center(
-            child: Text('CaliStrack • v4.1.6',
+            child: Text('CaliStrack • v4.1.7',
                 style: TextStyle(color: c.textMuted, fontSize: 12)),
           ),
           const SizedBox(height: 40),
