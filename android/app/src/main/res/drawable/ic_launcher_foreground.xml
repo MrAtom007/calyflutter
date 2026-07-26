@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
     <!-- alone morbido -->
-    <path android:pathData="M60,27 L47,52 L56,52 L44,83" android:strokeColor="#FFE9A8" android:strokeWidth="10" android:strokeAlpha="0.30" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
-    <!-- saetta sottile -->
-    <path android:pathData="M60,27 L47,52 L56,52 L44,83" android:strokeColor="#F3C75A" android:strokeWidth="4.5" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <path android:pathData="M57,24 L50,40 L59,47 L49,59 L58,66 L47,79 L53,87" android:strokeColor="#FFE9A8" android:strokeWidth="9" android:strokeAlpha="0.30" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <path android:pathData="M49,59 L40,71" android:strokeColor="#FFE9A8" android:strokeWidth="7" android:strokeAlpha="0.28" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <!-- saetta -->
+    <path android:pathData="M57,24 L50,40 L59,47 L49,59 L58,66 L47,79 L53,87" android:strokeColor="#F3C75A" android:strokeWidth="4" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <path android:pathData="M49,59 L40,71" android:strokeColor="#F3C75A" android:strokeWidth="3" android:strokeLineJoin="round" android:strokeLineCap="round" android:fillColor="#00000000" />
 </vector>
