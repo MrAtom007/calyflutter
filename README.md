@@ -1,13 +1,21 @@
-# CaliStrack (Flutter) — v3.1.0
+# CaliStrack (Flutter) — v4.0.0
 
 App mobile per il tracking degli allenamenti di **calisthenics** e **palestra**, riscritta in **Flutter/Dart** (port dalla versione originale Expo/React Native v2.6.0).
 
-La v3.0.0 introduce: animazioni fluide, effetti sonori e vibrazioni, tipografia
-custom (google_fonts), coriandoli al level-up, icone esercizi e supporto
-**multilingua (Italiano / English / Español)**.
+La **v4.0.0** introduce: **sezione Salute** con dati da wearable (Health Connect /
+Apple Health: Garmin, Samsung Health, Honor Health, Google) e sinusoidi/grafici
+spettacolari, **Home a widget personalizzabile** (riordina/aggiungi/rimuovi),
+**personalizzazione spinta** (densità, colore d'accento, stile card), **temi
+epici** (Spartacus, Kratos, Ulisse, Zeus, Cyberpunk), **icona app cambiabile**
+con stili diversi (Android + iOS) e **widget da schermata home del telefono** con
+deep-link.
 
 ## Funzionalità
 
+- 🏠 **Home a widget** – dashboard personalizzabile: riordina, aggiungi e rimuovi widget
+- ❤️ **Salute** – battiti (sinusoide ECG live), pressione, SpO2, HRV, passi, calorie, sonno
+- 🔗 **Wearable** – dati reali da Health Connect (Android) / Apple Health (iOS) + login Google + modalità demo
+- 📱 **Widget home telefono** – battiti e passi sulla home del telefono, con deep-link alla sezione
 - 📓 **Diario allenamenti** – registra e rivedi le tue sessioni
 - 🤸🏋️ **Due discipline** – Calisthenics e Palestra con switch dedicato
 - ➕ **Nuovo allenamento** – set per esercizio con reps, secondi o peso
@@ -16,7 +24,8 @@ custom (google_fonts), coriandoli al level-up, icone esercizi e supporto
 - 📊 **Progressi** – grafici (fl_chart), top esercizi, export CSV/JSON
 - 🏅 **Ranghi e medaglie** – da Legno ad Antimateria con overlay level-up
 - ⏱️ **Timer** – countdown con preset e vibrazione
-- 🎨 **Temi** – 6 skin free + 4 skin neon premium (Neon Store)
+- 🎨 **Temi & aspetto** – 17 skin free + neon premium, densità, accento, stile card
+- 🖼️ **Icona app** – 5 stili (Ulisse, Zeus, Cyberpunk, Spartacus, Kratos)
 - 🔒 **Sicurezza** – PIN (SHA-256), biometria, blocco dispositivo, cifratura AES-256
 - 🔔 **Promemoria** – notifiche locali settimanali
 
@@ -29,6 +38,7 @@ custom (google_fonts), coriandoli al level-up, icone esercizi e supporto
 - local_auth, flutter_local_notifications
 - fl_chart, cached_network_image, webview_flutter, video_player
 - share_plus, path_provider, image_picker
+- health (Health Connect / Apple Health), google_sign_in, home_widget
 
 ## Avvio
 

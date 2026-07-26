@@ -1,12 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/theme_provider.dart';
 import '../state/locale_provider.dart';
 import '../services/feedback_service.dart';
+import '../services/home_widget_service.dart';
+import 'dashboard_screen.dart';
 import 'home_screen.dart';
-import 'routines_screen.dart';
+import 'health_screen.dart';
 import 'progress_screen.dart';
-import 'ranks_screen.dart';
 import 'exercises_screen.dart';
 import 'settings_screen.dart';
 
@@ -20,13 +22,48 @@ class RootNav extends StatefulWidget {
 class _RootNavState extends State<RootNav> {
   int _index = 0;
 
-  final _pages = const [
-    HomeScreen(),
-    RoutinesScreen(),
-    ProgressScreen(),
-    RanksScreen(),
-    ExercisesScreen(),
-    SettingsScreen(),
+  static const _tabIndex = {
+    'dashboard': 0,
+    'diary': 1,
+    'health': 2,
+    'progress': 3,
+    'exercises': 4,
+    'settings': 5,
+  };
+
+  StreamSubscription<Uri?>? _widgetSub;
+
+  @override
+  void initState() {
+    super.initState();
+    // Deep-link dal widget della schermata home (caliwidget://<sezione>).
+    HomeWidgetService.initialUri().then(_handleUri);
+    _widgetSub = HomeWidgetService.clicks.listen(_handleUri);
+  }
+
+  @override
+  void dispose() {
+    _widgetSub?.cancel();
+    super.dispose();
+  }
+
+  void _handleUri(Uri? uri) {
+    if (uri == null || !mounted) return;
+    _openTab(uri.host);
+  }
+
+  void _openTab(String tab) {
+    final i = _tabIndex[tab];
+    if (i != null) setState(() => _index = i);
+  }
+
+  late final List<Widget> _pages = [
+    DashboardScreen(onOpenTab: _openTab),
+    const HomeScreen(),
+    const HealthScreen(),
+    const ProgressScreen(),
+    const ExercisesScreen(),
+    const SettingsScreen(),
   ];
 
   @override
@@ -64,16 +101,16 @@ class _RootNavState extends State<RootNav> {
         unselectedFontSize: 11,
         items: [
           BottomNavigationBarItem(
-              icon: const Icon(Icons.home_rounded), label: t('nav_home')),
+              icon: const Icon(Icons.dashboard_rounded),
+              label: t('nav_dashboard')),
           BottomNavigationBarItem(
-              icon: const Icon(Icons.assignment_outlined),
-              label: t('nav_routines')),
+              icon: const Icon(Icons.menu_book_rounded), label: t('nav_diary')),
+          BottomNavigationBarItem(
+              icon: const Icon(Icons.monitor_heart_rounded),
+              label: t('nav_health')),
           BottomNavigationBarItem(
               icon: const Icon(Icons.show_chart_rounded),
               label: t('nav_progress')),
-          BottomNavigationBarItem(
-              icon: const Icon(Icons.military_tech_outlined),
-              label: t('nav_medals')),
           BottomNavigationBarItem(
               icon: const Icon(Icons.fitness_center),
               label: t('nav_exercises')),

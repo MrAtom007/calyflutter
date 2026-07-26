@@ -14,6 +14,16 @@ rootProject.layout.buildDirectory.value(newBuildDir)
 subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
+    // Forza compileSdk >= 36 sui moduli plugin (es. :health richiede >= 35).
+    afterEvaluate {
+        extensions.findByName("android")?.let { ext ->
+            try {
+                val setCompileSdk = ext.javaClass.getMethod("compileSdkVersion", Int::class.javaPrimitiveType)
+                setCompileSdk.invoke(ext, 36)
+            } catch (_: Exception) {
+            }
+        }
+    }
 }
 subprojects {
     project.evaluationDependsOn(":app")

@@ -47,6 +47,18 @@ class AppColors {
     required this.danger,
   });
 
+  AppColors copyWith({Color? primary, Color? primaryDark}) => AppColors(
+        bg: bg,
+        card: card,
+        cardAlt: cardAlt,
+        text: text,
+        textMuted: textMuted,
+        primary: primary ?? this.primary,
+        primaryDark: primaryDark ?? this.primaryDark,
+        border: border,
+        danger: danger,
+      );
+
   factory AppColors.hex({
     required String bg,
     required String card,
@@ -342,12 +354,130 @@ final Map<String, AppSkin> appThemes = {
       border: '#1a2340', danger: '#ff4d8d',
     ),
   ),
+  // ---- Temi epici "forza" ----
+  'spartacus': AppSkin(
+    id: 'spartacus',
+    name: 'Spartacus',
+    description: 'Sangue e bronzo, forza da gladiatore',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#c0392b'),
+    colors: AppColors.hex(
+      bg: '#140807', card: '#20100d', cardAlt: '#2e1813',
+      text: '#f7e6d8', textMuted: '#b58e78', primary: '#c0392b',
+      primaryDark: '#8e211a', border: '#3a1f18', danger: '#ff5240',
+    ),
+  ),
+  'kratos': AppSkin(
+    id: 'kratos',
+    name: 'Kratos',
+    description: 'Cenere spartana e rosso caos',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#e63329'),
+    colors: AppColors.hex(
+      bg: '#0c0d0f', card: '#16181c', cardAlt: '#20242a', text: '#eceff3',
+      textMuted: '#9aa3ad', primary: '#e63329', primaryDark: '#a5221b',
+      border: '#2a2f36', danger: '#ff4736',
+    ),
+  ),
+  'ulisse': AppSkin(
+    id: 'ulisse',
+    name: 'Ulisse',
+    description: 'Mare Egeo e oro, astuzia e forza',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#e2b53f'),
+    colors: AppColors.hex(
+      bg: '#07131c', card: '#0e2130', cardAlt: '#153043', text: '#eaf6ff',
+      textMuted: '#89a7bb', primary: '#e2b53f', primaryDark: '#b78d1f',
+      border: '#1c3a4f', danger: '#ff6b6b',
+    ),
+  ),
+  'zeus': AppSkin(
+    id: 'zeus',
+    name: 'Zeus',
+    description: 'Tempesta e fulmini dorati dell\u2019Olimpo',
+    mode: Brightness.dark,
+    premium: true,
+    neon: true,
+    glow: _hex('#ffd85a'),
+    colors: AppColors.hex(
+      bg: '#0a0c12', card: '#12151f', cardAlt: '#1b2030', text: '#f4f1ff',
+      textMuted: '#9aa0c0', primary: '#ffd85a', primaryDark: '#d4a92f',
+      border: '#262b40', danger: '#7aa2ff',
+    ),
+  ),
+  'cyberpunk': AppSkin(
+    id: 'cyberpunk',
+    name: 'Cyberpunk',
+    description: 'Neon magenta e ciano, città del futuro',
+    mode: Brightness.dark,
+    premium: true,
+    neon: true,
+    glow: _hex('#ff2ec4'),
+    colors: AppColors.hex(
+      bg: '#05020a', card: '#0e0518', cardAlt: '#170a26', text: '#eafcff',
+      textMuted: '#8f7aa8', primary: '#ff2ec4', primaryDark: '#00e5ff',
+      border: '#241038', danger: '#ff3860',
+    ),
+  ),
 };
+
+/// Accento colore opzionale che sovrascrive il primary dello skin attivo.
+class AppAccent {
+  final String id;
+  final String name;
+  final Color color;
+  final Color dark;
+  const AppAccent(this.id, this.name, this.color, this.dark);
+}
+
+const List<AppAccent> accentOptions = [
+  AppAccent('default', 'Tema', Color(0x00000000), Color(0x00000000)),
+  AppAccent('emerald', 'Emerald', Color(0xff4cd964), Color(0xff37a94b)),
+  AppAccent('sky', 'Sky', Color(0xff38bdf8), Color(0xff0ea5e9)),
+  AppAccent('violet', 'Violet', Color(0xffa78bfa), Color(0xff8b5cf6)),
+  AppAccent('rose', 'Rose', Color(0xfff43f5e), Color(0xffe11d48)),
+  AppAccent('amber', 'Amber', Color(0xfff59e0b), Color(0xffd97706)),
+  AppAccent('cyan', 'Cyan', Color(0xff2ee6d6), Color(0xff14b8a6)),
+  AppAccent('magenta', 'Magenta', Color(0xffff2ec4), Color(0xffd40e9f)),
+  AppAccent('lime', 'Lime', Color(0xffbef264), Color(0xff84cc16)),
+  AppAccent('orange', 'Orange', Color(0xffff6a00), Color(0xffcc5200)),
+];
+
+AppAccent? accentById(String? id) {
+  if (id == null || id == 'default') return null;
+  for (final a in accentOptions) {
+    if (a.id == id) return a;
+  }
+  return null;
+}
+
+/// Densità dell'interfaccia: influenza spaziature e raggi.
+enum UiDensity { compact, comfortable, spacious }
+
+extension UiDensityScale on UiDensity {
+  double get scale => switch (this) {
+        UiDensity.compact => 0.78,
+        UiDensity.comfortable => 1.0,
+        UiDensity.spacious => 1.2,
+      };
+  String get label => switch (this) {
+        UiDensity.compact => 'Compatto',
+        UiDensity.comfortable => 'Comodo',
+        UiDensity.spacious => 'Ampio',
+      };
+}
+
+/// Stile delle card dell'app.
+enum CardStyle { solid, glass, outline }
 
 final List<AppSkin> themeList = appThemes.values.toList();
 const List<String> freeThemeIds = [
   'midnight', 'ocean', 'sunset', 'grape', 'paper', 'carbon',
   'forest', 'crimson', 'amber', 'slate', 'arctic', 'rose',
+  'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
 ];
 const String defaultThemeId = 'midnight';
 

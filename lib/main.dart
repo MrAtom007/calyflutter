@@ -11,6 +11,8 @@ import 'state/security_provider.dart';
 import 'state/levelup_provider.dart';
 import 'state/workout_provider.dart';
 import 'state/locale_provider.dart';
+import 'state/health_provider.dart';
+import 'state/dashboard_provider.dart';
 import 'services/notification_service.dart';
 import 'services/feedback_service.dart';
 import 'theme/app_theme.dart';
@@ -30,6 +32,8 @@ void main() async {
   final security = SecurityProvider();
   final workouts = WorkoutProvider();
   final locale = LocaleProvider();
+  final health = HealthProvider();
+  final dashboard = DashboardProvider();
 
   await Future.wait([
     theme.load(),
@@ -38,6 +42,8 @@ void main() async {
     security.load(),
     workouts.load(),
     locale.load(),
+    health.load(),
+    dashboard.load(),
   ]);
 
   runApp(
@@ -49,6 +55,8 @@ void main() async {
         ChangeNotifierProvider.value(value: security),
         ChangeNotifierProvider.value(value: workouts),
         ChangeNotifierProvider.value(value: locale),
+        ChangeNotifierProvider.value(value: health),
+        ChangeNotifierProvider.value(value: dashboard),
         ChangeNotifierProvider(create: (_) => LevelUpProvider()),
       ],
       child: const CaliStrackApp(),

@@ -15,6 +15,17 @@ class StorageService {
   static const unlockedKey = '@calistrack/unlocked';
   static const disciplineKey = '@calistrack/discipline';
   static const reminderKey = '@calistrack/reminder';
+  // Salute / wearable
+  static const healthDataKey = '@calistrack/healthData';
+  static const healthConnectedKey = '@calistrack/healthConnected';
+  static const googleAccountKey = '@calistrack/googleAccount';
+  // Dashboard personalizzabile
+  static const dashboardWidgetsKey = '@calistrack/dashboardWidgets';
+  // Aspetto / personalizzazione
+  static const accentKey = '@calistrack/accent';
+  static const densityKey = '@calistrack/density';
+  static const cardStyleKey = '@calistrack/cardStyle';
+  static const appIconKey = '@calistrack/appIcon';
 
   static SharedPreferences? _prefs;
   static Future<SharedPreferences> get _p async =>

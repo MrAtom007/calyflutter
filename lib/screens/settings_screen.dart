@@ -11,6 +11,7 @@ import '../services/security_service.dart';
 import '../services/storage_service.dart';
 import '../services/notification_service.dart';
 import '../services/export_service.dart';
+import '../services/app_icon_service.dart';
 import '../theme/app_theme.dart';
 import 'store_screen.dart';
 
@@ -29,6 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _policy = LockPolicy.launch;
   bool _sound = FeedbackService.soundEnabled;
   bool _haptics = FeedbackService.hapticsEnabled;
+  String _appIcon = 'IconDefault';
 
   static const _dayLabels = ['L', 'M', 'M', 'G', 'V', 'S', 'D'];
 
@@ -44,6 +46,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _reminder = await NotificationService.getSettings();
     _bioQuick = await SecurityService.isBioQuickEnabled();
     _policy = await SecurityService.getLockPolicy();
+    _appIcon = await AppIconService.current();
     if (mounted) setState(() {});
   }
 
@@ -188,6 +191,152 @@ class _SettingsScreenState extends State<SettingsScreen> {
               activeThumbColor: c.primary,
               onChanged: (v) => theme.toggleGlow(v),
             ),
+
+          // ---- Aspetto (densità, accento, stile card) ----
+          const SizedBox(height: Spacing.lg),
+          _section(c, t('appearance')),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(t('density'),
+                style: TextStyle(color: c.textMuted, fontSize: 12)),
+          ),
+          Wrap(
+            spacing: Spacing.sm,
+            children: UiDensity.values.map((d) {
+              final active = theme.density == d;
+              return ChoiceChip(
+                label: Text(d.label),
+                selected: active,
+                selectedColor: c.primary,
+                onSelected: (_) {
+                  FeedbackService.selection();
+                  theme.setDensity(d);
+                },
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: Spacing.md),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(t('accent'),
+                style: TextStyle(color: c.textMuted, fontSize: 12)),
+          ),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: accentOptions.map((a) {
+              final active = theme.accentId == a.id;
+              final isDefault = a.id == 'default';
+              return GestureDetector(
+                onTap: () {
+                  FeedbackService.selection();
+                  theme.setAccent(a.id);
+                },
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: isDefault ? c.card : a.color,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: active ? c.text : c.border,
+                        width: active ? 2.5 : 1),
+                  ),
+                  child: isDefault
+                      ? Icon(Icons.format_color_reset_rounded,
+                          size: 18, color: c.textMuted)
+                      : (active
+                          ? const Icon(Icons.check, size: 18, color: Colors.white)
+                          : null),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: Spacing.md),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(t('card_style'),
+                style: TextStyle(color: c.textMuted, fontSize: 12)),
+          ),
+          Wrap(
+            spacing: Spacing.sm,
+            children: [
+              (CardStyle.solid, t('card_solid')),
+              (CardStyle.glass, t('card_glass')),
+              (CardStyle.outline, t('card_outline')),
+            ].map((e) {
+              final active = theme.cardStyle == e.$1;
+              return ChoiceChip(
+                label: Text(e.$2),
+                selected: active,
+                selectedColor: c.primary,
+                onSelected: (_) {
+                  FeedbackService.selection();
+                  theme.setCardStyle(e.$1);
+                },
+              );
+            }).toList(),
+          ),
+
+          // ---- Icona app ----
+          const SizedBox(height: Spacing.lg),
+          _section(c, t('app_icon')),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(t('app_icon_hint'),
+                style: TextStyle(color: c.textMuted, fontSize: 12)),
+          ),
+          SizedBox(
+            height: 96,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: AppIconService.styles.length,
+              separatorBuilder: (_, __) => const SizedBox(width: Spacing.sm),
+              itemBuilder: (context, i) {
+                final s = AppIconService.styles[i];
+                final active = _appIcon == s.id;
+                return GestureDetector(
+                  onTap: () async {
+                    FeedbackService.onTap();
+                    final ok = await AppIconService.setIcon(s.id);
+                    if (ok) {
+                      setState(() => _appIcon = s.id);
+                    } else if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(t('app_icon_failed'))));
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          gradient: RadialGradient(
+                            center: const Alignment(-0.3, -0.4),
+                            radius: 1.1,
+                            colors: s.bg,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              color: active ? c.primary : c.border,
+                              width: active ? 2.5 : 1),
+                        ),
+                        child: Icon(Icons.bolt, color: s.bolt, size: 30),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(s.name,
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: active ? c.primary : c.textMuted,
+                              fontWeight:
+                                  active ? FontWeight.w800 : FontWeight.w500)),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
 
           const SizedBox(height: Spacing.lg),
           _section(c, t('security')),
@@ -345,7 +494,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const SizedBox(height: Spacing.xl),
           Center(
-            child: Text('CaliStrack • v2.6.0',
+            child: Text('CaliStrack • v4.0.0',
                 style: TextStyle(color: c.textMuted, fontSize: 12)),
           ),
           const SizedBox(height: 40),
