@@ -32,6 +32,10 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+            // Disabilita R8/shrinking: evita crash di androidx.work (WorkManager)
+            // e mantiene intatte le classi usate da home_widget/notifiche.
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

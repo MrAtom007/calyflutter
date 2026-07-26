@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// Spacing costanti (come nel tema Expo originale).
 class Spacing {
@@ -493,18 +492,25 @@ List<BoxShadow> glowShadow(Color color, {double blur = 12, double spread = 1}) {
 }
 
 /// Font display (titoli) e body coerenti in tutta l'app.
+/// Usa i font inclusi come asset (Inter body, Sora titoli): nessun download.
 TextTheme _appTextTheme(TextTheme base, Color text, Color muted) {
-  final body = GoogleFonts.interTextTheme(base);
-  final display = GoogleFonts.sora(
-    textStyle: TextStyle(color: text, fontWeight: FontWeight.w800),
-  );
+  final body = base.apply(fontFamily: 'Inter');
+  TextStyle display(double size,
+          {FontWeight weight = FontWeight.w800, double letterSpacing = 0}) =>
+      TextStyle(
+        fontFamily: 'Sora',
+        color: text,
+        fontWeight: weight,
+        fontSize: size,
+        letterSpacing: letterSpacing,
+      );
   return body.copyWith(
-    displayLarge: display.copyWith(fontSize: 40, letterSpacing: -0.5),
-    displayMedium: display.copyWith(fontSize: 32, letterSpacing: -0.5),
-    displaySmall: display.copyWith(fontSize: 26),
-    headlineMedium: display.copyWith(fontSize: 22),
-    headlineSmall: display.copyWith(fontSize: 18),
-    titleLarge: display.copyWith(fontSize: 20, fontWeight: FontWeight.w700),
+    displayLarge: display(40, letterSpacing: -0.5),
+    displayMedium: display(32, letterSpacing: -0.5),
+    displaySmall: display(26),
+    headlineMedium: display(22),
+    headlineSmall: display(18),
+    titleLarge: display(20, weight: FontWeight.w700),
   ).apply(bodyColor: text, displayColor: text);
 }
 
