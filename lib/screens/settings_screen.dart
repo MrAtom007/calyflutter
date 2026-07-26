@@ -494,7 +494,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const SizedBox(height: Spacing.xl),
           Center(
-            child: Text('CaliStrack • v4.1.1',
+            child: Text('CaliStrack • v4.1.2',
                 style: TextStyle(color: c.textMuted, fontSize: 12)),
           ),
           const SizedBox(height: 40),

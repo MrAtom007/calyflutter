@@ -6,6 +6,7 @@ import '../state/workout_provider.dart';
 import '../state/discipline_provider.dart';
 import '../state/locale_provider.dart';
 import '../state/health_provider.dart';
+import '../state/dashboard_provider.dart';
 import '../models/health_data.dart';
 import '../data/ranks.dart';
 import '../data/routines.dart';
@@ -20,33 +21,30 @@ import '../screens/timer_screen.dart';
 import '../screens/ranks_screen.dart';
 
 /// Mappa un [DashWidget] al widget concreto da renderizzare.
-/// (import spostato in fondo per evitare cicli con dashboard_provider)
 Widget buildDashWidget(
   BuildContext context,
-  dynamic type, // DashWidget
+  DashWidget type,
   void Function(String tab) onOpenTab,
 ) {
-  switch (type.name as String) {
-    case 'shortcuts':
+  switch (type) {
+    case DashWidget.shortcuts:
       return _ShortcutsWidget(onOpenTab: onOpenTab);
-    case 'heartWave':
+    case DashWidget.heartWave:
       return const _HeartWaveWidget();
-    case 'activityRings':
+    case DashWidget.activityRings:
       return const _ActivityRingsWidget();
-    case 'vitals':
+    case DashWidget.vitals:
       return const _VitalsWidget();
-    case 'sleep':
+    case DashWidget.sleep:
       return const _SleepWidget();
-    case 'workoutStats':
+    case DashWidget.workoutStats:
       return const _WorkoutStatsWidget();
-    case 'rank':
+    case DashWidget.rank:
       return const _RankWidget();
-    case 'quickTimer':
+    case DashWidget.quickTimer:
       return const _QuickTimerWidget();
-    case 'nextRoutine':
+    case DashWidget.nextRoutine:
       return const _NextRoutineWidget();
-    default:
-      return const SizedBox.shrink();
   }
 }
 
