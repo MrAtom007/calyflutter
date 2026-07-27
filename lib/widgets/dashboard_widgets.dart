@@ -8,12 +8,14 @@ import '../state/locale_provider.dart';
 import '../state/health_provider.dart';
 import '../state/dashboard_provider.dart';
 import '../models/health_data.dart';
+import '../models/workout.dart';
 import '../data/ranks.dart';
 import '../data/routines.dart';
 import '../theme/app_theme.dart';
 import '../utils/format.dart';
 import '../services/feedback_service.dart';
 import 'design_system.dart';
+import 'ui_kit.dart';
 import 'health_charts.dart';
 import 'medal.dart';
 import '../screens/new_workout_screen.dart';
@@ -517,6 +519,180 @@ class _QuickTimerWidget extends StatelessWidget {
                   ),
                 ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Hero: ultima sessione / avvio rapido workout
+// ---------------------------------------------------------------------------
+class DashboardHero extends StatelessWidget {
+  final void Function(String tab) onOpenTab;
+  const DashboardHero({super.key, required this.onOpenTab});
+
+  @override
+  Widget build(BuildContext context) {
+    final disc = context.watch<DisciplineProvider>().discipline;
+    final workouts = context.watch<WorkoutProvider>().forDiscipline(disc);
+    final last = workouts.isEmpty ? null : workouts.first;
+
+    // Transizione fluida quando cambia disciplina o ultima sessione.
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeIn,
+      transitionBuilder: (child, anim) => FadeTransition(
+        opacity: anim,
+        child: SlideTransition(
+          position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
+              .animate(anim),
+          child: child,
+        ),
+      ),
+      child: _HeroCard(
+        key: ValueKey('$disc-${last?.id ?? 'none'}'),
+        last: last,
+        onOpenTab: onOpenTab,
+      ),
+    );
+  }
+}
+
+class _HeroCard extends StatelessWidget {
+  final Workout? last;
+  final void Function(String tab) onOpenTab;
+  const _HeroCard({super.key, required this.last, required this.onOpenTab});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.watch<ThemeProvider>();
+    final c = theme.colors;
+    final t = context.watch<LocaleProvider>().t;
+
+    void startWorkout() {
+      FeedbackService.onTap();
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => const NewWorkoutScreen()));
+    }
+
+    final onPrimary = theme.skin.isDark ? Colors.black : Colors.white;
+
+    return Container(
+      padding: const EdgeInsets.all(Spacing.md),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.alphaBlend(c.primary.withValues(alpha: 0.22), c.card),
+            Color.alphaBlend(c.primary.withValues(alpha: 0.06), c.cardAlt),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(Radii.lg),
+        border: Border.all(color: c.primary.withValues(alpha: 0.35)),
+        boxShadow: theme.glowActive
+            ? glowShadow(c.primary, blur: 18)
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: theme.skin.isDark ? 0.3 : 0.06),
+                  blurRadius: 14,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: c.primary.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(Radii.md),
+                ),
+                child: Icon(
+                  last == null
+                      ? Icons.bolt_rounded
+                      : Icons.history_rounded,
+                  color: c.primary,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      last == null
+                          ? t('hero_no_sessions')
+                          : t('hero_last_session'),
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: c.textMuted),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      last == null
+                          ? t('hero_subtitle')
+                          : formatDate(last!.date),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w800),
+                    ),
+                    if (last != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        workoutSummary(last!),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12, color: c.textMuted),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: Spacing.md),
+          // CTA grande e tattile (min 52dp) facile da premere in palestra.
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: PressableScale(
+              onTap: startWorkout,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: c.primary,
+                  borderRadius: BorderRadius.circular(Radii.md),
+                  boxShadow: theme.glowActive
+                      ? glowShadow(c.primary, blur: 12)
+                      : null,
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.play_arrow_rounded, color: onPrimary),
+                      const SizedBox(width: 8),
+                      Text(
+                        t('hero_start'),
+                        style: TextStyle(
+                            color: onPrimary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

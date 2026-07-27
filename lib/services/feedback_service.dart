@@ -38,14 +38,32 @@ class FeedbackService {
   static Future<void> _play(String name, {double volume = 1.0}) async {
     if (!soundEnabled) return;
     try {
-      final player = _players.putIfAbsent(name, () => AudioPlayer());
+      final player = _players.putIfAbsent(name, () {
+        final p = AudioPlayer();
+        // Riproduce sul canale multimediale a volume pieno, senza abbassare
+        // gli altri suoni (mix), per la massima udibilità in palestra.
+        p.setAudioContext(AudioContext(
+          android: const AudioContextAndroid(
+            isSpeakerphoneOn: false,
+            stayAwake: false,
+            contentType: AndroidContentType.sonification,
+            usageType: AndroidUsageType.media,
+            audioFocus: AndroidAudioFocus.none,
+          ),
+          iOS: AudioContextIOS(
+            category: AVAudioSessionCategory.ambient,
+            options: const {AVAudioSessionOptions.mixWithOthers},
+          ),
+        ));
+        return p;
+      });
       await player.stop();
       await player.setVolume(volume);
       await player.play(AssetSource('sounds/$name.wav'));
     } catch (_) {}
   }
 
-  static void tap() => _play('tap', volume: 0.85);
+  static void tap() => _play('tap', volume: 1.0);
   static void beep() => _play('beep', volume: 1.0);
   static void success() => _play('success', volume: 1.0);
   static void complete() => _play('complete', volume: 1.0);

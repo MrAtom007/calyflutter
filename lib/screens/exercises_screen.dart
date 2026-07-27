@@ -8,6 +8,7 @@ import '../data/category_icons.dart';
 import '../models/exercise.dart';
 import '../theme/app_theme.dart';
 import '../widgets/discipline_switch.dart';
+import '../modules/skills/skills_screen.dart';
 import 'exercise_detail_screen.dart';
 import 'timer_screen.dart';
 
@@ -60,6 +61,13 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
               children: [
+                if (discipline == 'calisthenics') ...[
+                  _SkillTreeBanner(
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => const SkillsScreen())),
+                  ),
+                  const SizedBox(height: Spacing.sm),
+                ],
                 for (final cat in categories)
                   ..._buildCategory(context, cat, filtered, c),
                 const SizedBox(height: 40),
@@ -130,5 +138,53 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             ? 'secondi'
             : 'ripetizioni';
     return '${ex.level} · $unit';
+  }
+}
+
+/// Banner d'ingresso all'Albero delle Skill.
+class _SkillTreeBanner extends StatelessWidget {
+  final VoidCallback onTap;
+  const _SkillTreeBanner({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.watch<ThemeProvider>().colors;
+    final t = context.watch<LocaleProvider>().t;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(Spacing.md),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.alphaBlend(c.primary.withValues(alpha: 0.2), c.card),
+              c.card,
+            ],
+          ),
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(color: c.primary.withValues(alpha: 0.4)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: c.primary.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(Radii.md),
+              ),
+              child: Icon(Icons.account_tree_rounded, color: c.primary),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(t('skills_open'),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w800)),
+            ),
+            Icon(Icons.chevron_right_rounded, color: c.textMuted),
+          ],
+        ),
+      ),
+    );
   }
 }

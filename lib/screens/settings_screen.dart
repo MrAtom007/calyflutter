@@ -127,71 +127,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const SizedBox(height: Spacing.lg),
           _section(c, t('theme_color')),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: 1.6,
-            mainAxisSpacing: Spacing.sm,
-            crossAxisSpacing: Spacing.sm,
-            children: themeList.map((skin) {
-              final active = theme.themeId == skin.id;
-              final locked = skin.premium && !theme.isUnlocked(skin.id);
-              return GestureDetector(
-                onTap: () {
-                  if (locked) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const StoreScreen()));
-                  } else {
-                    theme.changeTheme(skin.id);
-                  }
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(Spacing.sm),
-                  decoration: BoxDecoration(
-                    color: c.card,
-                    borderRadius: BorderRadius.circular(Radii.md),
-                    border: Border.all(
-                        color: active ? c.primary : c.border,
-                        width: active ? 2 : 1),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          if (themeEmblemAsset(skin.id) != null) ...[
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: Image.asset(themeEmblemAsset(skin.id)!,
-                                  width: 26, height: 26, fit: BoxFit.cover),
-                            ),
-                            const SizedBox(width: 6),
-                          ],
-                          _sw(skin.colors.bg),
-                          _sw(skin.colors.card),
-                          _sw(skin.colors.primary),
-                        ],
-                      ),
-                      const Spacer(),
-                      Text('${skin.name}${skin.premium ? ' ✦' : ''}',
-                          style: const TextStyle(fontWeight: FontWeight.w700)),
-                      Text(
-                        active
-                            ? '✓ Attivo'
-                            : (locked ? '🔒 Store' : skin.description),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: active ? c.primary : c.textMuted,
-                            fontSize: 11),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
+          _themeCategory(context, theme, c, t('theme_cat_classic'),
+              _themesIn('classic'),
+              initiallyExpanded: true),
+          _themeCategory(
+              context, theme, c, t('theme_cat_neon'), _themesIn('neon')),
+          _themeCategory(context, theme, c, t('theme_cat_legendary'),
+              _themesIn('legendary')),
           if (theme.skin.neon)
             SwitchListTile(
               title: Text(t('glow_effect')),
@@ -629,6 +571,145 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 fontSize: 15,
                 fontWeight: FontWeight.w800)),
       );
+
+  // ---- Temi raggruppati per categoria ----
+  static const _legendaryIds = {
+    'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
+  };
+
+  List<AppSkin> _themesIn(String category) {
+    return themeList.where((s) {
+      final legendary = _legendaryIds.contains(s.id);
+      switch (category) {
+        case 'legendary':
+          return legendary;
+        case 'neon':
+          return s.neon && !legendary;
+        default: // classic
+          return !s.neon && !legendary;
+      }
+    }).toList();
+  }
+
+  Widget _themeCategory(BuildContext context, ThemeProvider theme, AppColors c,
+      String title, List<AppSkin> skins,
+      {bool initiallyExpanded = false}) {
+    if (skins.isEmpty) return const SizedBox.shrink();
+    final activeInside = skins.any((s) => s.id == theme.themeId);
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: Spacing.sm),
+        decoration: BoxDecoration(
+          color: c.card,
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(
+              color: c.border.withValues(alpha: 0.6)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: ExpansionTile(
+          initiallyExpanded: initiallyExpanded,
+          tilePadding: const EdgeInsets.symmetric(horizontal: Spacing.md),
+          childrenPadding: const EdgeInsets.fromLTRB(
+              Spacing.sm, 0, Spacing.sm, Spacing.sm),
+          title: Row(
+            children: [
+              Text(title,
+                  style: const TextStyle(fontWeight: FontWeight.w800)),
+              if (activeInside) ...[
+                const SizedBox(width: 8),
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration:
+                      BoxDecoration(color: c.primary, shape: BoxShape.circle),
+                ),
+              ],
+              const Spacer(),
+              Text('${skins.length}',
+                  style: TextStyle(color: c.textMuted, fontSize: 12)),
+            ],
+          ),
+          children: [
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              childAspectRatio: 1.6,
+              mainAxisSpacing: Spacing.sm,
+              crossAxisSpacing: Spacing.sm,
+              children: skins.map((skin) => _themeCard(context, theme, c, skin))
+                  .toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _themeCard(
+      BuildContext context, ThemeProvider theme, AppColors c, AppSkin skin) {
+    final active = theme.themeId == skin.id;
+    final locked = skin.premium && !theme.isUnlocked(skin.id);
+    final t = context.read<LocaleProvider>().t;
+    return GestureDetector(
+      onTap: () {
+        FeedbackService.onTap();
+        if (locked) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const StoreScreen()));
+        } else {
+          theme.changeTheme(skin.id);
+        }
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
+        padding: const EdgeInsets.all(Spacing.sm),
+        decoration: BoxDecoration(
+          color: c.card,
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(
+              color: active
+                  ? c.primary
+                  : c.border.withValues(alpha: 0.5),
+              width: active ? 2 : 1),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                if (themeEmblemAsset(skin.id) != null) ...[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Image.asset(themeEmblemAsset(skin.id)!,
+                        width: 26, height: 26, fit: BoxFit.cover),
+                  ),
+                  const SizedBox(width: 6),
+                ],
+                _sw(skin.colors.bg),
+                _sw(skin.colors.card),
+                _sw(skin.colors.primary),
+              ],
+            ),
+            const Spacer(),
+            Text('${skin.name}${skin.premium ? ' ✦' : ''}',
+                style: const TextStyle(fontWeight: FontWeight.w700)),
+            Text(
+              active
+                  ? '✓ ${t('active')}'
+                  : (locked ? '🔒 Store' : skin.description),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: active ? c.primary : c.textMuted, fontSize: 11),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _sw(Color color) => Container(
         width: 20,

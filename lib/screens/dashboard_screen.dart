@@ -78,9 +78,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               FeedbackService.selection();
               dash.reorder(o, n);
             },
-            header: Padding(
-              padding: EdgeInsets.only(bottom: gap),
-              child: const DisciplineSwitch(),
+            header: Column(
+              children: [
+                if (!_editing) ...[
+                  DashboardHero(onOpenTab: widget.onOpenTab),
+                  SizedBox(height: gap),
+                ],
+                const DisciplineSwitch(),
+                SizedBox(height: gap),
+              ],
             ),
             footer: _editing
                 ? Padding(

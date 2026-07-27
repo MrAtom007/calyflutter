@@ -84,10 +84,55 @@ class NotificationService {
     try {
       final android = _plugin.resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>();
-      await android?.requestNotificationsPermission();
+      final granted = await android?.requestNotificationsPermission();
+      // Richiede il permesso per gli allarmi esatti (Android 12+).
+      await android?.requestExactAlarmsPermission();
       final ios = _plugin.resolvePlatformSpecificImplementation<
           IOSFlutterLocalNotificationsPlugin>();
-      await ios?.requestPermissions(alert: true, badge: true, sound: true);
+      final iosGranted = await ios?.requestPermissions(
+          alert: true, badge: true, sound: true);
+      // Su piattaforme dove il metodo non ritorna nulla, consideriamo concesso.
+      return granted ?? iosGranted ?? true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// True se il dispositivo consente allarmi esatti (Android 12+).
+  static Future<bool> _canScheduleExact() async {
+    try {
+      final android = _plugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      if (android == null) return true; // iOS/altro: sempre preciso
+      return (await android.canScheduleExactNotifications()) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static const _androidDetails = AndroidNotificationDetails(
+    'reminders',
+    'Promemoria allenamento',
+    channelDescription: 'Ricorda di allenarti negli orari scelti',
+    importance: Importance.max,
+    priority: Priority.high,
+    enableVibration: true,
+    playSound: true,
+  );
+
+  /// Invia subito una notifica di prova (per verificare permessi/canale).
+  static Future<bool> sendTest(String title, String body) async {
+    if (!_ready) await init();
+    try {
+      final granted = await _ensurePermission();
+      if (!granted) return false;
+      await _plugin.show(
+        999,
+        title,
+        body,
+        const NotificationDetails(
+            android: _androidDetails, iOS: DarwinNotificationDetails()),
+      );
       return true;
     } catch (_) {
       return false;
@@ -118,13 +163,13 @@ class NotificationService {
         await _saveSettings(s.copyWith(enabled: false));
         return false;
       }
-      const androidDetails = AndroidNotificationDetails(
-        'reminders',
-        'Promemoria allenamento',
-        importance: Importance.defaultImportance,
-      );
       const details = NotificationDetails(
-          android: androidDetails, iOS: DarwinNotificationDetails());
+          android: _androidDetails, iOS: DarwinNotificationDetails());
+      // Usa allarmi esatti se consentiti, altrimenti fallback inesatto.
+      final exact = await _canScheduleExact();
+      final scheduleMode = exact
+          ? AndroidScheduleMode.exactAllowWhileIdle
+          : AndroidScheduleMode.inexactAllowWhileIdle;
       final rnd = Random();
       for (final day in s.days) {
         // day 0=dom..6=sab -> DateTime weekday 1..7 (lun..dom)
@@ -135,7 +180,7 @@ class NotificationService {
           _phrases[rnd.nextInt(_phrases.length)],
           _nextInstance(weekday, s.hour, s.minute),
           details,
-          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          androidScheduleMode: scheduleMode,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,

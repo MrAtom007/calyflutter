@@ -392,7 +392,12 @@ class _ConnectCard extends StatelessWidget {
               child: OutlinedButton.icon(
                 onPressed: () async {
                   FeedbackService.onTap();
-                  await health.signInGoogle();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final ok = await health.signInGoogle();
+                  if (!ok) {
+                    messenger.showSnackBar(SnackBar(
+                        content: Text(t('sign_in_failed'))));
+                  }
                 },
                 icon: const Icon(Icons.account_circle_rounded),
                 label: Text(t('sign_in_google')),

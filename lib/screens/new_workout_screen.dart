@@ -11,6 +11,7 @@ import '../data/routines.dart';
 import '../models/exercise.dart';
 import '../models/workout.dart';
 import '../theme/app_theme.dart';
+import '../modules/weighted/weighted_widgets.dart';
 
 class _EditSet {
   final Exercise exercise;
@@ -191,6 +192,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
 
   Widget _buildSetRow(int i, _EditSet s, AppColors c) {
     final unit = s.exercise.unit;
+    final t2 = context.read<LocaleProvider>().t;
     return Container(
       margin: const EdgeInsets.only(bottom: Spacing.sm),
       padding: const EdgeInsets.all(Spacing.sm),
@@ -210,6 +212,18 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
             Expanded(child: _numField(s.weight, 'kg', decimal: true)),
             const SizedBox(width: 6),
             Expanded(child: _numField(s.reps, 'reps')),
+            IconButton(
+              tooltip: t2('show_plates'),
+              icon: Icon(Icons.fitness_center_rounded,
+                  color: c.primary, size: 20),
+              onPressed: () {
+                FeedbackService.onTap();
+                final w = double.tryParse(
+                        s.weight.text.replaceAll(',', '.')) ??
+                    0;
+                showPlateSheet(context, addedWeight: w);
+              },
+            ),
           ] else if (unit == 'sec')
             Expanded(child: _numField(s.sec, 'sec'))
           else
