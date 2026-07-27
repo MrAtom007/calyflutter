@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../state/theme_provider.dart';
@@ -13,6 +14,7 @@ import '../models/exercise.dart';
 import '../models/workout.dart';
 import '../theme/app_theme.dart';
 import '../modules/weighted/weighted_widgets.dart';
+import '../widgets/common/custom_toast.dart';
 
 class _EditSet {
   final Exercise exercise;
@@ -31,7 +33,11 @@ class NewWorkoutScreen extends StatefulWidget {
 
   /// Se true, ripristina la bozza in corso dal [DraftProvider].
   final bool resumeDraft;
-  const NewWorkoutScreen({super.key, this.preset, this.resumeDraft = false});
+
+  /// Se valorizzato, la schermata è in modalità "Modifica allenamento".
+  final Workout? workoutToEdit;
+  const NewWorkoutScreen(
+      {super.key, this.preset, this.resumeDraft = false, this.workoutToEdit});
 
   @override
   State<NewWorkoutScreen> createState() => _NewWorkoutScreenState();
@@ -41,11 +47,22 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
   late String _category;
   final List<_EditSet> _sets = [];
 
+  bool get _isEdit => widget.workoutToEdit != null;
+
   @override
   void initState() {
     super.initState();
     final discipline = context.read<DisciplineProvider>().discipline;
     _category = getCategories(discipline).first;
+    if (_isEdit) {
+      for (final ws in widget.workoutToEdit!.sets) {
+        final ex = getExercise(ws.exerciseId);
+        if (ex != null) {
+          _sets.add(_EditSet(ex,
+              presetReps: ws.reps, presetSec: ws.sec, presetWeight: ws.weight));
+        }
+      }
+    }
     if (widget.resumeDraft) {
       final d = context.read<DraftProvider>().draft;
       if (d != null) {
@@ -80,6 +97,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
 
   /// Salva la bozza corrente (per riprendere l'allenamento dalla Home).
   void _persistDraft() {
+    if (_isEdit) return; // in modifica non si tocca la bozza
     final disc = context.read<DisciplineProvider>().discipline;
     context.read<DraftProvider>().saveDraft(disc, _sets.map(_toSet).toList());
   }
@@ -98,15 +116,26 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
       );
       return;
     }
-    final discipline = context.read<DisciplineProvider>().discipline;
-    final sets = _sets.map((s) {
-      return WorkoutSet(
-        exerciseId: s.exercise.id,
-        reps: int.tryParse(s.reps.text),
-        sec: int.tryParse(s.sec.text),
-        weight: double.tryParse(s.weight.text.replaceAll(',', '.')),
+    final sets = _sets.map(_toSet).toList();
+
+    if (_isEdit) {
+      // Aggiorna il record esistente: stesso id/data/disciplina, nuovi set.
+      final orig = widget.workoutToEdit!;
+      final updated = Workout(
+        id: orig.id,
+        date: orig.date,
+        discipline: orig.discipline,
+        single: orig.single,
+        sets: sets,
       );
-    }).toList();
+      context.read<WorkoutProvider>().update(updated);
+      FeedbackService.onSuccess();
+      CustomToast.show(context, t('workout_updated'));
+      Navigator.pop(context);
+      return;
+    }
+
+    final discipline = context.read<DisciplineProvider>().discipline;
     final workout = Workout(
       id: '${DateTime.now().millisecondsSinceEpoch}',
       date: DateTime.now(),
@@ -129,7 +158,8 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
         getLibrary(discipline).where((e) => e.category == _category).toList();
 
     return Scaffold(
-      appBar: AppBar(title: Text(t('new_workout'))),
+      appBar: AppBar(
+          title: Text(_isEdit ? t('edit_workout') : t('new_workout'))),
       body: Column(
         children: [
           Expanded(
@@ -212,7 +242,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                   onPressed: _save,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Text(t('save_workout')),
+                    child: Text(_isEdit ? t('save_changes') : t('save_workout')),
                   ),
                 ),
               ),
@@ -277,8 +307,13 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
       {bool decimal = false}) {
     return TextField(
       controller: ctrl,
-      keyboardType:
-          TextInputType.numberWithOptions(decimal: decimal),
+      keyboardType: TextInputType.numberWithOptions(decimal: decimal),
+      // Sanity check: solo cifre (con virgola per i pesi) e valore max 1000.
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+            decimal ? RegExp(r'[0-9.,]') : RegExp(r'[0-9]')),
+        _MaxValueFormatter(1000, decimal: decimal),
+      ],
       onChanged: (_) => _persistDraft(),
       decoration: InputDecoration(
         hintText: hint,
@@ -288,5 +323,23 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
         border: const OutlineInputBorder(),
       ),
     );
+  }
+}
+
+/// Impedisce di superare un valore massimo (es. 1000 kg / 1000 reps).
+class _MaxValueFormatter extends TextInputFormatter {
+  final double max;
+  final bool decimal;
+  const _MaxValueFormatter(this.max, {this.decimal = false});
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final text = newValue.text;
+    if (text.isEmpty) return newValue;
+    final v = double.tryParse(text.replaceAll(',', '.'));
+    if (v == null) return decimal ? newValue : oldValue;
+    if (v > max) return oldValue;
+    return newValue;
   }
 }

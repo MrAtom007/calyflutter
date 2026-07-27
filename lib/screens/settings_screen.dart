@@ -89,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.3.0',
+              child: Text('CaliStrack • v4.4.0',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),
@@ -183,7 +183,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }).toList(),
       ),
       _subLabel(c, t('accent')),
-      Wrap(
+      Padding(
+        // Evita che il primo pallino venga tagliato sul bordo sinistro.
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Wrap(
         spacing: 8,
         runSpacing: 8,
         children: accentOptions.map((a) {
@@ -213,6 +216,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           );
         }).toList(),
+      ),
       ),
       _subLabel(c, t('card_style')),
       Wrap(

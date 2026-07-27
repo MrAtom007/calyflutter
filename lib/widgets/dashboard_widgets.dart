@@ -458,7 +458,9 @@ class _RankWidget extends StatelessWidget {
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 2),
-                Text('$pts ${t('points')}',
+                Text('${fmtCompact(pts)} ${t('points')}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(color: c.textMuted, fontSize: 12)),
                 const SizedBox(height: 8),
                 ClipRRect(

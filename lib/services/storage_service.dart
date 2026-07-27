@@ -76,6 +76,19 @@ class StorageService {
     return updated;
   }
 
+  /// Aggiorna un allenamento esistente (per id), preservandone la posizione.
+  static Future<List<Workout>> updateWorkout(Workout w) async {
+    final all = await _readAll();
+    final idx = all.indexWhere((e) => e.id == w.id);
+    if (idx >= 0) {
+      all[idx] = w;
+    } else {
+      all.insert(0, w);
+    }
+    await _writeAll(all);
+    return all;
+  }
+
   static Future<List<Workout>> deleteWorkout(String id) async {
     final all = await _readAll();
     final updated = all.where((w) => w.id != id).toList();

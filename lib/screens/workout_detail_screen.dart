@@ -7,6 +7,7 @@ import '../services/feedback_service.dart';
 import '../models/workout.dart';
 import '../utils/format.dart';
 import '../theme/app_theme.dart';
+import 'new_workout_screen.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
   final String id;
@@ -21,7 +22,24 @@ class WorkoutDetailScreen extends StatelessWidget {
     final Workout? w = matches.isEmpty ? null : matches.first;
 
     return Scaffold(
-      appBar: AppBar(title: Text(t('detail'))),
+      appBar: AppBar(
+        title: Text(t('detail')),
+        actions: [
+          if (w != null)
+            IconButton(
+              icon: const Icon(Icons.edit_rounded),
+              tooltip: t('edit_workout'),
+              onPressed: () {
+                FeedbackService.onTap();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => NewWorkoutScreen(workoutToEdit: w)),
+                );
+              },
+            ),
+        ],
+      ),
       body: w == null
           ? Center(child: Text(t('workout_not_found')))
           : ListView(

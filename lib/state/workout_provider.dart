@@ -23,6 +23,11 @@ class WorkoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> update(Workout w) async {
+    _all = await StorageService.updateWorkout(w);
+    notifyListeners();
+  }
+
   Future<void> delete(String id) async {
     _all = await StorageService.deleteWorkout(id);
     notifyListeners();

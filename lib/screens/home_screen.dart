@@ -259,13 +259,17 @@ class _RankCard extends StatelessWidget {
                           color: c.text,
                           fontSize: 13,
                           fontWeight: FontWeight.w700),
-                      format: (v) => '${v.round()} pt',
+                      format: (v) => '${fmtCompact(v.round())} pt',
                     ),
-                    Text(
-                      info.next != null
-                          ? ' • $diff ${t.p('to_next', {'name': info.next!.name})}'
-                          : ' • ${t('max')}',
-                      style: TextStyle(color: c.textMuted, fontSize: 12),
+                    Flexible(
+                      child: Text(
+                        info.next != null
+                            ? ' • ${fmtCompact(diff)} ${t.p('to_next', {'name': info.next!.name})}'
+                            : ' • ${t('max')}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: c.textMuted, fontSize: 12),
+                      ),
                     ),
                   ],
                 ),

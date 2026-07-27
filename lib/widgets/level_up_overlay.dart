@@ -39,7 +39,6 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
   void initState() {
     super.initState();
     _confetti.play();
-    // Suono + haptic ritmico sincronizzati con l'esplosione.
     FeedbackService.onLevelUp();
   }
 
@@ -62,155 +61,161 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
   Widget build(BuildContext context) {
     final t = context.watch<LocaleProvider>().t;
     final rank = widget.rank;
+    final accent = rank.glow;
     final scale = CurvedAnimation(parent: _ctrl, curve: Curves.elasticOut);
     final fade = CurvedAnimation(
         parent: _ctrl, curve: const Interval(0, 0.4, curve: Curves.easeOut));
 
-    return GestureDetector(
-      onTap: widget.onDismiss,
-      behavior: HitTestBehavior.opaque,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Sfondo scuro + sfocatura.
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(color: Colors.black.withValues(alpha: 0.6)),
-          ),
-          // Esplosione radiale di coriandoli dal centro.
-          Align(
+    // Material (transparency) + DefaultTextStyle: garantisce font corretto
+    // dell'app e nessuna sottolineatura di debug (l'overlay sta fuori da Scaffold).
+    return Material(
+      type: MaterialType.transparency,
+      child: DefaultTextStyle(
+        style: const TextStyle(
+          fontFamily: 'Inter',
+          color: Colors.white,
+          decoration: TextDecoration.none,
+        ),
+        child: GestureDetector(
+          onTap: widget.onDismiss,
+          behavior: HitTestBehavior.opaque,
+          child: Stack(
             alignment: Alignment.center,
-            child: ConfettiWidget(
-              confettiController: _confetti,
-              blastDirectionality: BlastDirectionality.explosive,
-              emissionFrequency: 0.04,
-              numberOfParticles: 30,
-              maxBlastForce: 40,
-              minBlastForce: 12,
-              gravity: 0.32,
-              particleDrag: 0.05,
-              minimumSize: const Size(8, 8),
-              maximumSize: const Size(16, 16),
-              createParticlePath: _starOrCircle,
-              colors: [..._confettiColors, rank.color, rank.glow],
-            ),
+            children: [
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(color: Colors.black.withValues(alpha: 0.6)),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: ConfettiWidget(
+                  confettiController: _confetti,
+                  blastDirectionality: BlastDirectionality.explosive,
+                  emissionFrequency: 0.04,
+                  numberOfParticles: 30,
+                  maxBlastForce: 40,
+                  minBlastForce: 12,
+                  gravity: 0.32,
+                  particleDrag: 0.05,
+                  minimumSize: const Size(8, 8),
+                  maximumSize: const Size(16, 16),
+                  createParticlePath: _starOrCircle,
+                  colors: [..._confettiColors, rank.color, rank.glow],
+                ),
+              ),
+              FadeTransition(
+                opacity: fade,
+                child: ScaleTransition(
+                  scale: scale,
+                  child: _card(context, t, rank, accent),
+                ),
+              ),
+            ],
           ),
-          // Card centrale glassmorphic.
-          FadeTransition(
-            opacity: fade,
-            child: ScaleTransition(
-              scale: scale,
-              child: _card(context, t, rank),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _card(BuildContext context, dynamic t, Rank rank) {
+  Widget _card(BuildContext context, dynamic t, Rank rank, Color accent) {
+    final onAccent =
+        accent.computeLuminance() > 0.5 ? Colors.black : Colors.white;
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 360),
+      constraints: const BoxConstraints(maxWidth: 340),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(24),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.85),
-                borderRadius: BorderRadius.circular(28),
+                color: const Color(0xFF16161E).withValues(alpha: 0.92),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                    color: const Color(0xFFFFD37A).withValues(alpha: 0.55),
-                    width: 1.2),
-                boxShadow: [
-                  BoxShadow(
-                    color: rank.glow.withValues(alpha: 0.35),
-                    blurRadius: 40,
-                    spreadRadius: 4,
-                  ),
-                ],
+                    color: accent.withValues(alpha: 0.3), width: 1.5),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 30),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 26),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Label superiore.
+                  // Header
                   Text(
                     t('rank_unlocked'),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Color(0xFFFFD37A),
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      color: accent,
                       fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 3,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 2.0,
+                      decoration: TextDecoration.none,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Badge con glow radiale dietro.
-                  SizedBox(
-                    width: 190,
-                    height: 190,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                rank.glow.withValues(alpha: 0.55),
-                                rank.color.withValues(alpha: 0.15),
-                                Colors.transparent,
-                              ],
-                              stops: const [0.0, 0.5, 1.0],
-                            ),
-                          ),
+                  // Badge con backlight radiale + glow.
+                  Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          rank.color.withValues(alpha: 0.35),
+                          rank.color2.withValues(alpha: 0.10),
+                          Colors.transparent,
+                        ],
+                        stops: const [0.0, 0.6, 1.0],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: accent.withValues(alpha: 0.5),
+                          blurRadius: 30,
+                          spreadRadius: 5,
                         ),
-                        Medal(rank: rank, size: 150, level: widget.level),
                       ],
                     ),
+                    alignment: Alignment.center,
+                    child: Medal(rank: rank, size: 118, level: widget.level),
                   ),
-                  const SizedBox(height: 22),
-                  // Titolo: nome rango + livello.
+                  const SizedBox(height: 20),
+                  // Titolo
                   Text(
-                    '${rank.name} · ${t('level')} ${widget.level}',
+                    '${rank.name} • ${t('level')} ${widget.level}',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
                       color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.3,
-                      shadows: [
-                        Shadow(color: rank.glow.withValues(alpha: 0.6), blurRadius: 16),
-                      ],
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.none,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
+                  // Sottotitolo
                   Text(
                     t('level_up_sub'),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Inter',
+                      color: Colors.white60,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      decoration: TextDecoration.none,
                     ),
                   ),
-                  const SizedBox(height: 26),
-                  // Pulsante primario "Continua".
+                  const SizedBox(height: 24),
+                  // Pulsante Continua
                   SizedBox(
                     width: double.infinity,
-                    height: 52,
+                    height: 48,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: rank.color,
-                        foregroundColor:
-                            rank.color.computeLuminance() > 0.5
-                                ? Colors.black
-                                : Colors.white,
+                        backgroundColor: accent,
+                        foregroundColor: onAccent,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       onPressed: () {
                         FeedbackService.onTap();
@@ -219,7 +224,11 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
                       child: Text(
                         t('continue_'),
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w800),
+                          fontFamily: 'Inter',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          decoration: TextDecoration.none,
+                        ),
                       ),
                     ),
                   ),

@@ -17,6 +17,12 @@ String fmtNum(num n) {
   return n.toString();
 }
 
+/// Formattazione compatta (es. 600M, 12.3K) per evitare overflow nelle card.
+String fmtCompact(num n) {
+  if (n.abs() < 1000) return n.round().toString();
+  return NumberFormat.compact(locale: appLocale).format(n);
+}
+
 /// Riepilogo di un singolo set in base al tipo di esercizio.
 String setSummary(WorkoutSet s) {
   final ex = getExercise(s.exerciseId);

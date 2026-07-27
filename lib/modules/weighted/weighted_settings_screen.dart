@@ -81,11 +81,11 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
                 ),
                 const SizedBox(height: Spacing.lg),
                 _section(c, t('bar_weight')),
-                _numberRow(
+                _stepperRow(
                   c,
                   value: s.barWeight,
                   unit: s.unit,
-                  steps: const [1.25, 2.5, 5],
+                  step: 2.5,
                   onChanged: (v) => setState(() {
                     s.barWeight = v.clamp(0, 100);
                     _save();
@@ -93,11 +93,11 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
                 ),
                 const SizedBox(height: Spacing.lg),
                 _section(c, t('body_weight')),
-                _numberRow(
+                _stepperRow(
                   c,
                   value: s.bodyWeight,
                   unit: s.unit,
-                  steps: const [0.5, 1, 5],
+                  step: 1,
                   onChanged: (v) => setState(() {
                     s.bodyWeight = v.clamp(20, 300);
                     _save();
@@ -118,17 +118,19 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
         });
       },
       child: Container(
-        constraints: const BoxConstraints(minWidth: 56, minHeight: 48),
+        constraints: const BoxConstraints(minWidth: 44),
+        height: 36,
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
           color: active ? c.primary : c.cardAlt,
-          borderRadius: BorderRadius.circular(Radii.md),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: active ? c.primary : c.border),
         ),
         child: Text(
           _fmt(kg),
           style: TextStyle(
+            fontSize: 13,
             fontWeight: FontWeight.w800,
             color: active
                 ? (c.bg.computeLuminance() > 0.5 ? Colors.white : Colors.black)
@@ -139,73 +141,65 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
     );
   }
 
-  Widget _numberRow(
+  /// Stepper orizzontale compatto: [-]  valore unità  [+]
+  Widget _stepperRow(
     AppColors c, {
     required double value,
     required String unit,
-    required List<double> steps,
+    required double step,
     required ValueChanged<double> onChanged,
   }) {
     return Row(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(
-            color: c.cardAlt,
-            borderRadius: BorderRadius.circular(Radii.md),
-            border: Border.all(color: c.border),
-          ),
-          child: Text('${_fmt(value)} $unit',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  color: c.primary)),
-        ),
-        const SizedBox(width: Spacing.sm),
+        _roundBtn(c, Icons.remove_rounded, () => onChanged(value - step)),
         Expanded(
-          child: Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: [
-              for (final st in steps) ...[
-                _stepBtn(c, '-${_fmt(st)}', () => onChanged(value - st)),
-                _stepBtn(c, '+${_fmt(st)}', () => onChanged(value + st),
-                    filled: true),
-              ],
-            ],
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: Spacing.sm),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: c.cardAlt,
+              borderRadius: BorderRadius.circular(Radii.md),
+              border: Border.all(color: c.border),
+            ),
+            child: Text('${_fmt(value)} $unit',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: c.primary)),
           ),
         ),
+        _roundBtn(c, Icons.add_rounded, () => onChanged(value + step),
+            filled: true),
       ],
     );
   }
 
-  Widget _stepBtn(AppColors c, String label, VoidCallback onTap,
+  Widget _roundBtn(AppColors c, IconData icon, VoidCallback onTap,
       {bool filled = false}) {
     return Material(
       color: filled ? c.primary : c.cardAlt,
-      borderRadius: BorderRadius.circular(Radii.sm),
+      shape: const CircleBorder(),
       child: InkWell(
-        borderRadius: BorderRadius.circular(Radii.sm),
+        customBorder: const CircleBorder(),
         onTap: () {
           FeedbackService.light();
           onTap();
         },
         child: Container(
-          constraints: const BoxConstraints(minWidth: 48, minHeight: 44),
+          width: 48,
+          height: 48,
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Radii.sm),
+            shape: BoxShape.circle,
             border: filled ? null : Border.all(color: c.border),
           ),
-          child: Text(label,
-              style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  color: filled
-                      ? (c.bg.computeLuminance() > 0.5
-                          ? Colors.white
-                          : Colors.black)
-                      : c.text)),
+          child: Icon(icon,
+              color: filled
+                  ? (c.bg.computeLuminance() > 0.5
+                      ? Colors.white
+                      : Colors.black)
+                  : c.text),
         ),
       ),
     );
