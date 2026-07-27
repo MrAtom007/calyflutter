@@ -49,6 +49,29 @@ flutter build apk      # Android (richiede Android SDK)
 flutter build web      # browser
 ```
 
+## Configurazione Google Sign-In (google-services.json)
+
+Il file `android/app/google-services.json` **non è versionato** (contiene chiavi
+del progetto Firebase) ed è escluso via `.gitignore`. Su una nuova macchina va
+ricreato, altrimenti l'app compila ma il login Google fallisce.
+
+1. [console.firebase.google.com](https://console.firebase.google.com) → progetto **CaliStrack**.
+2. ⚙️ **Impostazioni progetto** → scheda **Generali** → app Android
+   `com.calistrack.calistrack`.
+3. Aggiungi la **SHA-1** della chiave con cui firmi la build. Per la chiave di
+   debug (usata anche dalla release attuale):
+   ```bash
+   keytool -list -v -keystore ~/.android/debug.keystore \
+     -alias androiddebugkey -storepass android | grep SHA1
+   ```
+   Se `keytool` va in errore per la locale, aggiungi
+   `-J-Duser.language=en -J-Duser.country=US`.
+4. **Authentication** → *Sign-in method* → abilita **Google**.
+5. Scarica `google-services.json` e mettilo in **`android/app/`**.
+
+> Nota: un keystore di release diverso (o la firma del Play Store) ha una SHA-1
+> differente, da aggiungere anch'essa in Firebase.
+
 ## Struttura
 
 ```
