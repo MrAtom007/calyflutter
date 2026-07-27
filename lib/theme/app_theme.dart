@@ -423,6 +423,21 @@ final Map<String, AppSkin> appThemes = {
   ),
 };
 
+/// Pacchetto sonoro caratterizzante per un tema.
+/// - neon* e cyberpunk -> 'neon'
+/// - zeus -> 'storm'
+/// - spartacus/kratos/ulisse -> 'epic'
+/// - tutti gli altri (classici) -> 'clean'
+String soundPackForTheme(String themeId) {
+  const epic = {'spartacus', 'kratos', 'ulisse'};
+  if (themeId == 'zeus') return 'storm';
+  if (themeId == 'cyberpunk') return 'neon';
+  if (epic.contains(themeId)) return 'epic';
+  final skin = appThemes[themeId];
+  if (skin != null && skin.neon) return 'neon';
+  return 'clean';
+}
+
 /// Accento colore opzionale che sovrascrive il primary dello skin attivo.
 class AppAccent {
   final String id;

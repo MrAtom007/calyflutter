@@ -64,405 +64,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(Spacing.md),
         children: [
-          // ---- Esperienza (lingua, suoni, vibrazioni) ----
-          _section(c, t('experience')),
-          Container(
-            decoration: BoxDecoration(
-              color: c.card,
-              borderRadius: BorderRadius.circular(Radii.md),
-              border: Border.all(color: c.border),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.language, color: c.primary),
-                    const SizedBox(width: 12),
-                    Text(t('language')),
-                    const Spacer(),
-                    DropdownButton<String>(
-                      value: localeP.code,
-                      underline: const SizedBox(),
-                      onChanged: (v) {
-                        if (v != null) {
-                          FeedbackService.selection();
-                          context.read<LocaleProvider>().setLanguage(v);
-                        }
-                      },
-                      items: AppStrings.supported
-                          .map((code) => DropdownMenuItem(
-                                value: code,
-                                child: Text(AppStrings.languageNames[code]!),
-                              ))
-                          .toList(),
-                    ),
-                  ],
-                ),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  secondary: Icon(Icons.volume_up, color: c.primary),
-                  title: Text(t('sound_effects')),
-                  value: _sound,
-                  activeThumbColor: c.primary,
-                  onChanged: (v) async {
-                    await FeedbackService.setSound(v);
-                    if (v) FeedbackService.success();
-                    setState(() => _sound = v);
-                  },
-                ),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  secondary: Icon(Icons.vibration, color: c.primary),
-                  title: Text(t('vibrations')),
-                  value: _haptics,
-                  activeThumbColor: c.primary,
-                  onChanged: (v) async {
-                    await FeedbackService.setHaptics(v);
-                    if (v) FeedbackService.medium();
-                    setState(() => _haptics = v);
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: Spacing.lg),
-          _section(c, t('theme_color')),
-          _themeCategory(context, theme, c, t('theme_cat_classic'),
-              _themesIn('classic'),
-              initiallyExpanded: true),
-          _themeCategory(
-              context, theme, c, t('theme_cat_neon'), _themesIn('neon')),
-          _themeCategory(context, theme, c, t('theme_cat_legendary'),
-              _themesIn('legendary')),
-          if (theme.skin.neon)
-            SwitchListTile(
-              title: Text(t('glow_effect')),
-              value: theme.glow,
-              activeThumbColor: c.primary,
-              onChanged: (v) => theme.toggleGlow(v),
-            ),
-
-          // ---- Aspetto (densità, accento, stile card) ----
-          const SizedBox(height: Spacing.lg),
-          _section(c, t('appearance')),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(t('density'),
-                style: TextStyle(color: c.textMuted, fontSize: 12)),
-          ),
-          Wrap(
-            spacing: Spacing.sm,
-            children: UiDensity.values.map((d) {
-              final active = theme.density == d;
-              return ChoiceChip(
-                label: Text(d.label),
-                selected: active,
-                selectedColor: c.primary,
-                onSelected: (_) {
-                  FeedbackService.selection();
-                  theme.setDensity(d);
-                },
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: Spacing.md),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(t('accent'),
-                style: TextStyle(color: c.textMuted, fontSize: 12)),
-          ),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: accentOptions.map((a) {
-              final active = theme.accentId == a.id;
-              final isDefault = a.id == 'default';
-              return GestureDetector(
-                onTap: () {
-                  FeedbackService.selection();
-                  theme.setAccent(a.id);
-                },
-                child: Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: isDefault ? c.card : a.color,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: active ? c.text : c.border,
-                        width: active ? 2.5 : 1),
-                  ),
-                  child: isDefault
-                      ? Icon(Icons.format_color_reset_rounded,
-                          size: 18, color: c.textMuted)
-                      : (active
-                          ? const Icon(Icons.check, size: 18, color: Colors.white)
-                          : null),
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: Spacing.md),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(t('card_style'),
-                style: TextStyle(color: c.textMuted, fontSize: 12)),
-          ),
-          Wrap(
-            spacing: Spacing.sm,
-            children: [
-              (CardStyle.solid, t('card_solid')),
-              (CardStyle.glass, t('card_glass')),
-              (CardStyle.outline, t('card_outline')),
-            ].map((e) {
-              final active = theme.cardStyle == e.$1;
-              return ChoiceChip(
-                label: Text(e.$2),
-                selected: active,
-                selectedColor: c.primary,
-                onSelected: (_) {
-                  FeedbackService.selection();
-                  theme.setCardStyle(e.$1);
-                },
-              );
-            }).toList(),
-          ),
-
-          // ---- Zavorre & piastre ----
-          const SizedBox(height: Spacing.lg),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.fitness_center_rounded, color: c.primary),
-            title: Text(t('weighted_settings')),
-            subtitle: Text(t('weighted_settings_hint'),
-                style: TextStyle(color: c.textMuted, fontSize: 12)),
-            trailing: Icon(Icons.chevron_right_rounded, color: c.textMuted),
-            onTap: () {
-              FeedbackService.onTap();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const WeightedSettingsScreen()));
-            },
-          ),
-
-          // ---- Icona app ----
-          const SizedBox(height: Spacing.lg),
-          _section(c, t('app_icon')),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(t('app_icon_hint'),
-                style: TextStyle(color: c.textMuted, fontSize: 12)),
-          ),
-          SizedBox(
-            height: 96,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: AppIconService.styles.length,
-              separatorBuilder: (_, _) => const SizedBox(width: Spacing.sm),
-              itemBuilder: (context, i) {
-                final s = AppIconService.styles[i];
-                final active = _appIcon == s.id;
-                return GestureDetector(
-                  onTap: () async {
-                    FeedbackService.onTap();
-                    final messenger = ScaffoldMessenger.of(context);
-                    final ok = await AppIconService.setIcon(s.id);
-                    if (ok) {
-                      setState(() => _appIcon = s.id);
-                    } else if (mounted) {
-                      messenger.showSnackBar(
-                          SnackBar(content: Text(t('app_icon_failed'))));
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                              color: active ? c.primary : c.border,
-                              width: active ? 2.5 : 1),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: Image.asset(s.asset, fit: BoxFit.cover),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(s.name,
-                          style: TextStyle(
-                              fontSize: 11,
-                              color: active ? c.primary : c.textMuted,
-                              fontWeight:
-                                  active ? FontWeight.w800 : FontWeight.w500)),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-
-          const SizedBox(height: Spacing.lg),
-          _section(c, t('security')),
-          _radioTile(t('no_protection'), LockMode.none, security.mode, () async {
-            await SecurityService.disableLock();
-            await security.syncSettings();
-            setState(() {});
-          }),
-          _radioTile(t('app_pin'), LockMode.pin, security.mode, () async {
-            final pin = await _askPin();
-            if (pin != null) {
-              await SecurityService.setPin(pin);
-              await security.syncSettings();
-              setState(() {});
-            }
-          }),
-          if (_support?.deviceLockAvailable ?? false)
-            _radioTile(t('device_lock'), LockMode.device, security.mode,
-                () async {
-              await SecurityService.setDeviceMode();
-              await security.syncSettings();
-              setState(() {});
-            }),
-          if (security.mode == LockMode.pin &&
-              (_support?.biometricAvailable ?? false))
-            SwitchListTile(
-              title: Text('${t('quick_unlock')} ${_support!.biometricLabel}'),
-              value: _bioQuick,
-              activeThumbColor: c.primary,
-              onChanged: (v) async {
-                await SecurityService.setBioQuickEnabled(v);
-                setState(() => _bioQuick = v);
-              },
-            ),
-          if (security.mode != LockMode.none) ...[
-            Padding(
-              padding: const EdgeInsets.only(top: Spacing.sm, bottom: 4),
-              child: Text(t('when_unlock'),
-                  style: TextStyle(color: c.textMuted, fontSize: 12)),
-            ),
-            _policyTile(t('on_launch'), LockPolicy.launch),
-            _policyTile(t('after_2min'), LockPolicy.grace),
-            _policyTile(t('always'), LockPolicy.immediate),
-          ],
-
-          const SizedBox(height: Spacing.lg),
-          _section(c, t('reminders')),
-          SwitchListTile(
-            title: Text(t('reminder_notifications')),
-            value: _reminder.enabled,
-            activeThumbColor: c.primary,
-            onChanged: (v) async {
-              final updated = _reminder.copyWith(enabled: v);
-              final ok = await NotificationService.reschedule(updated);
-              setState(() => _reminder = updated.copyWith(enabled: v && ok));
-            },
-          ),
-          if (_reminder.enabled) ...[
-            ListTile(
-              title: Text(t('time')),
-              trailing: Text(
-                  '${_reminder.hour.toString().padLeft(2, '0')}:${_reminder.minute.toString().padLeft(2, '0')}'),
-              onTap: () async {
-                final picked = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay(
-                      hour: _reminder.hour, minute: _reminder.minute),
-                );
-                if (picked != null) {
-                  final updated =
-                      _reminder.copyWith(hour: picked.hour, minute: picked.minute);
-                  await NotificationService.reschedule(updated);
-                  setState(() => _reminder = updated);
-                }
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Wrap(
-                spacing: 6,
-                children: List.generate(7, (uiIdx) {
-                  // uiIdx 0=Lun..6=Dom -> storage day (dom=0)
-                  final day = (uiIdx + 1) % 7;
-                  final sel = _reminder.days.contains(day);
-                  return ChoiceChip(
-                    label: Text(_dayLabels[uiIdx]),
-                    selected: sel,
-                    selectedColor: c.primary,
-                    onSelected: (_) async {
-                      final days = [..._reminder.days];
-                      if (sel) {
-                        days.remove(day);
-                      } else {
-                        days.add(day);
-                      }
-                      final updated = _reminder.copyWith(days: days);
-                      await NotificationService.reschedule(updated);
-                      setState(() => _reminder = updated);
-                    },
-                  );
-                }),
-              ),
-            ),
-          ],
-
-          const SizedBox(height: Spacing.lg),
-          _section(c, t('backup_privacy')),
-          SwitchListTile(
-            title: Text(t('encryption')),
-            value: _encryption,
-            activeThumbColor: c.primary,
-            onChanged: (v) async {
-              final workouts = context.read<WorkoutProvider>();
-              if (v) {
-                await StorageService.enableEncryption();
-              } else {
-                await StorageService.disableEncryption();
-              }
-              await workouts.reencrypt();
-              if (mounted) setState(() => _encryption = v);
-            },
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => _export('csv'),
-                  child: Text(t('export_csv')),
-                ),
-              ),
-              const SizedBox(width: Spacing.sm),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => _export('json'),
-                  child: Text(t('export_json')),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: Spacing.lg),
-          _section(c, t('guide')),
-          ListTile(
-            leading: const Icon(Icons.replay),
-            title: Text(t('replay_tutorial')),
-            onTap: () => context.read<OnboardingProvider>().replay(),
-          ),
-
-          const SizedBox(height: Spacing.lg),
-          _section(c, t('data')),
-          ListTile(
-            leading: Icon(Icons.delete_forever, color: c.danger),
-            title: Text(t('clear_all'), style: TextStyle(color: c.danger)),
-            onTap: _confirmClear,
-          ),
-
+          _categoryCard(c,
+              icon: Icons.palette_rounded,
+              title: t('cat_personalization'),
+              initiallyExpanded: true,
+              children: _personalizationChildren(context, theme, c, t)),
+          _categoryCard(c,
+              icon: Icons.fitness_center_rounded,
+              title: t('cat_equipment'),
+              children: _equipmentChildren(context, c, t)),
+          _categoryCard(c,
+              icon: Icons.shield_rounded,
+              title: t('cat_security'),
+              children: _securityChildren(context, security, c, t)),
+          _categoryCard(c,
+              icon: Icons.tune_rounded,
+              title: t('cat_preferences'),
+              children: _preferencesChildren(context, localeP, c, t)),
+          _categoryCard(c,
+              icon: Icons.storage_rounded,
+              title: t('cat_data'),
+              children: _dataChildren(context, c, t)),
           const SizedBox(height: Spacing.xl),
           Center(
-            child: Text('CaliStrack • v4.1.7',
-                style: TextStyle(color: c.textMuted, fontSize: 12)),
+            child: Opacity(
+              opacity: 0.5,
+              child: Text('CaliStrack • v4.3.0',
+                  style: TextStyle(color: c.textMuted, fontSize: 12)),
+            ),
           ),
           const SizedBox(height: 40),
         ],
@@ -470,6 +99,437 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  // ===========================================================================
+  // Card categoria
+  // ===========================================================================
+  Widget _categoryCard(AppColors c,
+      {required IconData icon,
+      required String title,
+      bool initiallyExpanded = false,
+      required List<Widget> children}) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: Spacing.md),
+        decoration: BoxDecoration(
+          color: c.card,
+          borderRadius: BorderRadius.circular(Radii.lg),
+          border: Border.all(color: c.border.withValues(alpha: 0.7)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: ExpansionTile(
+          initiallyExpanded: initiallyExpanded,
+          leading: Icon(icon, color: c.primary),
+          tilePadding: const EdgeInsets.symmetric(horizontal: Spacing.md),
+          childrenPadding:
+              const EdgeInsets.fromLTRB(Spacing.md, 0, Spacing.md, Spacing.md),
+          title: Text(title,
+              style:
+                  const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+          children: children,
+        ),
+      ),
+    );
+  }
+
+  Widget _subLabel(AppColors c, String text) => Padding(
+        padding: const EdgeInsets.only(top: Spacing.md, bottom: 6),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(text,
+              style: TextStyle(
+                  color: c.textMuted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700)),
+        ),
+      );
+
+  // ===========================================================================
+  // 1. Personalizzazione & Temi
+  // ===========================================================================
+  List<Widget> _personalizationChildren(
+      BuildContext context, ThemeProvider theme, AppColors c, dynamic t) {
+    return [
+      _subLabel(c, t('theme_color')),
+      _themeCategory(context, theme, c, t('theme_cat_classic'),
+          _themesIn('classic'),
+          initiallyExpanded: true),
+      _themeCategory(
+          context, theme, c, t('theme_cat_neon'), _themesIn('neon')),
+      _themeCategory(context, theme, c, t('theme_cat_legendary'),
+          _themesIn('legendary')),
+      if (theme.skin.neon)
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(t('glow_effect')),
+          value: theme.glow,
+          activeThumbColor: c.primary,
+          onChanged: (v) => theme.toggleGlow(v),
+        ),
+      _subLabel(c, t('density')),
+      Wrap(
+        spacing: Spacing.sm,
+        children: UiDensity.values.map((d) {
+          final active = theme.density == d;
+          return ChoiceChip(
+            label: Text(d.label),
+            selected: active,
+            selectedColor: c.primary,
+            onSelected: (_) {
+              FeedbackService.selection();
+              theme.setDensity(d);
+            },
+          );
+        }).toList(),
+      ),
+      _subLabel(c, t('accent')),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: accentOptions.map((a) {
+          final active = theme.accentId == a.id;
+          final isDefault = a.id == 'default';
+          return GestureDetector(
+            onTap: () {
+              FeedbackService.selection();
+              theme.setAccent(a.id);
+            },
+            child: Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: isDefault ? c.card : a.color,
+                shape: BoxShape.circle,
+                border: Border.all(
+                    color: active ? c.text : c.border,
+                    width: active ? 2.5 : 1),
+              ),
+              child: isDefault
+                  ? Icon(Icons.format_color_reset_rounded,
+                      size: 15, color: c.textMuted)
+                  : (active
+                      ? const Icon(Icons.check, size: 15, color: Colors.white)
+                      : null),
+            ),
+          );
+        }).toList(),
+      ),
+      _subLabel(c, t('card_style')),
+      Wrap(
+        spacing: Spacing.sm,
+        children: [
+          (CardStyle.solid, t('card_solid')),
+          (CardStyle.glass, t('card_glass')),
+          (CardStyle.outline, t('card_outline')),
+        ].map((e) {
+          final active = theme.cardStyle == e.$1;
+          return ChoiceChip(
+            label: Text(e.$2),
+            selected: active,
+            selectedColor: c.primary,
+            onSelected: (_) {
+              FeedbackService.selection();
+              theme.setCardStyle(e.$1);
+            },
+          );
+        }).toList(),
+      ),
+      _subLabel(c, t('app_icon')),
+      SizedBox(
+        height: 96,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: AppIconService.styles.length,
+          separatorBuilder: (_, _) => const SizedBox(width: Spacing.sm),
+          itemBuilder: (context, i) {
+            final s = AppIconService.styles[i];
+            final active = _appIcon == s.id;
+            return GestureDetector(
+              onTap: () async {
+                FeedbackService.onTap();
+                final messenger = ScaffoldMessenger.of(context);
+                final ok = await AppIconService.setIcon(s.id);
+                if (ok) {
+                  setState(() => _appIcon = s.id);
+                } else if (mounted) {
+                  messenger.showSnackBar(
+                      SnackBar(content: Text(t('app_icon_failed'))));
+                }
+              },
+              child: Column(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                          color: active ? c.primary : c.border,
+                          width: active ? 2.5 : 1),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Image.asset(s.asset, fit: BoxFit.cover),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(s.name,
+                      style: TextStyle(
+                          fontSize: 11,
+                          color: active ? c.primary : c.textMuted,
+                          fontWeight:
+                              active ? FontWeight.w800 : FontWeight.w500)),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    ];
+  }
+
+  // ===========================================================================
+  // 2. Attrezzatura & Pesi
+  // ===========================================================================
+  List<Widget> _equipmentChildren(
+      BuildContext context, AppColors c, dynamic t) {
+    return [
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(Icons.scale_rounded, color: c.primary),
+        title: Text(t('weighted_settings')),
+        subtitle: Text(t('weighted_settings_hint'),
+            style: TextStyle(color: c.textMuted, fontSize: 12)),
+        trailing: Icon(Icons.chevron_right_rounded, color: c.textMuted),
+        onTap: () {
+          FeedbackService.onTap();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const WeightedSettingsScreen()));
+        },
+      ),
+    ];
+  }
+
+  // ===========================================================================
+  // 3. Sicurezza & Privacy
+  // ===========================================================================
+  List<Widget> _securityChildren(
+      BuildContext context, SecurityProvider security, AppColors c, dynamic t) {
+    return [
+      _radioTile(t('no_protection'), LockMode.none, security.mode, () async {
+        await SecurityService.disableLock();
+        await security.syncSettings();
+        setState(() {});
+      }),
+      _radioTile(t('app_pin'), LockMode.pin, security.mode, () async {
+        final pin = await _askPin();
+        if (pin != null) {
+          await SecurityService.setPin(pin);
+          await security.syncSettings();
+          setState(() {});
+        }
+      }),
+      if (_support?.deviceLockAvailable ?? false)
+        _radioTile(t('device_lock'), LockMode.device, security.mode, () async {
+          await SecurityService.setDeviceMode();
+          await security.syncSettings();
+          setState(() {});
+        }),
+      if (security.mode == LockMode.pin &&
+          (_support?.biometricAvailable ?? false))
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text('${t('quick_unlock')} ${_support!.biometricLabel}'),
+          value: _bioQuick,
+          activeThumbColor: c.primary,
+          onChanged: (v) async {
+            await SecurityService.setBioQuickEnabled(v);
+            setState(() => _bioQuick = v);
+          },
+        ),
+      if (security.mode != LockMode.none) ...[
+        _subLabel(c, t('when_unlock')),
+        _policyTile(t('on_launch'), LockPolicy.launch),
+        _policyTile(t('after_2min'), LockPolicy.grace),
+        _policyTile(t('always'), LockPolicy.immediate),
+      ],
+      _subLabel(c, t('backup_privacy')),
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(t('encryption')),
+        value: _encryption,
+        activeThumbColor: c.primary,
+        onChanged: (v) async {
+          final workouts = context.read<WorkoutProvider>();
+          if (v) {
+            await StorageService.enableEncryption();
+          } else {
+            await StorageService.disableEncryption();
+          }
+          await workouts.reencrypt();
+          if (mounted) setState(() => _encryption = v);
+        },
+      ),
+    ];
+  }
+
+  // ===========================================================================
+  // 4. Preferenze & Suoni
+  // ===========================================================================
+  List<Widget> _preferencesChildren(
+      BuildContext context, LocaleProvider localeP, AppColors c, dynamic t) {
+    return [
+      Row(
+        children: [
+          Icon(Icons.language, color: c.primary),
+          const SizedBox(width: 12),
+          Text(t('language')),
+          const Spacer(),
+          DropdownButton<String>(
+            value: localeP.code,
+            underline: const SizedBox(),
+            onChanged: (v) {
+              if (v != null) {
+                FeedbackService.selection();
+                context.read<LocaleProvider>().setLanguage(v);
+              }
+            },
+            items: AppStrings.supported
+                .map((code) => DropdownMenuItem(
+                      value: code,
+                      child: Text(AppStrings.languageNames[code]!),
+                    ))
+                .toList(),
+          ),
+        ],
+      ),
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        secondary: Icon(Icons.volume_up, color: c.primary),
+        title: Text(t('sound_effects')),
+        value: _sound,
+        activeThumbColor: c.primary,
+        onChanged: (v) async {
+          await FeedbackService.setSound(v);
+          if (v) FeedbackService.success();
+          setState(() => _sound = v);
+        },
+      ),
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        secondary: Icon(Icons.vibration, color: c.primary),
+        title: Text(t('vibrations')),
+        value: _haptics,
+        activeThumbColor: c.primary,
+        onChanged: (v) async {
+          await FeedbackService.setHaptics(v);
+          if (v) FeedbackService.medium();
+          setState(() => _haptics = v);
+        },
+      ),
+      _subLabel(c, t('reminders')),
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(t('reminder_notifications')),
+        value: _reminder.enabled,
+        activeThumbColor: c.primary,
+        onChanged: (v) async {
+          final updated = _reminder.copyWith(enabled: v);
+          final ok = await NotificationService.reschedule(updated);
+          setState(() => _reminder = updated.copyWith(enabled: v && ok));
+        },
+      ),
+      if (_reminder.enabled) ...[
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(t('time')),
+          trailing: Text(
+              '${_reminder.hour.toString().padLeft(2, '0')}:${_reminder.minute.toString().padLeft(2, '0')}'),
+          onTap: () async {
+            final picked = await showTimePicker(
+              context: context,
+              initialTime:
+                  TimeOfDay(hour: _reminder.hour, minute: _reminder.minute),
+            );
+            if (picked != null) {
+              final updated =
+                  _reminder.copyWith(hour: picked.hour, minute: picked.minute);
+              await NotificationService.reschedule(updated);
+              setState(() => _reminder = updated);
+            }
+          },
+        ),
+        Wrap(
+          spacing: 6,
+          children: List.generate(7, (uiIdx) {
+            final day = (uiIdx + 1) % 7;
+            final sel = _reminder.days.contains(day);
+            return ChoiceChip(
+              label: Text(_dayLabels[uiIdx]),
+              selected: sel,
+              selectedColor: c.primary,
+              onSelected: (_) async {
+                final days = [..._reminder.days];
+                if (sel) {
+                  days.remove(day);
+                } else {
+                  days.add(day);
+                }
+                final updated = _reminder.copyWith(days: days);
+                await NotificationService.reschedule(updated);
+                setState(() => _reminder = updated);
+              },
+            );
+          }),
+        ),
+      ],
+    ];
+  }
+
+  // ===========================================================================
+  // 5. Dati & Backup
+  // ===========================================================================
+  List<Widget> _dataChildren(BuildContext context, AppColors c, dynamic t) {
+    return [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: Spacing.sm),
+        child: Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => _export('csv'),
+                child: Text(t('export_csv')),
+              ),
+            ),
+            const SizedBox(width: Spacing.sm),
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => _export('json'),
+                child: Text(t('export_json')),
+              ),
+            ),
+          ],
+        ),
+      ),
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: const Icon(Icons.replay),
+        title: Text(t('replay_tutorial')),
+        onTap: () => context.read<OnboardingProvider>().replay(),
+      ),
+      const Divider(height: 1),
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(Icons.delete_forever, color: c.danger),
+        title: Text(t('clear_all'), style: TextStyle(color: c.danger)),
+        onTap: _confirmClear,
+      ),
+    ];
+  }
+
+  // ===========================================================================
+  // Azioni / helper
+  // ===========================================================================
   Future<void> _export(String fmt) async {
     final all = await StorageService.getWorkouts();
     if (all.isEmpty) {
@@ -556,6 +616,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _radioTile(
       String label, String value, String groupValue, VoidCallback onTap) {
     return RadioListTile<String>(
+      contentPadding: EdgeInsets.zero,
       title: Text(label),
       value: value,
       // ignore: deprecated_member_use
@@ -568,6 +629,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _policyTile(String label, String value) {
     return RadioListTile<String>(
       dense: true,
+      contentPadding: EdgeInsets.zero,
       title: Text(label),
       value: value,
       // ignore: deprecated_member_use
@@ -581,15 +643,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
     );
   }
-
-  Widget _section(AppColors c, String t) => Padding(
-        padding: const EdgeInsets.only(bottom: Spacing.sm),
-        child: Text(t,
-            style: TextStyle(
-                color: c.primary,
-                fontSize: 15,
-                fontWeight: FontWeight.w800)),
-      );
 
   // ---- Temi raggruppati per categoria ----
   static const _legendaryIds = {
@@ -620,21 +673,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Container(
         margin: const EdgeInsets.only(bottom: Spacing.sm),
         decoration: BoxDecoration(
-          color: c.card,
+          color: c.cardAlt,
           borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(
-              color: c.border.withValues(alpha: 0.6)),
+          border: Border.all(color: c.border.withValues(alpha: 0.6)),
         ),
         clipBehavior: Clip.antiAlias,
         child: ExpansionTile(
           initiallyExpanded: initiallyExpanded,
           tilePadding: const EdgeInsets.symmetric(horizontal: Spacing.md),
-          childrenPadding: const EdgeInsets.fromLTRB(
-              Spacing.sm, 0, Spacing.sm, Spacing.sm),
+          childrenPadding:
+              const EdgeInsets.fromLTRB(Spacing.sm, 0, Spacing.sm, Spacing.sm),
           title: Row(
             children: [
-              Text(title,
-                  style: const TextStyle(fontWeight: FontWeight.w800)),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
               if (activeInside) ...[
                 const SizedBox(width: 8),
                 Container(
@@ -657,7 +708,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               childAspectRatio: 1.6,
               mainAxisSpacing: Spacing.sm,
               crossAxisSpacing: Spacing.sm,
-              children: skins.map((skin) => _themeCard(context, theme, c, skin))
+              children: skins
+                  .map((skin) => _themeCard(context, theme, c, skin))
                   .toList(),
             ),
           ],
@@ -689,9 +741,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           color: c.card,
           borderRadius: BorderRadius.circular(Radii.md),
           border: Border.all(
-              color: active
-                  ? c.primary
-                  : c.border.withValues(alpha: 0.5),
+              color: active ? c.primary : c.border.withValues(alpha: 0.5),
               width: active ? 2 : 1),
         ),
         child: Column(

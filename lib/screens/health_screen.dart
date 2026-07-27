@@ -359,10 +359,9 @@ class _ConnectCard extends StatelessWidget {
                 ),
             ],
           ),
-          // Google (mostrato solo se l'accesso è già attivo: il login richiede
-          // una configurazione OAuth/Firebase non ancora presente).
-          if (health.googleSignedIn) ...[
-            const SizedBox(height: Spacing.md),
+          const SizedBox(height: Spacing.md),
+          // Google
+          if (health.googleSignedIn)
             Row(
               children: [
                 CircleAvatar(
@@ -386,8 +385,24 @@ class _ConnectCard extends StatelessWidget {
                     onPressed: () => health.signOutGoogle(),
                     child: Text(t('sign_out'))),
               ],
+            )
+          else
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () async {
+                  FeedbackService.onTap();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final ok = await health.signInGoogle();
+                  if (!ok) {
+                    messenger.showSnackBar(SnackBar(
+                        content: Text(t('sign_in_failed'))));
+                  }
+                },
+                icon: const Icon(Icons.account_circle_rounded),
+                label: Text(t('sign_in_google')),
+              ),
             ),
-          ],
           const SizedBox(height: Spacing.sm),
           Row(
             children: [

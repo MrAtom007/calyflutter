@@ -12,6 +12,21 @@ class FeedbackService {
   static bool hapticsEnabled = true;
   static bool _hasVibrator = false;
 
+  /// Pacchetto sonoro attivo (cartella in `assets/sounds/<pack>/`).
+  /// Impostato in base al tema attivo.
+  static String pack = 'clean';
+
+  static void setPack(String p) {
+    if (p == pack) return;
+    pack = p;
+    // I player sono legati al percorso del file: svuota la cache così
+    // il prossimo suono usa il nuovo pacchetto.
+    for (final pl in _players.values) {
+      pl.dispose();
+    }
+    _players.clear();
+  }
+
   static final Map<String, AudioPlayer> _players = {};
 
   static Future<void> init() async {
@@ -59,16 +74,16 @@ class FeedbackService {
       });
       await player.stop();
       await player.setVolume(volume);
-      await player.play(AssetSource('sounds/$name.wav'));
+      await player.play(AssetSource('sounds/$pack/$name.wav'));
     } catch (_) {}
   }
 
-  static void tap() => _play('tap', volume: 1.0);
-  static void beep() => _play('beep', volume: 1.0);
-  static void success() => _play('success', volume: 1.0);
-  static void complete() => _play('complete', volume: 1.0);
-  static void levelUp() => _play('levelup', volume: 1.0);
-  static void unlock() => _play('unlock', volume: 1.0);
+  static void tap() => _play('tap', volume: 0.55);
+  static void beep() => _play('beep', volume: 0.85);
+  static void success() => _play('success', volume: 0.9);
+  static void complete() => _play('complete', volume: 0.9);
+  static void levelUp() => _play('levelup', volume: 0.95);
+  static void unlock() => _play('unlock', volume: 0.9);
 
   // ---------------- Vibrazioni ----------------
   static void _vibrate({List<int>? pattern}) {
@@ -114,9 +129,14 @@ class FeedbackService {
   }
 
   static void onLevelUp() {
+    // Suono (rispetta lo switch Effetti sonori) + haptic ritmico sincronizzato.
     levelUp();
-    _vibrate(pattern: [0, 60, 80, 120, 80, 200]);
-    heavy();
+    if (!hapticsEnabled) return;
+    HapticFeedback.heavyImpact();
+    Future.delayed(const Duration(milliseconds: 100), () {
+      HapticFeedback.mediumImpact();
+      Future.delayed(const Duration(milliseconds: 90), HapticFeedback.mediumImpact);
+    });
   }
 
   static void onComplete() {

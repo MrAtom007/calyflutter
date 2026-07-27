@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/storage_service.dart';
+import '../services/feedback_service.dart';
 
 /// Gestisce skin attivo, glow e temi sbloccati.
 class ThemeProvider extends ChangeNotifier {
@@ -35,6 +36,7 @@ class ThemeProvider extends ChangeNotifier {
   Future<void> load() async {
     final id = await StorageService.getString(StorageService.themeKey);
     if (id != null && appThemes.containsKey(id)) _themeId = id;
+    FeedbackService.setPack(soundPackForTheme(_themeId));
     final g = await StorageService.getBool(StorageService.glowKey);
     if (g != null) _glow = g;
     final saved = await StorageService.getStringList(StorageService.unlockedKey);
@@ -78,6 +80,7 @@ class ThemeProvider extends ChangeNotifier {
   Future<void> changeTheme(String id) async {
     if (!appThemes.containsKey(id)) return;
     _themeId = id;
+    FeedbackService.setPack(soundPackForTheme(id));
     await StorageService.setString(StorageService.themeKey, id);
     notifyListeners();
   }
