@@ -89,9 +89,10 @@ class _LockScreenState extends State<LockScreen> {
               FilledButton(
                 style: FilledButton.styleFrom(backgroundColor: c.primary),
                 onPressed: () async {
+                  final security = context.read<SecurityProvider>();
                   final ok = await SecurityService.authenticateDevice();
                   if (ok && mounted) {
-                    context.read<SecurityProvider>().unlock();
+                    security.unlock();
                   }
                 },
                 child: Text(t('unlock')),
@@ -143,9 +144,10 @@ class _LockScreenState extends State<LockScreen> {
                 icon: const Icon(Icons.fingerprint),
                 label: Text(t('unlock_biometric')),
                 onPressed: () async {
+                  final security = context.read<SecurityProvider>();
                   final ok = await SecurityService.authenticateBiometric();
                   if (ok && mounted) {
-                    context.read<SecurityProvider>().unlock();
+                    security.unlock();
                   }
                 },
               ),

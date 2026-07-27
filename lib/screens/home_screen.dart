@@ -276,7 +276,7 @@ class _RankCard extends StatelessWidget {
                     tween: Tween(begin: 0, end: info.progress),
                     duration: const Duration(milliseconds: 900),
                     curve: Curves.easeOutCubic,
-                    builder: (_, v, __) => LinearProgressIndicator(
+                    builder: (_, v, _) => LinearProgressIndicator(
                       value: v,
                       minHeight: 6,
                       backgroundColor: c.cardAlt,

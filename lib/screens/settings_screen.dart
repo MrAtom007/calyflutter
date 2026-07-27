@@ -299,18 +299,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: AppIconService.styles.length,
-              separatorBuilder: (_, __) => const SizedBox(width: Spacing.sm),
+              separatorBuilder: (_, _) => const SizedBox(width: Spacing.sm),
               itemBuilder: (context, i) {
                 final s = AppIconService.styles[i];
                 final active = _appIcon == s.id;
                 return GestureDetector(
                   onTap: () async {
                     FeedbackService.onTap();
+                    final messenger = ScaffoldMessenger.of(context);
                     final ok = await AppIconService.setIcon(s.id);
                     if (ok) {
                       setState(() => _appIcon = s.id);
                     } else if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      messenger.showSnackBar(
                           SnackBar(content: Text(t('app_icon_failed'))));
                     }
                   },
@@ -453,13 +454,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             value: _encryption,
             activeThumbColor: c.primary,
             onChanged: (v) async {
+              final workouts = context.read<WorkoutProvider>();
               if (v) {
                 await StorageService.enableEncryption();
               } else {
                 await StorageService.disableEncryption();
               }
-              await context.read<WorkoutProvider>().reencrypt();
-              setState(() => _encryption = v);
+              await workouts.reencrypt();
+              if (mounted) setState(() => _encryption = v);
             },
           ),
           Row(
@@ -611,9 +613,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       groupValue: _policy,
       // ignore: deprecated_member_use
       onChanged: (v) async {
+        final security = context.read<SecurityProvider>();
         await SecurityService.setLockPolicy(v!);
-        await context.read<SecurityProvider>().syncSettings();
-        setState(() => _policy = v);
+        await security.syncSettings();
+        if (mounted) setState(() => _policy = v);
       },
     );
   }

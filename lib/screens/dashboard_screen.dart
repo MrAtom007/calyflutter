@@ -74,7 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: ReorderableListView(
             padding: EdgeInsets.fromLTRB(gap, gap, gap, gap * 4),
             buildDefaultDragHandles: false,
-            onReorder: (o, n) {
+            onReorderItem: (o, n) {
               FeedbackService.selection();
               dash.reorder(o, n);
             },

@@ -108,7 +108,6 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
-    if (newIndex > oldIndex) newIndex -= 1;
     final item = _widgets.removeAt(oldIndex);
     _widgets.insert(newIndex, item);
     await _persist();

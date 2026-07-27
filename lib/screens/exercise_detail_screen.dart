@@ -127,9 +127,9 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     height: 180,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    placeholder: (_, __) => Container(
+                    placeholder: (_, _) => Container(
                         height: 180, color: c.cardAlt),
-                    errorWidget: (_, __, ___) => Container(
+                    errorWidget: (_, _, _) => Container(
                       height: 180,
                       color: c.cardAlt,
                       child: Icon(Icons.image_not_supported,
