@@ -144,6 +144,21 @@ class PlateMath {
   }) =>
       bodyWeight <= _eps ? 0 : (addedWeight / bodyWeight) * 100;
 
+  /// Colore convenzionale per un disco, in base all'unità.
+  static Color colorFor(double v, String unit) =>
+      unit == 'lb' ? colorForLb(v) : colorForKg(v);
+
+  /// Colori standard (stile calibrati lb) per i dischi in libbre.
+  static Color colorForLb(double lb) {
+    if ((lb - 45).abs() < 0.01) return const Color(0xFF1E88E5); // blu
+    if ((lb - 35).abs() < 0.01) return const Color(0xFFFDD835); // giallo
+    if ((lb - 25).abs() < 0.01) return const Color(0xFF43A047); // verde
+    if ((lb - 10).abs() < 0.01) return const Color(0xFFECEFF1); // bianco
+    if ((lb - 5).abs() < 0.01) return const Color(0xFF546E7A);
+    if ((lb - 2.5).abs() < 0.01) return const Color(0xFF90A4AE);
+    return const Color(0xFF78909C);
+  }
+
   /// Colore convenzionale (stile IPF) per un disco di un dato peso in kg.
   static Color colorForKg(double kg) {
     if ((kg - 25).abs() < 0.01) return const Color(0xFFE53935); // rosso

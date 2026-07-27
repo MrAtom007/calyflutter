@@ -26,6 +26,10 @@ class SkillNode {
   /// Obiettivo in ripetizioni da cui calcolare la percentuale.
   final double? targetReps;
 
+  /// Se true il progresso si basa sul totale accumulato (es. "30s totali"),
+  /// altrimenti sul miglior singolo set.
+  final bool cumulative;
+
   const SkillNode({
     required this.id,
     required this.name,
@@ -37,6 +41,7 @@ class SkillNode {
     this.exerciseId,
     this.targetSec,
     this.targetReps,
+    this.cumulative = false,
   });
 
   bool get hasAutoTarget =>
@@ -68,7 +73,8 @@ const List<SkillNode> skillNodes = [
       y: _t0,
       icon: Icons.airline_seat_flat_rounded,
       exerciseId: 'pseudo-planche-hold',
-      targetSec: 30),
+      targetSec: 30,
+      cumulative: true),
   SkillNode(
       id: 'tuck_planche',
       name: 'Tuck Planche',

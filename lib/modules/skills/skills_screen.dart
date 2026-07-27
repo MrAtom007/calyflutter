@@ -27,6 +27,8 @@ class _SkillsScreenState extends State<SkillsScreen> {
   // Migliori risultati registrati per esercizio (dalla cronologia).
   Map<String, double> _maxSec = {};
   Map<String, double> _maxReps = {};
+  Map<String, double> _sumSec = {};
+  Map<String, double> _sumReps = {};
   bool _loaded = false;
 
   @override
@@ -54,10 +56,14 @@ class _SkillsScreenState extends State<SkillsScreen> {
   double _autoPct(SkillNode n) {
     if (!n.hasAutoTarget) return 0;
     if (n.targetSec != null) {
-      final best = _maxSec[n.exerciseId] ?? 0;
+      final best = n.cumulative
+          ? (_sumSec[n.exerciseId] ?? 0)
+          : (_maxSec[n.exerciseId] ?? 0);
       return (best / n.targetSec! * 100).clamp(0, 100);
     }
-    final best = _maxReps[n.exerciseId] ?? 0;
+    final best = n.cumulative
+        ? (_sumReps[n.exerciseId] ?? 0)
+        : (_maxReps[n.exerciseId] ?? 0);
     return (best / n.targetReps! * 100).clamp(0, 100);
   }
 
@@ -80,22 +86,27 @@ class _SkillsScreenState extends State<SkillsScreen> {
   void _computeBest(WorkoutProvider workouts) {
     final sec = <String, double>{};
     final reps = <String, double>{};
+    final sumSec = <String, double>{};
+    final sumReps = <String, double>{};
     for (final w in workouts.all) {
       if (w.discipline != 'calisthenics') continue;
       for (final s in w.sets) {
         if (s.sec != null) {
-          sec[s.exerciseId] =
-              (sec[s.exerciseId] ?? 0) < s.sec! ? s.sec!.toDouble() : sec[s.exerciseId]!;
+          final v = s.sec!.toDouble();
+          if ((sec[s.exerciseId] ?? 0) < v) sec[s.exerciseId] = v;
+          sumSec[s.exerciseId] = (sumSec[s.exerciseId] ?? 0) + v;
         }
         if (s.reps != null) {
-          reps[s.exerciseId] = (reps[s.exerciseId] ?? 0) < s.reps!
-              ? s.reps!.toDouble()
-              : reps[s.exerciseId]!;
+          final v = s.reps!.toDouble();
+          if ((reps[s.exerciseId] ?? 0) < v) reps[s.exerciseId] = v;
+          sumReps[s.exerciseId] = (sumReps[s.exerciseId] ?? 0) + v;
         }
       }
     }
     _maxSec = sec;
     _maxReps = reps;
+    _sumSec = sumSec;
+    _sumReps = sumReps;
   }
 
   void _setProgress(String id, double pct) {
@@ -127,36 +138,87 @@ class _SkillsScreenState extends State<SkillsScreen> {
       ),
       body: !_loaded
           ? const Center(child: CircularProgressIndicator())
-          : LayoutBuilder(
-              builder: (context, constraints) {
-                final width = constraints.maxWidth;
-                const height = 620.0;
-                return SingleChildScrollView(
-                  child: SizedBox(
-                    width: width,
-                    height: height,
-                    child: Stack(
-                      children: [
-                        // Archi tra i nodi.
-                        Positioned.fill(
-                          child: CustomPaint(
-                            painter: _EdgePainter(
-                              canvas: Size(width, height),
-                              statusOf: (id) => _status(skillById[id]!),
-                              primary: c.primary,
-                              muted: c.border,
-                            ),
+          : Column(
+              children: [
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = constraints.maxWidth < 380
+                          ? 380.0
+                          : constraints.maxWidth;
+                      final height = constraints.maxHeight < 560
+                          ? 620.0
+                          : constraints.maxHeight;
+                      return InteractiveViewer(
+                        minScale: 0.6,
+                        maxScale: 2.5,
+                        boundaryMargin: const EdgeInsets.all(80),
+                        child: SizedBox(
+                          width: width,
+                          height: height,
+                          child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: CustomPaint(
+                                  painter: _EdgePainter(
+                                    canvas: Size(width, height),
+                                    statusOf: (id) =>
+                                        _status(skillById[id]!),
+                                    primary: c.primary,
+                                    muted: c.border,
+                                  ),
+                                ),
+                              ),
+                              for (final n in skillNodes)
+                                _positionedNode(n, width, height, c),
+                            ],
                           ),
                         ),
-                        // Nodi.
-                        for (final n in skillNodes)
-                          _positionedNode(n, width, height, c),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                _legend(c, t),
+              ],
             ),
+    );
+  }
+
+  Widget _legend(AppColors c, dynamic t) {
+    Widget item(Widget dot, String label) => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            dot,
+            const SizedBox(width: 5),
+            Text(label,
+                style: TextStyle(color: c.textMuted, fontSize: 11)),
+          ],
+        );
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+          horizontal: Spacing.md, vertical: Spacing.sm),
+      decoration: BoxDecoration(
+        color: c.card,
+        border: Border(top: BorderSide(color: c.border)),
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.spaceEvenly,
+        spacing: 14,
+        runSpacing: 6,
+        children: [
+          item(
+              Icon(Icons.lock_rounded, size: 14, color: c.textMuted),
+              t('skills_state_locked')),
+          item(
+              Icon(Icons.radio_button_unchecked_rounded,
+                  size: 14, color: c.primary),
+              t('skills_state_progress')),
+          item(
+              Icon(Icons.check_circle_rounded, size: 14, color: c.primary),
+              t('skills_state_done')),
+        ],
+      ),
     );
   }
 
@@ -374,6 +436,15 @@ class _SkillNodeWidget extends StatelessWidget {
                       color: locked ? c.border : c.primary,
                       width: unlocked ? 2 : 1.4,
                     ),
+                    boxShadow: unlocked
+                        ? [
+                            BoxShadow(
+                              color: c.primary.withValues(alpha: 0.5),
+                              blurRadius: 12,
+                              spreadRadius: 1,
+                            )
+                          ]
+                        : null,
                   ),
                   child: Icon(
                     locked ? Icons.lock_rounded : node.icon,

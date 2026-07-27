@@ -7,28 +7,35 @@ import '../services/storage_service.dart';
 class WorkoutDraft {
   final String discipline;
   final List<WorkoutSet> sets;
+  final DateTime startedAt;
   final DateTime updatedAt;
 
   const WorkoutDraft({
     required this.discipline,
     required this.sets,
+    required this.startedAt,
     required this.updatedAt,
   });
 
   Map<String, dynamic> toJson() => {
         'discipline': discipline,
         'sets': sets.map((s) => s.toJson()).toList(),
+        'startedAt': startedAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
       };
 
-  factory WorkoutDraft.fromJson(Map<String, dynamic> j) => WorkoutDraft(
-        discipline: (j['discipline'] as String?) ?? 'calisthenics',
-        sets: ((j['sets'] as List?) ?? [])
-            .map((s) => WorkoutSet.fromJson(Map<String, dynamic>.from(s)))
-            .toList(),
-        updatedAt:
-            DateTime.tryParse(j['updatedAt']?.toString() ?? '') ?? DateTime.now(),
-      );
+  factory WorkoutDraft.fromJson(Map<String, dynamic> j) {
+    final updated =
+        DateTime.tryParse(j['updatedAt']?.toString() ?? '') ?? DateTime.now();
+    return WorkoutDraft(
+      discipline: (j['discipline'] as String?) ?? 'calisthenics',
+      sets: ((j['sets'] as List?) ?? [])
+          .map((s) => WorkoutSet.fromJson(Map<String, dynamic>.from(s)))
+          .toList(),
+      startedAt: DateTime.tryParse(j['startedAt']?.toString() ?? '') ?? updated,
+      updatedAt: updated,
+    );
+  }
 }
 
 /// Gestisce la bozza dell'allenamento in corso.
@@ -60,8 +67,15 @@ class DraftProvider extends ChangeNotifier {
       await clear();
       return;
     }
+    // Preserva l'inizio sessione se la bozza esiste già per la disciplina.
+    final started = (_draft != null && _draft!.discipline == discipline)
+        ? _draft!.startedAt
+        : DateTime.now();
     _draft = WorkoutDraft(
-        discipline: discipline, sets: sets, updatedAt: DateTime.now());
+        discipline: discipline,
+        sets: sets,
+        startedAt: started,
+        updatedAt: DateTime.now());
     await StorageService.setString(_key, jsonEncode(_draft!.toJson()));
     notifyListeners();
   }

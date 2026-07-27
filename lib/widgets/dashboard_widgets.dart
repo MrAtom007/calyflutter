@@ -541,6 +541,7 @@ class DashboardHero extends StatelessWidget {
     final last = workouts.isEmpty ? null : workouts.first;
     final draft = context.watch<DraftProvider>().draftFor(disc);
     final resumeCount = draft?.sets.length ?? 0;
+    final startedAt = draft?.startedAt;
 
     // Transizione fluida quando cambia disciplina o ultima sessione.
     return AnimatedSwitcher(
@@ -559,6 +560,7 @@ class DashboardHero extends StatelessWidget {
         key: ValueKey('$disc-${last?.id ?? 'none'}-r$resumeCount'),
         last: last,
         resumeCount: resumeCount,
+        startedAt: startedAt,
         onOpenTab: onOpenTab,
       ),
     );
@@ -568,12 +570,22 @@ class DashboardHero extends StatelessWidget {
 class _HeroCard extends StatelessWidget {
   final Workout? last;
   final int resumeCount;
+  final DateTime? startedAt;
   final void Function(String tab) onOpenTab;
   const _HeroCard(
       {super.key,
       required this.last,
       required this.onOpenTab,
-      this.resumeCount = 0});
+      this.resumeCount = 0,
+      this.startedAt});
+
+  String _elapsed() {
+    if (startedAt == null) return '';
+    final d = DateTime.now().difference(startedAt!);
+    if (d.inMinutes < 1) return 'ora';
+    if (d.inMinutes < 60) return '${d.inMinutes}m';
+    return '${d.inHours}h ${d.inMinutes % 60}m';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -665,7 +677,21 @@ class _HeroCard extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 17, fontWeight: FontWeight.w800),
                     ),
-                    if (!resuming && last != null) ...[
+                    if (resuming) ...[
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          Icon(Icons.schedule_rounded,
+                              size: 12, color: c.textMuted),
+                          const SizedBox(width: 4),
+                          Text(
+                            t.p('hero_since', {'t': _elapsed()}),
+                            style:
+                                TextStyle(fontSize: 12, color: c.textMuted),
+                          ),
+                        ],
+                      ),
+                    ] else if (last != null) ...[
                       const SizedBox(height: 2),
                       Text(
                         workoutSummary(last!),
@@ -717,7 +743,60 @@ class _HeroCard extends StatelessWidget {
               ),
             ),
           ),
+          if (resuming) ...[
+            const SizedBox(height: Spacing.sm),
+            Row(
+              children: [
+                Expanded(
+                  child: _heroAction(context, c, Icons.timer_outlined,
+                      t('timer'), () {
+                    FeedbackService.onTap();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => const TimerScreen()));
+                  }),
+                ),
+                const SizedBox(width: Spacing.sm),
+                Expanded(
+                  child: _heroAction(context, c, Icons.menu_book_rounded,
+                      t('diary'), () {
+                    FeedbackService.onTap();
+                    onOpenTab('diary');
+                  }),
+                ),
+              ],
+            ),
+          ],
         ],
+      ),
+    );
+  }
+
+  Widget _heroAction(BuildContext context, AppColors c, IconData icon,
+      String label, VoidCallback onTap) {
+    return Material(
+      color: c.cardAlt,
+      borderRadius: BorderRadius.circular(Radii.md),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(Radii.md),
+        onTap: onTap,
+        child: Container(
+          height: 44,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Radii.md),
+            border: Border.all(color: c.border),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 18, color: c.primary),
+              const SizedBox(width: 6),
+              Text(label,
+                  style: TextStyle(
+                      color: c.text, fontWeight: FontWeight.w700, fontSize: 13)),
+            ],
+          ),
+        ),
       ),
     );
   }

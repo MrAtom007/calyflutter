@@ -18,10 +18,12 @@ class WeightedSettingsScreen extends StatefulWidget {
 class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
   WeightedSettings? _s;
 
-  /// Tagli standard selezionabili (kg).
-  static const _standardPlates = [
-    25.0, 20.0, 15.0, 10.0, 5.0, 2.5, 1.25, 0.5,
-  ];
+  /// Tagli standard selezionabili per unità.
+  static const _standardKg = [25.0, 20.0, 15.0, 10.0, 5.0, 2.5, 1.25, 0.5];
+  static const _standardLb = [45.0, 35.0, 25.0, 10.0, 5.0, 2.5];
+
+  List<double> get _standardPlates =>
+      _s?.unit == 'lb' ? _standardLb : _standardKg;
 
   @override
   void initState() {
@@ -46,6 +48,28 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
           : ListView(
               padding: const EdgeInsets.all(Spacing.md),
               children: [
+                _section(c, t('unit_measure')),
+                Row(
+                  children: [
+                    for (final u in const ['kg', 'lb'])
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text(u.toUpperCase()),
+                          selected: s.unit == u,
+                          selectedColor: c.primary,
+                          onSelected: (_) {
+                            FeedbackService.selection();
+                            setState(() {
+                              s.applyUnitDefaults(u);
+                              _save();
+                            });
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: Spacing.lg),
                 _section(c, t('plates_available')),
                 Wrap(
                   spacing: 8,
@@ -60,7 +84,7 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
                 _numberRow(
                   c,
                   value: s.barWeight,
-                  unit: 'kg',
+                  unit: s.unit,
                   steps: const [1.25, 2.5, 5],
                   onChanged: (v) => setState(() {
                     s.barWeight = v.clamp(0, 100);
@@ -72,7 +96,7 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
                 _numberRow(
                   c,
                   value: s.bodyWeight,
-                  unit: 'kg',
+                  unit: s.unit,
                   steps: const [0.5, 1, 5],
                   onChanged: (v) => setState(() {
                     s.bodyWeight = v.clamp(20, 300);

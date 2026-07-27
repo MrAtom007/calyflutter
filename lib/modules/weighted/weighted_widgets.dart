@@ -215,6 +215,10 @@ class _PlateSheetState extends State<_PlateSheet> {
     );
     final effective = PlateMath.effectiveLoad(
         bodyWeight: s.bodyWeight, addedWeight: _target);
+    final u = s.unit;
+    final steps = u == 'lb'
+        ? const <double>[2.5, 5, 10, 25]
+        : const <double>[1.25, 2.5, 5, 10];
 
     return Container(
       decoration: BoxDecoration(
@@ -262,28 +266,43 @@ class _PlateSheetState extends State<_PlateSheet> {
             ],
           ),
           const SizedBox(height: Spacing.md),
-          PlateVisualizer(result: result, colors: c),
+          PlateVisualizer(result: result, colors: c, unit: u),
           const SizedBox(height: Spacing.sm),
           // Riepilogo pesi.
-          _summaryRow(c, t('plate_added'), '${_fmtInput(_target)} kg'),
+          _summaryRow(c, t('plate_added'), '${_fmtInput(_target)} $u'),
           if (_mode == LoadMode.barbell)
             _summaryRow(c, t('plate_total_bar'),
-                '${_fmtInput(result.totalSystemWeight)} kg'),
+                '${_fmtInput(result.totalSystemWeight)} $u'),
           _summaryRow(c, t('plate_effective'),
-              '${_fmtInput(effective)} kg (BW+${_fmtInput(_target)})'),
+              '${_fmtInput(effective)} $u (BW+${_fmtInput(_target)})'),
           if (!result.isExact && !result.isEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                '${t('plate_closest')}: ${_fmtInput(result.achieved + (_mode == LoadMode.barbell ? result.barWeight : 0))} kg',
-                style: TextStyle(color: c.danger, fontSize: 12),
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: c.danger.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(Radii.sm),
+                border: Border.all(color: c.danger.withValues(alpha: 0.4)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.warning_amber_rounded,
+                      size: 16, color: c.danger),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      '${t('plate_not_exact')} ${_fmtInput(result.achieved + (_mode == LoadMode.barbell ? result.barWeight : 0))} $u',
+                      style: TextStyle(color: c.danger, fontSize: 12),
+                    ),
+                  ),
+                ],
               ),
             ),
           const SizedBox(height: Spacing.md),
           QuickStepper(
             controller: _weight,
-            steps: const [1.25, 2.5, 5, 10],
-            unit: 'kg',
+            steps: steps,
+            unit: u,
             decimal: true,
             onChanged: (_) => setState(() {}),
           ),

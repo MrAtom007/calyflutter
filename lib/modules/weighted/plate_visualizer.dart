@@ -10,11 +10,15 @@ class PlateVisualizer extends StatelessWidget {
   /// Se true usa colori standard da gara, altrimenti tinte coordinate col tema.
   final bool standardColors;
 
+  /// Unità di misura ('kg' o 'lb') per colori ed etichette.
+  final String unit;
+
   const PlateVisualizer({
     super.key,
     required this.result,
     required this.colors,
     this.standardColors = true,
+    this.unit = 'kg',
   });
 
   @override
@@ -33,6 +37,7 @@ class PlateVisualizer extends StatelessWidget {
               result: result,
               colors: colors,
               standardColors: standardColors,
+              unit: unit,
               progress: v,
             ),
           ),
@@ -46,17 +51,19 @@ class _PlatePainter extends CustomPainter {
   final PlateResult result;
   final AppColors colors;
   final bool standardColors;
+  final String unit;
   final double progress;
 
   _PlatePainter({
     required this.result,
     required this.colors,
     required this.standardColors,
+    required this.unit,
     required this.progress,
   });
 
   Color _plateColor(double kg, int index) {
-    if (standardColors) return PlateMath.colorForKg(kg);
+    if (standardColors) return PlateMath.colorFor(kg, unit);
     // Tinte coordinate col tema: alterna primary/primaryDark con opacità.
     final base = index.isEven ? colors.primary : colors.primaryDark;
     return base;
@@ -192,13 +199,40 @@ class _PlatePainter extends CustomPainter {
       {bool horizontal = false}) {
     final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
     canvas.drawRRect(rrect, Paint()..color = color);
+    // Sfumatura per dare volume al disco.
     canvas.drawRRect(
       rrect,
       Paint()
-        ..color = Colors.black.withValues(alpha: 0.25)
+        ..shader = LinearGradient(
+          begin: horizontal ? Alignment.topCenter : Alignment.centerLeft,
+          end: horizontal ? Alignment.bottomCenter : Alignment.centerRight,
+          colors: [
+            Colors.white.withValues(alpha: 0.22),
+            Colors.transparent,
+            Colors.black.withValues(alpha: 0.28),
+          ],
+          stops: const [0, 0.5, 1],
+        ).createShader(rect),
+    );
+    canvas.drawRRect(
+      rrect,
+      Paint()
+        ..color = Colors.black.withValues(alpha: 0.3)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1,
     );
+    // Foro centrale (visibile nei dischi mostrati di faccia, cintura).
+    if (horizontal && rect.width > 26) {
+      canvas.drawCircle(rect.center, 4,
+          Paint()..color = colors.bg.withValues(alpha: 0.9));
+      canvas.drawCircle(
+          rect.center,
+          4,
+          Paint()
+            ..color = Colors.black.withValues(alpha: 0.3)
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1);
+    }
     // Etichetta peso (solo se lo spazio è sufficiente).
     final show = horizontal ? rect.width > 34 : rect.height > 46;
     if (show) {
