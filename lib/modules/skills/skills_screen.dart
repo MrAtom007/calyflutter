@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../state/theme_provider.dart';
 import '../../state/locale_provider.dart';
+import '../../state/workout_provider.dart';
 import '../../services/feedback_service.dart';
 import '../../services/storage_service.dart';
 import '../../theme/app_theme.dart';
@@ -23,6 +24,9 @@ class SkillsScreen extends StatefulWidget {
 class _SkillsScreenState extends State<SkillsScreen> {
   static const _key = '@calistrack/skillProgress';
   Map<String, double> _progress = {};
+  // Migliori risultati registrati per esercizio (dalla cronologia).
+  Map<String, double> _maxSec = {};
+  Map<String, double> _maxReps = {};
   bool _loaded = false;
 
   @override
@@ -46,14 +50,52 @@ class _SkillsScreenState extends State<SkillsScreen> {
     await StorageService.setString(_key, jsonEncode(_progress));
   }
 
-  double _pct(String id) => _progress[id] ?? 0;
+  /// Progresso automatico derivato dalla cronologia (0..100).
+  double _autoPct(SkillNode n) {
+    if (!n.hasAutoTarget) return 0;
+    if (n.targetSec != null) {
+      final best = _maxSec[n.exerciseId] ?? 0;
+      return (best / n.targetSec! * 100).clamp(0, 100);
+    }
+    final best = _maxReps[n.exerciseId] ?? 0;
+    return (best / n.targetReps! * 100).clamp(0, 100);
+  }
+
+  /// Progresso effettivo: massimo tra manuale e automatico.
+  double _pct(String id) {
+    final node = skillById[id];
+    final manual = _progress[id] ?? 0;
+    final auto = node == null ? 0.0 : _autoPct(node);
+    return manual > auto ? manual : auto;
+  }
 
   SkillStatus _status(SkillNode n) {
-    final prereqsDone =
-        n.prereqs.every((p) => (_progress[p] ?? 0) >= 100);
+    final prereqsDone = n.prereqs.every((p) => _pct(p) >= 100);
     if (!prereqsDone) return SkillStatus.locked;
     if (_pct(n.id) >= 100) return SkillStatus.unlocked;
     return SkillStatus.inProgress;
+  }
+
+  /// Ricalcola i migliori risultati per esercizio dalla cronologia.
+  void _computeBest(WorkoutProvider workouts) {
+    final sec = <String, double>{};
+    final reps = <String, double>{};
+    for (final w in workouts.all) {
+      if (w.discipline != 'calisthenics') continue;
+      for (final s in w.sets) {
+        if (s.sec != null) {
+          sec[s.exerciseId] =
+              (sec[s.exerciseId] ?? 0) < s.sec! ? s.sec!.toDouble() : sec[s.exerciseId]!;
+        }
+        if (s.reps != null) {
+          reps[s.exerciseId] = (reps[s.exerciseId] ?? 0) < s.reps!
+              ? s.reps!.toDouble()
+              : reps[s.exerciseId]!;
+        }
+      }
+    }
+    _maxSec = sec;
+    _maxReps = reps;
   }
 
   void _setProgress(String id, double pct) {
@@ -65,6 +107,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
   Widget build(BuildContext context) {
     final c = context.watch<ThemeProvider>().colors;
     final t = context.watch<LocaleProvider>().t;
+    _computeBest(context.watch<WorkoutProvider>());
     final unlockedCount =
         skillNodes.where((n) => _pct(n.id) >= 100).length;
 

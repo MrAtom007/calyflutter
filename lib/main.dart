@@ -13,6 +13,7 @@ import 'state/workout_provider.dart';
 import 'state/locale_provider.dart';
 import 'state/health_provider.dart';
 import 'state/dashboard_provider.dart';
+import 'state/draft_provider.dart';
 import 'services/notification_service.dart';
 import 'services/feedback_service.dart';
 import 'services/home_widget_service.dart';
@@ -36,6 +37,7 @@ void main() async {
   final locale = LocaleProvider();
   final health = HealthProvider();
   final dashboard = DashboardProvider();
+  final draft = DraftProvider();
 
   await Future.wait([
     theme.load(),
@@ -46,6 +48,7 @@ void main() async {
     locale.load(),
     health.load(),
     dashboard.load(),
+    draft.load(),
   ]);
 
   // Popola il widget della schermata home col rango attuale (dati allenamento).
@@ -63,6 +66,7 @@ void main() async {
         ChangeNotifierProvider.value(value: locale),
         ChangeNotifierProvider.value(value: health),
         ChangeNotifierProvider.value(value: dashboard),
+        ChangeNotifierProvider.value(value: draft),
         ChangeNotifierProvider(create: (_) => LevelUpProvider()),
       ],
       child: const CaliStrackApp(),

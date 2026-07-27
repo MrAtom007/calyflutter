@@ -7,6 +7,7 @@ import '../state/discipline_provider.dart';
 import '../state/locale_provider.dart';
 import '../state/health_provider.dart';
 import '../state/dashboard_provider.dart';
+import '../state/draft_provider.dart';
 import '../models/health_data.dart';
 import '../models/workout.dart';
 import '../data/ranks.dart';
@@ -538,6 +539,8 @@ class DashboardHero extends StatelessWidget {
     final disc = context.watch<DisciplineProvider>().discipline;
     final workouts = context.watch<WorkoutProvider>().forDiscipline(disc);
     final last = workouts.isEmpty ? null : workouts.first;
+    final draft = context.watch<DraftProvider>().draftFor(disc);
+    final resumeCount = draft?.sets.length ?? 0;
 
     // Transizione fluida quando cambia disciplina o ultima sessione.
     return AnimatedSwitcher(
@@ -553,8 +556,9 @@ class DashboardHero extends StatelessWidget {
         ),
       ),
       child: _HeroCard(
-        key: ValueKey('$disc-${last?.id ?? 'none'}'),
+        key: ValueKey('$disc-${last?.id ?? 'none'}-r$resumeCount'),
         last: last,
+        resumeCount: resumeCount,
         onOpenTab: onOpenTab,
       ),
     );
@@ -563,8 +567,13 @@ class DashboardHero extends StatelessWidget {
 
 class _HeroCard extends StatelessWidget {
   final Workout? last;
+  final int resumeCount;
   final void Function(String tab) onOpenTab;
-  const _HeroCard({super.key, required this.last, required this.onOpenTab});
+  const _HeroCard(
+      {super.key,
+      required this.last,
+      required this.onOpenTab,
+      this.resumeCount = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -572,10 +581,14 @@ class _HeroCard extends StatelessWidget {
     final c = theme.colors;
     final t = context.watch<LocaleProvider>().t;
 
+    final resuming = resumeCount > 0;
+
     void startWorkout() {
       FeedbackService.onTap();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (_) => const NewWorkoutScreen()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => NewWorkoutScreen(resumeDraft: resuming)));
     }
 
     final onPrimary = theme.skin.isDark ? Colors.black : Colors.white;
@@ -616,9 +629,11 @@ class _HeroCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Radii.md),
                 ),
                 child: Icon(
-                  last == null
-                      ? Icons.bolt_rounded
-                      : Icons.history_rounded,
+                  resuming
+                      ? Icons.play_circle_fill_rounded
+                      : (last == null
+                          ? Icons.bolt_rounded
+                          : Icons.history_rounded),
                   color: c.primary,
                 ),
               ),
@@ -628,9 +643,11 @@ class _HeroCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      last == null
-                          ? t('hero_no_sessions')
-                          : t('hero_last_session'),
+                      resuming
+                          ? t('hero_in_progress')
+                          : (last == null
+                              ? t('hero_no_sessions')
+                              : t('hero_last_session')),
                       style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -638,15 +655,17 @@ class _HeroCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      last == null
-                          ? t('hero_subtitle')
-                          : formatDate(last!.date),
+                      resuming
+                          ? t.p('hero_draft_sets', {'n': '$resumeCount'})
+                          : (last == null
+                              ? t('hero_subtitle')
+                              : formatDate(last!.date)),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                           fontSize: 17, fontWeight: FontWeight.w800),
                     ),
-                    if (last != null) ...[
+                    if (!resuming && last != null) ...[
                       const SizedBox(height: 2),
                       Text(
                         workoutSummary(last!),
@@ -679,10 +698,14 @@ class _HeroCard extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.play_arrow_rounded, color: onPrimary),
+                      Icon(
+                          resuming
+                              ? Icons.play_arrow_rounded
+                              : Icons.play_arrow_rounded,
+                          color: onPrimary),
                       const SizedBox(width: 8),
                       Text(
-                        t('hero_start'),
+                        resuming ? t('hero_resume') : t('hero_start'),
                         style: TextStyle(
                             color: onPrimary,
                             fontSize: 16,

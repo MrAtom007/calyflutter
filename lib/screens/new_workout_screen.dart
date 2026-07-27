@@ -5,6 +5,7 @@ import '../state/theme_provider.dart';
 import '../state/discipline_provider.dart';
 import '../state/workout_provider.dart';
 import '../state/locale_provider.dart';
+import '../state/draft_provider.dart';
 import '../services/feedback_service.dart';
 import '../data/exercises.dart';
 import '../data/routines.dart';
@@ -27,7 +28,10 @@ class _EditSet {
 
 class NewWorkoutScreen extends StatefulWidget {
   final List<RoutineSet>? preset;
-  const NewWorkoutScreen({super.key, this.preset});
+
+  /// Se true, ripristina la bozza in corso dal [DraftProvider].
+  final bool resumeDraft;
+  const NewWorkoutScreen({super.key, this.preset, this.resumeDraft = false});
 
   @override
   State<NewWorkoutScreen> createState() => _NewWorkoutScreenState();
@@ -42,6 +46,20 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
     super.initState();
     final discipline = context.read<DisciplineProvider>().discipline;
     _category = getCategories(discipline).first;
+    if (widget.resumeDraft) {
+      final d = context.read<DraftProvider>().draft;
+      if (d != null) {
+        for (final ws in d.sets) {
+          final ex = getExercise(ws.exerciseId);
+          if (ex != null) {
+            _sets.add(_EditSet(ex,
+                presetReps: ws.reps,
+                presetSec: ws.sec,
+                presetWeight: ws.weight));
+          }
+        }
+      }
+    }
     if (widget.preset != null) {
       for (final p in widget.preset!) {
         final ex = getExercise(p.exerciseId);
@@ -53,9 +71,23 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
     }
   }
 
+  WorkoutSet _toSet(_EditSet s) => WorkoutSet(
+        exerciseId: s.exercise.id,
+        reps: int.tryParse(s.reps.text),
+        sec: int.tryParse(s.sec.text),
+        weight: double.tryParse(s.weight.text.replaceAll(',', '.')),
+      );
+
+  /// Salva la bozza corrente (per riprendere l'allenamento dalla Home).
+  void _persistDraft() {
+    final disc = context.read<DisciplineProvider>().discipline;
+    context.read<DraftProvider>().saveDraft(disc, _sets.map(_toSet).toList());
+  }
+
   void _addSet(Exercise ex) {
     FeedbackService.onTap();
     setState(() => _sets.add(_EditSet(ex)));
+    _persistDraft();
   }
 
   void _save() {
@@ -82,6 +114,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
       sets: sets,
     );
     context.read<WorkoutProvider>().save(workout);
+    context.read<DraftProvider>().clear();
     FeedbackService.onSuccess();
     Navigator.pop(context);
   }
@@ -230,7 +263,10 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
             Expanded(child: _numField(s.reps, 'reps')),
           IconButton(
             icon: Icon(Icons.close, color: c.danger, size: 20),
-            onPressed: () => setState(() => _sets.removeAt(i)),
+            onPressed: () {
+              setState(() => _sets.removeAt(i));
+              _persistDraft();
+            },
           ),
         ],
       ),
@@ -243,6 +279,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
       controller: ctrl,
       keyboardType:
           TextInputType.numberWithOptions(decimal: decimal),
+      onChanged: (_) => _persistDraft(),
       decoration: InputDecoration(
         hintText: hint,
         isDense: true,

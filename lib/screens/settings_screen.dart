@@ -13,6 +13,7 @@ import '../services/notification_service.dart';
 import '../services/export_service.dart';
 import '../services/app_icon_service.dart';
 import '../theme/app_theme.dart';
+import '../modules/weighted/weighted_settings_screen.dart';
 import 'store_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -226,6 +227,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               );
             }).toList(),
+          ),
+
+          // ---- Zavorre & piastre ----
+          const SizedBox(height: Spacing.lg),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.fitness_center_rounded, color: c.primary),
+            title: Text(t('weighted_settings')),
+            subtitle: Text(t('weighted_settings_hint'),
+                style: TextStyle(color: c.textMuted, fontSize: 12)),
+            trailing: Icon(Icons.chevron_right_rounded, color: c.textMuted),
+            onTap: () {
+              FeedbackService.onTap();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const WeightedSettingsScreen()));
+            },
           ),
 
           // ---- Icona app ----

@@ -17,6 +17,15 @@ class SkillNode {
 
   final IconData icon;
 
+  /// Esercizio della libreria da cui derivare l'auto-progresso (opzionale).
+  final String? exerciseId;
+
+  /// Obiettivo in secondi (per hold) da cui calcolare la percentuale.
+  final double? targetSec;
+
+  /// Obiettivo in ripetizioni da cui calcolare la percentuale.
+  final double? targetReps;
+
   const SkillNode({
     required this.id,
     required this.name,
@@ -25,7 +34,13 @@ class SkillNode {
     required this.x,
     required this.y,
     this.icon = Icons.self_improvement_rounded,
+    this.exerciseId,
+    this.targetSec,
+    this.targetReps,
   });
+
+  bool get hasAutoTarget =>
+      exerciseId != null && (targetSec != null || targetReps != null);
 }
 
 /// Colonne (x) per ciascun ramo di skill.
@@ -51,7 +66,9 @@ const List<SkillNode> skillNodes = [
       prereqs: [],
       x: _xPlanche,
       y: _t0,
-      icon: Icons.airline_seat_flat_rounded),
+      icon: Icons.airline_seat_flat_rounded,
+      exerciseId: 'pseudo-planche-hold',
+      targetSec: 30),
   SkillNode(
       id: 'tuck_planche',
       name: 'Tuck Planche',
@@ -59,7 +76,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['planche_lean'],
       x: _xPlanche,
       y: _t1,
-      icon: Icons.accessibility_new_rounded),
+      icon: Icons.accessibility_new_rounded,
+      exerciseId: 'tuck-planche',
+      targetSec: 10),
   SkillNode(
       id: 'straddle_planche',
       name: 'Straddle Planche',
@@ -67,7 +86,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['tuck_planche'],
       x: _xPlanche,
       y: _t2,
-      icon: Icons.open_in_full_rounded),
+      icon: Icons.open_in_full_rounded,
+      exerciseId: 'straddle-planche',
+      targetSec: 5),
   SkillNode(
       id: 'full_planche',
       name: 'Full Planche',
@@ -75,7 +96,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['straddle_planche'],
       x: _xPlanche,
       y: _t3,
-      icon: Icons.star_rounded),
+      icon: Icons.star_rounded,
+      exerciseId: 'planche',
+      targetSec: 3),
 
   // --- Front Lever ---
   SkillNode(
@@ -85,7 +108,9 @@ const List<SkillNode> skillNodes = [
       prereqs: [],
       x: _xFrontLever,
       y: _t0,
-      icon: Icons.horizontal_rule_rounded),
+      icon: Icons.horizontal_rule_rounded,
+      exerciseId: 'tuck-front-lever',
+      targetSec: 15),
   SkillNode(
       id: 'adv_tuck_fl',
       name: 'Adv. Tuck FL',
@@ -93,7 +118,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['tuck_fl'],
       x: _xFrontLever,
       y: _t1,
-      icon: Icons.remove_rounded),
+      icon: Icons.remove_rounded,
+      exerciseId: 'plank-static',
+      targetSec: 12),
   SkillNode(
       id: 'straddle_fl',
       name: 'Straddle FL',
@@ -101,7 +128,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['adv_tuck_fl'],
       x: _xFrontLever,
       y: _t2,
-      icon: Icons.open_in_full_rounded),
+      icon: Icons.open_in_full_rounded,
+      exerciseId: 'front-lever-raise',
+      targetReps: 8),
   SkillNode(
       id: 'full_fl',
       name: 'Full Front Lever',
@@ -109,7 +138,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['straddle_fl'],
       x: _xFrontLever,
       y: _t3,
-      icon: Icons.star_rounded),
+      icon: Icons.star_rounded,
+      exerciseId: 'front-lever',
+      targetSec: 5),
 
   // --- Handstand ---
   SkillNode(
@@ -119,7 +150,9 @@ const List<SkillNode> skillNodes = [
       prereqs: [],
       x: _xHandstand,
       y: _t0,
-      icon: Icons.vertical_align_top_rounded),
+      icon: Icons.vertical_align_top_rounded,
+      exerciseId: 'wall-handstand',
+      targetSec: 60),
   SkillNode(
       id: 'freestanding_hs',
       name: 'Handstand libero',
@@ -127,7 +160,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['wall_hs'],
       x: _xHandstand,
       y: _t1,
-      icon: Icons.accessibility_rounded),
+      icon: Icons.accessibility_rounded,
+      exerciseId: 'handstand',
+      targetSec: 15),
   SkillNode(
       id: 'hspu',
       name: 'Handstand Push-Up',
@@ -135,7 +170,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['freestanding_hs'],
       x: _xHandstand,
       y: _t2,
-      icon: Icons.star_rounded),
+      icon: Icons.star_rounded,
+      exerciseId: 'hspu',
+      targetReps: 5),
 
   // --- Muscle-Up ---
   SkillNode(
@@ -145,7 +182,9 @@ const List<SkillNode> skillNodes = [
       prereqs: [],
       x: _xMuscleUp,
       y: _t0,
-      icon: Icons.download_rounded),
+      icon: Icons.download_rounded,
+      exerciseId: 'pullup',
+      targetReps: 10),
   SkillNode(
       id: 'explosive_pullups',
       name: 'Pull-Up esplosive',
@@ -153,7 +192,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['pullups'],
       x: _xMuscleUp,
       y: _t1,
-      icon: Icons.bolt_rounded),
+      icon: Icons.bolt_rounded,
+      exerciseId: 'high-pullup',
+      targetReps: 5),
   SkillNode(
       id: 'muscle_up',
       name: 'Muscle-Up',
@@ -161,7 +202,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['explosive_pullups'],
       x: _xMuscleUp,
       y: _t2,
-      icon: Icons.star_rounded),
+      icon: Icons.star_rounded,
+      exerciseId: 'muscleup',
+      targetReps: 1),
 
   // --- Human Flag ---
   SkillNode(
@@ -195,7 +238,9 @@ const List<SkillNode> skillNodes = [
       prereqs: ['adv_flag'],
       x: _xFlag,
       y: _t3,
-      icon: Icons.star_rounded),
+      icon: Icons.star_rounded,
+      exerciseId: 'human-flag',
+      targetSec: 5),
 ];
 
 final Map<String, SkillNode> skillById = {
