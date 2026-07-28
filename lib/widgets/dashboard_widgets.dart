@@ -16,6 +16,7 @@ import '../theme/app_theme.dart';
 import '../utils/format.dart';
 import '../services/feedback_service.dart';
 import 'design_system.dart';
+import 'emblem.dart';
 import 'ui_kit.dart';
 import 'health_charts.dart';
 import 'medal.dart';
@@ -608,7 +609,7 @@ class _HeroCard extends StatelessWidget {
     final onPrimary = theme.skin.isDark ? Colors.black : Colors.white;
 
     return Container(
-      padding: const EdgeInsets.all(Spacing.md),
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -630,7 +631,27 @@ class _HeroCard extends StatelessWidget {
                 ),
               ],
       ),
-      child: Column(
+      child: Stack(
+        children: [
+          Positioned(
+            right: -18,
+            top: -12,
+            bottom: -12,
+            child: IgnorePointer(
+              child: Opacity(
+                opacity: 0.10,
+                child: EmblemView(
+                  subject: theme.activeEmblemSubject,
+                  size: 150,
+                  color: c.primary,
+                  style: theme.emblemStyle,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(Spacing.md),
+            child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -768,6 +789,9 @@ class _HeroCard extends StatelessWidget {
               ],
             ),
           ],
+        ],
+            ),
+          ),
         ],
       ),
     );

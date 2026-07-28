@@ -14,6 +14,7 @@ import '../services/notification_service.dart';
 import '../services/export_service.dart';
 import '../services/app_icon_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/emblem.dart';
 import '../modules/weighted/weighted_settings_screen.dart';
 import 'store_screen.dart';
 
@@ -90,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.5.0',
+              child: Text('CaliStrack • v4.6.0',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),
@@ -264,6 +265,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 final messenger = ScaffoldMessenger.of(context);
                 final ok = await AppIconService.setIcon(s.id);
                 if (ok) {
+                  if (context.mounted) {
+                    context.read<ThemeProvider>().setAppIcon(s.id);
+                  }
                   setState(() => _appIcon = s.id);
                 } else if (mounted) {
                   messenger.showSnackBar(
@@ -282,18 +286,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           width: active ? 2.5 : 1),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: s.hasAsset
-                        ? Image.asset(s.asset, fit: BoxFit.cover)
-                        : DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: s.bg,
-                              ),
-                            ),
-                            child: Icon(s.glyph, color: s.bolt, size: 28),
-                          ),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: s.bg,
+                        ),
+                      ),
+                      child: Center(
+                        child: EmblemView(
+                          subject: emblemForIcon(s.id),
+                          size: 40,
+                          color: s.bolt,
+                          style: theme.emblemStyle,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(s.name,
@@ -307,6 +316,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
             );
           },
         ),
+      ),
+      _subLabel(c, t('emblem_style')),
+      Selector<ThemeProvider, EmblemStyle>(
+        selector: (_, th) => th.emblemStyle,
+        builder: (context, style, _) => Wrap(
+          spacing: Spacing.sm,
+          children: [
+            (EmblemStyle.classic, t('emblem_classic')),
+            (EmblemStyle.line, t('emblem_line')),
+            (EmblemStyle.glow, t('emblem_glow')),
+          ].map((e) {
+            return _AnimatedSelectChip(
+              c: c,
+              label: e.$2,
+              selected: style == e.$1,
+              onTap: () => context.read<ThemeProvider>().setEmblemStyle(e.$1),
+            );
+          }).toList(),
+        ),
+      ),
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(t('emblem_follow_icon')),
+        subtitle: Text(t('emblem_follow_icon_hint'),
+            style: TextStyle(color: c.textMuted, fontSize: 12)),
+        value: theme.emblemFollowIcon,
+        activeThumbColor: c.primary,
+        onChanged: (v) {
+          FeedbackService.selection();
+          theme.setEmblemFollowIcon(v);
+        },
       ),
     ];
   }
@@ -775,11 +815,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             Row(
               children: [
-                if (themeEmblemAsset(skin.id) != null) ...[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: Image.asset(themeEmblemAsset(skin.id)!,
-                        width: 26, height: 26, fit: BoxFit.cover),
+                if (emblemForTheme(skin.id) != null) ...[
+                  EmblemView(
+                    subject: emblemForTheme(skin.id),
+                    size: 26,
+                    color: skin.colors.primary,
+                    style: theme.emblemStyle,
                   ),
                   const SizedBox(width: 6),
                 ],

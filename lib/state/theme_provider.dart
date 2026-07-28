@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/emblem.dart';
 import '../services/storage_service.dart';
 import '../services/feedback_service.dart';
 
@@ -11,6 +12,9 @@ class ThemeProvider extends ChangeNotifier {
   String _accentId = 'default';
   UiDensity _density = UiDensity.comfortable;
   CardStyle _cardStyle = CardStyle.solid;
+  String _appIconId = 'IconDefault';
+  EmblemStyle _emblemStyle = EmblemStyle.classic;
+  bool _emblemFollowIcon = true;
   bool ready = false;
 
   AppSkin get skin => appThemes[_themeId] ?? appThemes[defaultThemeId]!;
@@ -28,6 +32,15 @@ class ThemeProvider extends ChangeNotifier {
   double get densityScale => _density.scale;
   CardStyle get cardStyle => _cardStyle;
   bool get glow => _glow;
+
+  String get appIconId => _appIconId;
+  EmblemStyle get emblemStyle => _emblemStyle;
+  bool get emblemFollowIcon => _emblemFollowIcon;
+
+  /// Soggetto dell'emblema attivo: segue l'icona app oppure il tema.
+  String? get activeEmblemSubject => _emblemFollowIcon
+      ? emblemForIcon(_appIconId)
+      : emblemForTheme(_themeId);
 
   /// Il glow è attivo solo per i temi neon con glow abilitato.
   bool get glowActive => skin.neon && _glow;
@@ -53,7 +66,34 @@ class ThemeProvider extends ChangeNotifier {
       _cardStyle = CardStyle.values
           .firstWhere((c) => c.name == cs, orElse: () => CardStyle.solid);
     }
+    final icon = await StorageService.getString(StorageService.appIconKey);
+    if (icon != null) _appIconId = icon;
+    final es = await StorageService.getString(StorageService.emblemStyleKey);
+    if (es != null) {
+      _emblemStyle = EmblemStyle.values
+          .firstWhere((e) => e.name == es, orElse: () => EmblemStyle.classic);
+    }
+    final ef = await StorageService.getBool(StorageService.emblemFollowKey);
+    if (ef != null) _emblemFollowIcon = ef;
     ready = true;
+    notifyListeners();
+  }
+
+  Future<void> setAppIcon(String id) async {
+    _appIconId = id;
+    await StorageService.setString(StorageService.appIconKey, id);
+    notifyListeners();
+  }
+
+  Future<void> setEmblemStyle(EmblemStyle s) async {
+    _emblemStyle = s;
+    await StorageService.setString(StorageService.emblemStyleKey, s.name);
+    notifyListeners();
+  }
+
+  Future<void> setEmblemFollowIcon(bool v) async {
+    _emblemFollowIcon = v;
+    await StorageService.setBool(StorageService.emblemFollowKey, v);
     notifyListeners();
   }
 

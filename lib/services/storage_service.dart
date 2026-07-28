@@ -27,6 +27,8 @@ class StorageService {
   static const densityKey = '@calistrack/density';
   static const cardStyleKey = '@calistrack/cardStyle';
   static const appIconKey = '@calistrack/appIcon';
+  static const emblemStyleKey = '@calistrack/emblemStyle';
+  static const emblemFollowKey = '@calistrack/emblemFollowIcon';
 
   static SharedPreferences? _prefs;
   static Future<SharedPreferences> get _p async =>
