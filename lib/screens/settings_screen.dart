@@ -91,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.6.1',
+              child: Text('CaliStrack • v4.7.0',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),
@@ -154,8 +154,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return [
       _subLabel(c, t('theme_color')),
       _themeCategory(context, theme, c, t('theme_cat_classic'),
-          _themesIn('classic'),
-          initiallyExpanded: true),
+          _themesIn('classic')),
       _themeCategory(
           context, theme, c, t('theme_cat_neon'), _themesIn('neon')),
       _themeCategory(context, theme, c, t('theme_cat_legendary'),
@@ -347,6 +346,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
           FeedbackService.selection();
           theme.setEmblemFollowIcon(v);
         },
+      ),
+      SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(t('icon_follow_theme')),
+        subtitle: Text(t('icon_follow_theme_hint'),
+            style: TextStyle(color: c.textMuted, fontSize: 12)),
+        value: theme.iconFollowsTheme,
+        activeThumbColor: c.primary,
+        onChanged: (v) {
+          FeedbackService.selection();
+          theme.setIconFollowsTheme(v);
+        },
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Row(
+          children: [
+            Icon(Icons.smartphone_rounded, size: 16, color: c.textMuted),
+            const SizedBox(width: 6),
+            Text('${t('dock_name')}: ',
+                style: TextStyle(color: c.textMuted, fontSize: 12)),
+            Text(theme.launcherName,
+                style: TextStyle(
+                    color: c.primary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800)),
+          ],
+        ),
       ),
     ];
   }
@@ -712,7 +739,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // ---- Temi raggruppati per categoria ----
   static const _legendaryIds = {
     'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
-    'valkyrie', 'ronin', 'anubis',
+    'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
   };
 
   List<AppSkin> _themesIn(String category) {

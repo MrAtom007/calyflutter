@@ -29,6 +29,7 @@ class StorageService {
   static const appIconKey = '@calistrack/appIcon';
   static const emblemStyleKey = '@calistrack/emblemStyle';
   static const emblemFollowKey = '@calistrack/emblemFollowIcon';
+  static const iconFollowThemeKey = '@calistrack/iconFollowsTheme';
 
   static SharedPreferences? _prefs;
   static Future<SharedPreferences> get _p async =>

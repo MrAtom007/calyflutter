@@ -10,11 +10,20 @@ class AppIconStyle {
   final Color bolt; // colore accento
   final String asset; // immagine emblema (vuoto = usa glyph di fallback)
   final IconData glyph; // icona di fallback quando manca l'asset
+  final String appName; // nome mostrato nel launcher (dock)
 
   const AppIconStyle(this.id, this.name, this.bg, this.bolt, this.asset,
-      {this.glyph = Icons.bolt_rounded});
+      {this.glyph = Icons.bolt_rounded, this.appName = 'CaliStrack'});
 
   bool get hasAsset => asset.isNotEmpty;
+}
+
+/// Nome dell'app nel launcher associato a un alias icona.
+String launcherAppName(String alias) {
+  for (final s in AppIconService.styles) {
+    if (s.id == alias) return s.appName;
+  }
+  return 'CaliTrack';
 }
 
 /// Mappa un id tema epico all'emblema corrispondente (o null).
@@ -35,28 +44,31 @@ class AppIconService {
   // I nomi combaciano con i temi epici dell'app.
   static const List<AppIconStyle> styles = [
     AppIconStyle('IconDefault', 'Ulisse', [Color(0xff1F526D), Color(0xff08161F)],
-        Color(0xffF3C75A), 'assets/icon_previews/ulisse.png'),
+        Color(0xffF3C75A), 'assets/icon_previews/ulisse.png',
+        appName: 'CaliTrack'),
     AppIconStyle('IconZeus', 'Zeus', [Color(0xff303B5C), Color(0xff0B0E16)],
-        Color(0xffFFD85A), 'assets/icon_previews/zeus.png'),
+        Color(0xffFFD85A), 'assets/icon_previews/zeus.png', appName: 'ZeusTrack'),
     AppIconStyle('IconCyberpunk', 'Cyberpunk', [Color(0xff320E44), Color(0xff07030D)],
-        Color(0xffFF3AD0), 'assets/icon_previews/cyberpunk.png'),
+        Color(0xffFF3AD0), 'assets/icon_previews/cyberpunk.png',
+        appName: 'CyberTrack'),
     AppIconStyle('IconSpartacus', 'Spartacus', [Color(0xffCF4233), Color(0xff1A0A09)],
-        Color(0xffE9B45A), 'assets/icon_previews/spartacus.png'),
+        Color(0xffE9B45A), 'assets/icon_previews/spartacus.png',
+        appName: 'SpartanTrack'),
     AppIconStyle('IconKratos', 'Kratos', [Color(0xff442727), Color(0xff0E0F12)],
-        Color(0xffEE4A40), 'assets/icon_previews/kratos.png'),
+        Color(0xffEE4A40), 'assets/icon_previews/kratos.png', appName: 'KratosFit'),
     // Nuove icone (anteprima vettoriale, senza PNG dedicato).
     AppIconStyle('IconSynthwave', 'Synthwave',
         [Color(0xff2A0A54), Color(0xff0D0221)], Color(0xffFF2EC4), '',
-        glyph: Icons.wb_sunny_rounded),
+        glyph: Icons.wb_sunny_rounded, appName: 'SynthTrack'),
     AppIconStyle('IconValkyrie', 'Valkyrie',
         [Color(0xff2A323B), Color(0xff0B0E12)], Color(0xffD7DEE6), '',
-        glyph: Icons.flight_rounded),
+        glyph: Icons.flight_rounded, appName: 'ValkyrieFit'),
     AppIconStyle('IconRonin', 'Ronin',
         [Color(0xff2E1516), Color(0xff0B0808)], Color(0xffC0392B), '',
-        glyph: Icons.brightness_1_rounded),
+        glyph: Icons.brightness_1_rounded, appName: 'RoninTrack'),
     AppIconStyle('IconAnubis', 'Anubis',
         [Color(0xff16233F), Color(0xff070A12)], Color(0xffF2C14E), '',
-        glyph: Icons.ac_unit_rounded),
+        glyph: Icons.ac_unit_rounded, appName: 'AnubisFit'),
   ];
 
   static Future<String> current() async {

@@ -275,6 +275,10 @@ class AppStrings {
       'emblem_follow_icon': 'Emblemi seguono l\'icona app',
       'emblem_follow_icon_hint':
           'Se attivo, gli emblemi in-app usano il soggetto dell\'icona scelta; altrimenti seguono il tema.',
+      'icon_follow_theme': 'Icona e nome app seguono il tema',
+      'icon_follow_theme_hint':
+          'Cambiando tema, l\'icona e il nome dell\'app nel dock si adattano (es. tema Zeus → ZeusTrack).',
+      'dock_name': 'Nome nel dock',
       'ob8_t': 'Salute e wearable',
       'ob8_s': 'Battiti, pressione, passi e sonno dal tuo smartwatch, con grafici spettacolari.',
       'ob9_t': 'Home personalizzabile',
@@ -519,6 +523,10 @@ class AppStrings {
       'emblem_follow_icon': 'Emblems follow app icon',
       'emblem_follow_icon_hint':
           'When on, in-app emblems use the selected icon\'s subject; otherwise they follow the theme.',
+      'icon_follow_theme': 'App icon & name follow theme',
+      'icon_follow_theme_hint':
+          'When you change theme, the app icon and dock name adapt (e.g. Zeus theme → ZeusTrack).',
+      'dock_name': 'Dock name',
       'ob8_t': 'Health & wearables',
       'ob8_s': 'Heart rate, blood pressure, steps and sleep from your smartwatch, with stunning charts.',
       'ob9_t': 'Customizable home',
@@ -763,6 +771,10 @@ class AppStrings {
       'emblem_follow_icon': 'Emblemas siguen el icono',
       'emblem_follow_icon_hint':
           'Si está activo, los emblemas usan el sujeto del icono elegido; si no, siguen el tema.',
+      'icon_follow_theme': 'Icono y nombre siguen el tema',
+      'icon_follow_theme_hint':
+          'Al cambiar de tema, el icono y el nombre en el dock se adaptan (p. ej. tema Zeus → ZeusTrack).',
+      'dock_name': 'Nombre en el dock',
       'ob8_t': 'Salud y wearables',
       'ob8_s': 'Ritmo cardíaco, presión, pasos y sueño desde tu smartwatch, con gráficos espectaculares.',
       'ob9_t': 'Inicio personalizable',

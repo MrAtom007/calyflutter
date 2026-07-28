@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../widgets/emblem.dart';
 import '../services/storage_service.dart';
 import '../services/feedback_service.dart';
+import '../services/app_icon_service.dart';
 
 /// Gestisce skin attivo, glow e temi sbloccati.
 class ThemeProvider extends ChangeNotifier {
@@ -15,6 +16,7 @@ class ThemeProvider extends ChangeNotifier {
   String _appIconId = 'IconDefault';
   EmblemStyle _emblemStyle = EmblemStyle.classic;
   bool _emblemFollowIcon = true;
+  bool _iconFollowsTheme = false;
   bool ready = false;
 
   AppSkin get skin => appThemes[_themeId] ?? appThemes[defaultThemeId]!;
@@ -36,6 +38,10 @@ class ThemeProvider extends ChangeNotifier {
   String get appIconId => _appIconId;
   EmblemStyle get emblemStyle => _emblemStyle;
   bool get emblemFollowIcon => _emblemFollowIcon;
+  bool get iconFollowsTheme => _iconFollowsTheme;
+
+  /// Nome dell'app attualmente mostrato nel launcher (dock).
+  String get launcherName => launcherAppName(_appIconId);
 
   /// Soggetto dell'emblema attivo: segue l'icona app oppure il tema.
   String? get activeEmblemSubject => _emblemFollowIcon
@@ -75,7 +81,24 @@ class ThemeProvider extends ChangeNotifier {
     }
     final ef = await StorageService.getBool(StorageService.emblemFollowKey);
     if (ef != null) _emblemFollowIcon = ef;
+    final ift = await StorageService.getBool(StorageService.iconFollowThemeKey);
+    if (ift != null) _iconFollowsTheme = ift;
     ready = true;
+    notifyListeners();
+  }
+
+  /// Applica l'icona (e quindi il nome nel launcher) coerente col tema attivo.
+  Future<void> _applyIconForTheme() async {
+    final alias = iconAliasForSubject(emblemForTheme(_themeId));
+    if (alias == _appIconId) return;
+    final ok = await AppIconService.setIcon(alias);
+    if (ok) _appIconId = alias;
+  }
+
+  Future<void> setIconFollowsTheme(bool v) async {
+    _iconFollowsTheme = v;
+    await StorageService.setBool(StorageService.iconFollowThemeKey, v);
+    if (v) await _applyIconForTheme();
     notifyListeners();
   }
 
@@ -122,6 +145,7 @@ class ThemeProvider extends ChangeNotifier {
     _themeId = id;
     FeedbackService.setPack(soundPackForTheme(id));
     await StorageService.setString(StorageService.themeKey, id);
+    if (_iconFollowsTheme) await _applyIconForTheme();
     notifyListeners();
   }
 

@@ -516,6 +516,45 @@ final Map<String, AppSkin> appThemes = {
       border: '#1c2942', danger: '#ff5b6b',
     ),
   ),
+  'achille': AppSkin(
+    id: 'achille',
+    name: 'Achille',
+    description: 'Bronzo acceso e nero di Troia, furia dell\u2019eroe',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#cf9b3c'),
+    colors: AppColors.hex(
+      bg: '#0c0a08', card: '#17130d', cardAlt: '#221a10', text: '#f6ecd8',
+      textMuted: '#b39b78', primary: '#cf9b3c', primaryDark: '#a6791f',
+      border: '#2e2416', danger: '#ff5240',
+    ),
+  ),
+  'leonida': AppSkin(
+    id: 'leonida',
+    name: 'Leonida',
+    description: 'Rosso spartano e oro, spirito delle Termopili',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#e0b34a'),
+    colors: AppColors.hex(
+      bg: '#120707', card: '#1f0d0b', cardAlt: '#2d1512', text: '#f7e6da',
+      textMuted: '#c39688', primary: '#d13b2f', primaryDark: '#9e2419',
+      border: '#3a1c18', danger: '#ff5240',
+    ),
+  ),
+  'poseidon': AppSkin(
+    id: 'poseidon',
+    name: 'Poseidone',
+    description: 'Turchese abissale e oro, dominio dei mari',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#2ee6d6'),
+    colors: AppColors.hex(
+      bg: '#04121a', card: '#0a2230', cardAlt: '#103243', text: '#e6fbff',
+      textMuted: '#85b3bb', primary: '#2ec4b6', primaryDark: '#1a9c90',
+      border: '#12414f', danger: '#ff6b6b',
+    ),
+  ),
 };
 
 /// Pacchetto sonoro caratterizzante per un tema.
@@ -602,7 +641,7 @@ const List<String> freeThemeIds = [
   'forest', 'crimson', 'amber', 'slate', 'arctic', 'rose',
   'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
   'neonSynthwave', 'neonToxic', 'neonElectricIce', 'neonSolarFlare',
-  'valkyrie', 'ronin', 'anubis',
+  'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
 ];
 const String defaultThemeId = 'midnight';
 
