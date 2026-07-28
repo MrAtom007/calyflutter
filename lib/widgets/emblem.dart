@@ -40,6 +40,14 @@ String emblemForIcon(String appIconId) {
       return 'leonida';
     case 'IconPoseidon':
       return 'poseidon';
+    case 'IconErcole':
+      return 'ercole';
+    case 'IconOdino':
+      return 'odino';
+    case 'IconRa':
+      return 'ra';
+    case 'IconAde':
+      return 'ade';
     case 'IconDefault':
     default:
       return 'ulisse';
@@ -108,6 +116,14 @@ String iconAliasForSubject(String? subject) {
       return 'IconLeonida';
     case 'poseidon':
       return 'IconPoseidon';
+    case 'ercole':
+      return 'IconErcole';
+    case 'odino':
+      return 'IconOdino';
+    case 'ra':
+      return 'IconRa';
+    case 'ade':
+      return 'IconAde';
     case 'ulisse':
     default:
       return 'IconDefault';

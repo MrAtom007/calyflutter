@@ -78,6 +78,18 @@ class AppIconService {
     AppIconStyle('IconPoseidon', 'Poseidone',
         [Color(0xff0A2A38), Color(0xff04121A)], Color(0xff2EC4B6), '',
         glyph: Icons.water_rounded, appName: 'PoseidonTrack'),
+    AppIconStyle('IconErcole', 'Ercole',
+        [Color(0xff212E16), Color(0xff0D1109)], Color(0xffC9A24B), '',
+        glyph: Icons.sports_mma_rounded, appName: 'ErcoleTrack'),
+    AppIconStyle('IconOdino', 'Odino',
+        [Color(0xff202838), Color(0xff0B0F16)], Color(0xffE0B34A), '',
+        glyph: Icons.change_history_rounded, appName: 'OdinoTrack'),
+    AppIconStyle('IconRa', 'Ra',
+        [Color(0xff2C1F0C), Color(0xff120C04)], Color(0xffF2B418), '',
+        glyph: Icons.wb_sunny_rounded, appName: 'RaTrack'),
+    AppIconStyle('IconAde', 'Ade',
+        [Color(0xff1A1226), Color(0xff08060C)], Color(0xff7C4DFF), '',
+        glyph: Icons.local_fire_department_rounded, appName: 'AdeTrack'),
   ];
 
   static Future<String> current() async {

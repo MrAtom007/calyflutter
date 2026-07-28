@@ -205,6 +205,58 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".IconErcole"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_ercole"
+            android:roundIcon="@mipmap/ic_ercole"
+            android:label="@string/icon_name_ercole"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconOdino"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_odino"
+            android:roundIcon="@mipmap/ic_odino"
+            android:label="@string/icon_name_odino"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconRa"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_ra"
+            android:roundIcon="@mipmap/ic_ra"
+            android:label="@string/icon_name_ra"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconAde"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_ade"
+            android:roundIcon="@mipmap/ic_ade"
+            android:label="@string/icon_name_ade"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
         <!-- Health Connect: motivazione permessi su Android 14+ -->
         <activity-alias
             android:name="ViewPermissionUsageActivity"

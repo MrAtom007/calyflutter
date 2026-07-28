@@ -13,4 +13,8 @@
     <string name="icon_name_achille">AchilleTrack</string>
     <string name="icon_name_leonida">LeonidaTrack</string>
     <string name="icon_name_poseidon">PoseidonTrack</string>
+    <string name="icon_name_ercole">ErcoleTrack</string>
+    <string name="icon_name_odino">OdinoTrack</string>
+    <string name="icon_name_ra">RaTrack</string>
+    <string name="icon_name_ade">AdeTrack</string>
 </resources>
