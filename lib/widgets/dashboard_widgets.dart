@@ -18,6 +18,7 @@ import '../services/feedback_service.dart';
 import 'design_system.dart';
 import 'emblem.dart';
 import 'ui_kit.dart';
+import '../data/quotes.dart';
 import 'health_charts.dart';
 import 'medal.dart';
 import '../screens/new_workout_screen.dart';
@@ -724,6 +725,29 @@ class _HeroCard extends StatelessWidget {
                       ),
                     ],
                   ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: Spacing.sm),
+          // Frase motivazionale del giorno.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.format_quote_rounded, size: 16, color: c.primary),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  motivationalQuote(context.watch<LocaleProvider>().code),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    height: 1.25,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w600,
+                    color: c.text.withValues(alpha: 0.82),
+                  ),
                 ),
               ),
             ],

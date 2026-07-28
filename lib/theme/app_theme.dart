@@ -241,6 +241,72 @@ final Map<String, AppSkin> appThemes = {
       border: '#f2d5e0', danger: '#dc2626',
     ),
   ),
+  'obsidian': AppSkin(
+    id: 'obsidian',
+    name: 'Obsidian',
+    description: 'Nero ossidiana con blu elettrico',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#05060a', card: '#0d0f16', cardAlt: '#151824', text: '#eef2ff',
+      textMuted: '#8a90a6', primary: '#4d7cff', primaryDark: '#2f5de0',
+      border: '#1c2030', danger: '#ff5470',
+    ),
+  ),
+  'dracula': AppSkin(
+    id: 'dracula',
+    name: 'Dracula',
+    description: 'Viola e rosa su fondo notturno, cult dev',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#282a36', card: '#343746', cardAlt: '#414458', text: '#f8f8f2',
+      textMuted: '#a6accd', primary: '#bd93f9', primaryDark: '#9d6ef0',
+      border: '#4a4d63', danger: '#ff5555',
+    ),
+  ),
+  'nord': AppSkin(
+    id: 'nord',
+    name: 'Nord',
+    description: 'Palette nordica blu-ghiaccio, sobria',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#2e3440', card: '#3b4252', cardAlt: '#434c5e', text: '#eceff4',
+      textMuted: '#a9b1c2', primary: '#88c0d0', primaryDark: '#5e81ac',
+      border: '#4c566a', danger: '#bf616a',
+    ),
+  ),
+  'mocha': AppSkin(
+    id: 'mocha',
+    name: 'Mocha',
+    description: 'Caldo caffè e caramello, avvolgente',
+    mode: Brightness.dark,
+    colors: AppColors.hex(
+      bg: '#120e0b', card: '#1d1712', cardAlt: '#29211a', text: '#f4ece2',
+      textMuted: '#b39d88', primary: '#c9925e', primaryDark: '#a5713f',
+      border: '#33291f', danger: '#ef4444',
+    ),
+  ),
+  'sakura': AppSkin(
+    id: 'sakura',
+    name: 'Sakura',
+    description: 'Chiaro delicato sui toni del ciliegio',
+    mode: Brightness.light,
+    colors: AppColors.hex(
+      bg: '#fdf3f6', card: '#ffffff', cardAlt: '#fbe6ec', text: '#2a1e24',
+      textMuted: '#8a6f79', primary: '#ec4899', primaryDark: '#db2777',
+      border: '#f3d9e2', danger: '#dc2626',
+    ),
+  ),
+  'matcha': AppSkin(
+    id: 'matcha',
+    name: 'Matcha',
+    description: 'Chiaro verde tè, fresco e naturale',
+    mode: Brightness.light,
+    colors: AppColors.hex(
+      bg: '#f3f7ee', card: '#ffffff', cardAlt: '#e7f0dd', text: '#1e2a17',
+      textMuted: '#6b7d5c', primary: '#6a9a3a', primaryDark: '#52792c',
+      border: '#dde8cf', danger: '#dc2626',
+    ),
+  ),
   'neonGreen': AppSkin(
     id: 'neonGreen',
     name: 'Neon Toxic',
@@ -351,6 +417,34 @@ final Map<String, AppSkin> appThemes = {
       bg: '#050810', card: '#0a1020', cardAlt: '#0f1a33', text: '#e6eeff',
       textMuted: '#6f82a3', primary: '#2e7bff', primaryDark: '#1a5ae0',
       border: '#1a2340', danger: '#ff4d8d',
+    ),
+  ),
+  'neonMint': AppSkin(
+    id: 'neonMint',
+    name: 'Neon Mint',
+    description: 'Verde menta luminoso, fresco e vivo',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#5cffb0'),
+    colors: AppColors.hex(
+      bg: '#04100b', card: '#0a1a13', cardAlt: '#10261c', text: '#e6fff2',
+      textMuted: '#6f9a86', primary: '#5cffb0', primaryDark: '#22c47e',
+      border: '#123020', danger: '#ff4d6d',
+    ),
+  ),
+  'neonGold': AppSkin(
+    id: 'neonGold',
+    name: 'Neon Gold',
+    description: 'Oro elettrico, lusso ad alta tensione',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#ffd24d'),
+    colors: AppColors.hex(
+      bg: '#0a0803', card: '#161005', cardAlt: '#22190a', text: '#fff6e0',
+      textMuted: '#9a8b6b', primary: '#ffd24d', primaryDark: '#d4a92f',
+      border: '#332813', danger: '#ff4d4d',
     ),
   ),
   'neonSynthwave': AppSkin(
@@ -555,6 +649,60 @@ final Map<String, AppSkin> appThemes = {
       border: '#12414f', danger: '#ff6b6b',
     ),
   ),
+  'ercole': AppSkin(
+    id: 'ercole',
+    name: 'Ercole',
+    description: 'Bronzo e pelle di leone, forza delle 12 fatiche',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#c9a24b'),
+    colors: AppColors.hex(
+      bg: '#0d1109', card: '#17200f', cardAlt: '#212e16', text: '#f0f5e6',
+      textMuted: '#a3b389', primary: '#c9a24b', primaryDark: '#9e7c2c',
+      border: '#2a361c', danger: '#ff5240',
+    ),
+  ),
+  'odino': AppSkin(
+    id: 'odino',
+    name: 'Odino',
+    description: 'Acciaio norreno e oro, il Padre di tutti',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#e0b34a'),
+    colors: AppColors.hex(
+      bg: '#0b0f16', card: '#151b28', cardAlt: '#202838', text: '#eaf1fb',
+      textMuted: '#97a6bd', primary: '#e0b34a', primaryDark: '#b78d1f',
+      border: '#28324a', danger: '#7aa2ff',
+    ),
+  ),
+  'ra': AppSkin(
+    id: 'ra',
+    name: 'Ra',
+    description: 'Oro solare e cielo del deserto, dio del sole',
+    mode: Brightness.dark,
+    premium: true,
+    neon: true,
+    glow: _hex('#ffcf4d'),
+    colors: AppColors.hex(
+      bg: '#120c04', card: '#1f1508', cardAlt: '#2c1f0c', text: '#fff4dd',
+      textMuted: '#c2a878', primary: '#f2b418', primaryDark: '#c98f0a',
+      border: '#38290f', danger: '#ff5b3b',
+    ),
+  ),
+  'ade': AppSkin(
+    id: 'ade',
+    name: 'Ade',
+    description: 'Fiamma viola degli inferi, signore dell\u2019oltretomba',
+    mode: Brightness.dark,
+    premium: true,
+    neon: true,
+    glow: _hex('#9d6bff'),
+    colors: AppColors.hex(
+      bg: '#08060c', card: '#110b18', cardAlt: '#1a1226', text: '#ece6f5',
+      textMuted: '#9a8fb0', primary: '#7c4dff', primaryDark: '#5a26e0',
+      border: '#241a38', danger: '#ff4d8d',
+    ),
+  ),
 };
 
 /// Pacchetto sonoro caratterizzante per un tema.
@@ -599,6 +747,10 @@ const List<AppAccent> accentOptions = [
   AppAccent('gold', 'Gold', Color(0xfff2c14e), Color(0xffc9a94e)),
   AppAccent('copper', 'Copper', Color(0xffb87333), Color(0xff8c5626)),
   AppAccent('teal', 'Teal', Color(0xff2ec4b6), Color(0xff1a9c90)),
+  AppAccent('mint', 'Mint', Color(0xff5cffb0), Color(0xff22c47e)),
+  AppAccent('indigo', 'Indigo', Color(0xff7c4dff), Color(0xff5a26e0)),
+  AppAccent('crimson', 'Crimson', Color(0xffd13b2f), Color(0xff9e2419)),
+  AppAccent('steel', 'Steel', Color(0xff9aa7bd), Color(0xff6b7b94)),
 ];
 
 AppAccent? accentById(String? id) {
@@ -640,8 +792,11 @@ const List<String> freeThemeIds = [
   'midnight', 'ocean', 'sunset', 'grape', 'paper', 'carbon',
   'forest', 'crimson', 'amber', 'slate', 'arctic', 'rose',
   'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
+  'obsidian', 'dracula', 'nord', 'mocha', 'sakura', 'matcha',
   'neonSynthwave', 'neonToxic', 'neonElectricIce', 'neonSolarFlare',
+  'neonMint', 'neonGold',
   'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
+  'ercole', 'odino', 'ra', 'ade',
 ];
 const String defaultThemeId = 'midnight';
 

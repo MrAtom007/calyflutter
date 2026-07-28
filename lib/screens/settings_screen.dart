@@ -92,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.8.0',
+              child: Text('CaliStrack • v4.9.0',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),
@@ -185,6 +185,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       const SizedBox(height: Spacing.sm),
       _themeGrid(context, theme, c, _themesIn(_themeTab)),
+      const SizedBox(height: Spacing.sm),
+      SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: () {
+            FeedbackService.onTap();
+            theme.randomTheme();
+          },
+          icon: const Icon(Icons.casino_rounded, size: 18),
+          label: Text(t('surprise_me')),
+        ),
+      ),
       if (theme.skin.neon)
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
@@ -769,6 +781,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   static const _legendaryIds = {
     'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
     'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
+    'ercole', 'odino', 'ra', 'ade',
   };
 
   List<AppSkin> _themesIn(String category) {

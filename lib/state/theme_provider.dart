@@ -149,6 +149,15 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Applica un tema casuale tra quelli sbloccati (diverso dall'attuale).
+  Future<void> randomTheme() async {
+    final ids =
+        appThemes.keys.where((id) => id != _themeId && isUnlocked(id)).toList();
+    if (ids.isEmpty) return;
+    ids.shuffle();
+    await changeTheme(ids.first);
+  }
+
   Future<void> toggleGlow(bool v) async {
     _glow = v;
     await StorageService.setBool(StorageService.glowKey, v);

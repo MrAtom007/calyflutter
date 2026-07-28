@@ -12,6 +12,7 @@ const List<String> emblemSubjects = [
   'ulisse', 'zeus', 'cyberpunk', 'spartacus', 'kratos',
   'synthwave', 'valkyrie', 'ronin', 'anubis',
   'achille', 'leonida', 'poseidon',
+  'ercole', 'odino', 'ra', 'ade',
 ];
 
 /// Mappa l'icona app (alias nativo) al soggetto dell'emblema.
@@ -59,6 +60,10 @@ String? emblemForTheme(String themeId) {
     case 'achille':
     case 'leonida':
     case 'poseidon':
+    case 'ercole':
+    case 'odino':
+    case 'ra':
+    case 'ade':
       return themeId;
     case 'neonSynthwave':
       return 'synthwave';
@@ -238,6 +243,14 @@ class EmblemPainter extends CustomPainter {
         return _leonida();
       case 'poseidon':
         return _poseidon();
+      case 'ercole':
+        return _ercole();
+      case 'odino':
+        return _odino();
+      case 'ra':
+        return _ra();
+      case 'ade':
+        return _ade();
       default:
         return _zeus();
     }
@@ -556,6 +569,109 @@ class EmblemPainter extends CustomPainter {
     final accent = Path();
     accent.addRect(const Rect.fromLTRB(45, 58, 55, 62));
     accent.addRect(const Rect.fromLTRB(45, 68, 55, 72));
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _ercole() {
+    // Clava di Ercole (in diagonale) con borchie.
+    final main = Path();
+    // impugnatura + asta
+    main.moveTo(22, 88);
+    main.lineTo(30, 80);
+    main.lineTo(58, 52);
+    main.lineTo(50, 60);
+    main.close();
+    // testa nodosa
+    main.addOval(Rect.fromCircle(center: const Offset(70, 40), radius: 17));
+    // Dettaglio: borchie sulla testa + fascia impugnatura.
+    final accent = Path();
+    accent.addOval(Rect.fromCircle(center: const Offset(64, 34), radius: 3));
+    accent.addOval(Rect.fromCircle(center: const Offset(77, 37), radius: 3));
+    accent.addOval(Rect.fromCircle(center: const Offset(70, 48), radius: 3));
+    accent.addOval(Rect.fromCircle(center: const Offset(72, 30), radius: 2.4));
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _odino() {
+    // Valknut: tre triangoli intrecciati (anelli triangolari).
+    final ring = Path()..fillType = PathFillType.evenOdd;
+    void tri(double cx, double cy, double s) {
+      // triangolo esterno
+      ring.moveTo(cx, cy - s);
+      ring.lineTo(cx - s * 0.92, cy + s * 0.72);
+      ring.lineTo(cx + s * 0.92, cy + s * 0.72);
+      ring.close();
+      // triangolo interno (foro)
+      final i = s * 0.5;
+      ring.moveTo(cx, cy - i);
+      ring.lineTo(cx - i * 0.92, cy + i * 0.72);
+      ring.lineTo(cx + i * 0.92, cy + i * 0.72);
+      ring.close();
+    }
+
+    tri(50, 34, 18);
+    tri(38, 64, 18);
+    tri(62, 64, 18);
+    return _EmblemArt(ring);
+  }
+
+  _EmblemArt _ra() {
+    // Disco solare alato (Ra).
+    final main = Path();
+    main.addOval(Rect.fromCircle(center: const Offset(50, 42), radius: 11));
+    // ala sinistra
+    main.moveTo(40, 40);
+    main.lineTo(14, 34);
+    main.lineTo(23, 40);
+    main.lineTo(13, 43);
+    main.lineTo(24, 46);
+    main.lineTo(15, 49);
+    main.lineTo(40, 48);
+    main.close();
+    // ala destra
+    main.moveTo(60, 40);
+    main.lineTo(86, 34);
+    main.lineTo(77, 40);
+    main.lineTo(87, 43);
+    main.lineTo(76, 46);
+    main.lineTo(85, 49);
+    main.lineTo(60, 48);
+    main.close();
+    // Dettaglio: nucleo del disco + raggi.
+    final accent = Path()..fillType = PathFillType.evenOdd;
+    accent.addOval(Rect.fromCircle(center: const Offset(50, 42), radius: 6));
+    accent.addOval(Rect.fromCircle(center: const Offset(50, 42), radius: 2.5));
+    accent.addRect(const Rect.fromLTRB(48.5, 58, 51.5, 74)); // raggio/uraeus
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _ade() {
+    // Bidente di Ade.
+    final main = Path();
+    main.addRect(const Rect.fromLTRB(48, 44, 52, 92)); // asta
+    main.moveTo(48, 92);
+    main.lineTo(52, 92);
+    main.lineTo(50, 98);
+    main.close();
+    main.addRect(const Rect.fromLTRB(37, 42, 63, 46)); // traversa
+    // rebbio sinistro
+    main.moveTo(40, 44);
+    main.lineTo(39, 24);
+    main.lineTo(42, 16);
+    main.lineTo(45, 24);
+    main.lineTo(45, 44);
+    main.close();
+    // rebbio destro
+    main.moveTo(55, 44);
+    main.lineTo(55, 24);
+    main.lineTo(58, 16);
+    main.lineTo(61, 24);
+    main.lineTo(60, 44);
+    main.close();
+    // Dettaglio: fasce sull'asta.
+    final accent = Path();
+    accent.addRect(const Rect.fromLTRB(45, 58, 55, 62));
+    accent.addRect(const Rect.fromLTRB(45, 70, 55, 74));
     return _EmblemArt(main, accent: accent);
   }
 }
