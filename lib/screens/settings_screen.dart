@@ -16,6 +16,7 @@ import '../services/app_icon_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/emblem.dart';
 import '../modules/weighted/weighted_settings_screen.dart';
+import 'achievements_screen.dart';
 import 'store_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -88,11 +89,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.storage_rounded,
               title: t('cat_data'),
               children: _dataChildren(context, c, t)),
+          // Traguardi (link a schermata dedicata)
+          Container(
+            margin: const EdgeInsets.only(bottom: Spacing.md),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(Radii.lg),
+              border: Border.all(color: c.border.withValues(alpha: 0.7)),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              leading: Icon(Icons.emoji_events_rounded, color: c.primary),
+              title: Text(t('achievements'),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w800, fontSize: 15)),
+              subtitle: Text(t('achievements_hint'),
+                  style: TextStyle(color: c.textMuted, fontSize: 12)),
+              trailing: Icon(Icons.chevron_right_rounded, color: c.textMuted),
+              onTap: () {
+                FeedbackService.onTap();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const AchievementsScreen()));
+              },
+            ),
+          ),
           const SizedBox(height: Spacing.xl),
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.10.0',
+              child: Text('CaliStrack • v4.11.0',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),
