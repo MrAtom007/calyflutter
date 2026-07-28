@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <!-- Testa di sciacallo (Anubis), oro -->
-    <path android:pathData="M34,10 L48,40 L36,36 Z" android:fillColor="#F2C14E" />
-    <path android:pathData="M74,10 L60,40 L72,36 Z" android:fillColor="#F2C14E" />
-    <path android:pathData="M38,34 Q38,30 54,30 Q70,30 70,34 L66,58 Q62,74 54,92 Q46,74 42,58 Z" android:fillColor="#F2C14E" />
-    <!-- Occhi turchese -->
-    <path android:pathData="M45,44 a2.4,2.4 0 1,0 4.8,0 a2.4,2.4 0 1,0 -4.8,0" android:fillColor="#2EC4B6" />
-    <path android:pathData="M58.2,44 a2.4,2.4 0 1,0 4.8,0 a2.4,2.4 0 1,0 -4.8,0" android:fillColor="#2EC4B6" />
+    <!-- Testa di sciacallo di profilo (oro), con occhio egizio -->
+    <path android:fillType="evenOdd" android:fillColor="#F2C14E" android:pathData="M32,32 L38,6 L51,32 Q54,32 58,36 L92,44 L96,50 L93,54 L63,54 L58,66 L53,82 L36,79 Q27,67 28,48 Z M49,40 L57,42 L54,45 L48,44 Z" />
+    <!-- Interno orecchio + collare (turchese) -->
+    <path android:fillColor="#2EC4B6" android:pathData="M38,15 L46,31 L40,30 Z" />
+    <path android:fillColor="#2EC4B6" android:pathData="M39,67 h17 v3 h-17 z" />
+    <path android:fillColor="#2EC4B6" android:pathData="M41,73 h13 v3 h-13 z" />
 </vector>

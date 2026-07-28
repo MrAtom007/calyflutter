@@ -92,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.7.3',
+              child: Text('CaliStrack • v4.8.0',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),

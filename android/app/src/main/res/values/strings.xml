@@ -10,4 +10,7 @@
     <string name="icon_name_valkyrie">ValkyrieFit</string>
     <string name="icon_name_ronin">RoninTrack</string>
     <string name="icon_name_anubis">AnubisFit</string>
+    <string name="icon_name_achille">AchilleTrack</string>
+    <string name="icon_name_leonida">LeonidaTrack</string>
+    <string name="icon_name_poseidon">PoseidonTrack</string>
 </resources>

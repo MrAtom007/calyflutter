@@ -166,6 +166,45 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".IconAchille"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_achille"
+            android:roundIcon="@mipmap/ic_achille"
+            android:label="@string/icon_name_achille"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconLeonida"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_leonida"
+            android:roundIcon="@mipmap/ic_leonida"
+            android:label="@string/icon_name_leonida"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconPoseidon"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_poseidon"
+            android:roundIcon="@mipmap/ic_poseidon"
+            android:label="@string/icon_name_poseidon"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
         <!-- Health Connect: motivazione permessi su Android 14+ -->
         <activity-alias
             android:name="ViewPermissionUsageActivity"

@@ -11,6 +11,7 @@ extension EmblemStyleLabel on EmblemStyle {
 const List<String> emblemSubjects = [
   'ulisse', 'zeus', 'cyberpunk', 'spartacus', 'kratos',
   'synthwave', 'valkyrie', 'ronin', 'anubis',
+  'achille', 'leonida', 'poseidon',
 ];
 
 /// Mappa l'icona app (alias nativo) al soggetto dell'emblema.
@@ -32,6 +33,12 @@ String emblemForIcon(String appIconId) {
       return 'ronin';
     case 'IconAnubis':
       return 'anubis';
+    case 'IconAchille':
+      return 'achille';
+    case 'IconLeonida':
+      return 'leonida';
+    case 'IconPoseidon':
+      return 'poseidon';
     case 'IconDefault':
     default:
       return 'ulisse';
@@ -49,6 +56,9 @@ String? emblemForTheme(String themeId) {
     case 'valkyrie':
     case 'ronin':
     case 'anubis':
+    case 'achille':
+    case 'leonida':
+    case 'poseidon':
       return themeId;
     case 'neonSynthwave':
       return 'synthwave';
@@ -87,6 +97,12 @@ String iconAliasForSubject(String? subject) {
       return 'IconRonin';
     case 'anubis':
       return 'IconAnubis';
+    case 'achille':
+      return 'IconAchille';
+    case 'leonida':
+      return 'IconLeonida';
+    case 'poseidon':
+      return 'IconPoseidon';
     case 'ulisse':
     default:
       return 'IconDefault';
@@ -216,6 +232,12 @@ class EmblemPainter extends CustomPainter {
         return _ronin();
       case 'anubis':
         return _anubis();
+      case 'achille':
+        return _achille();
+      case 'leonida':
+        return _leonida();
+      case 'poseidon':
+        return _poseidon();
       default:
         return _zeus();
     }
@@ -419,37 +441,121 @@ class EmblemPainter extends CustomPainter {
   }
 
   _EmblemArt _anubis() {
-    final main = Path();
-    // orecchio sinistro
-    main.moveTo(32, 8);
-    main.lineTo(45, 36);
-    main.lineTo(33, 33);
+    // Testa di sciacallo DI PROFILO (rivolta a destra): la silhouette
+    // iconica di Anubis, con orecchio dritto e muso lungo.
+    final main = Path()..fillType = PathFillType.evenOdd;
+    main.moveTo(30, 30); // base posteriore orecchio
+    main.lineTo(35, 6); // punta orecchio
+    main.lineTo(47, 30); // base anteriore orecchio
+    main.quadraticBezierTo(50, 30, 54, 33); // fronte
+    main.lineTo(85, 41); // dorso del muso fino al naso
+    main.lineTo(89, 46); // punta naso
+    main.lineTo(86, 50); // narice
+    main.lineTo(58, 50); // bocca
+    main.lineTo(54, 61); // mento
+    main.lineTo(49, 76); // gola davanti
+    main.lineTo(33, 73); // gola dietro
+    main.quadraticBezierTo(25, 62, 26, 44); // nuca
     main.close();
-    // orecchio destro
-    main.moveTo(68, 8);
-    main.lineTo(55, 36);
-    main.lineTo(67, 33);
+    // occhio (foro) di taglio egizio
+    main.moveTo(45, 37);
+    main.lineTo(53, 39);
+    main.lineTo(50, 42);
+    main.lineTo(44, 41);
     main.close();
-    // testa e muso
-    main.moveTo(35, 30);
-    main.quadraticBezierTo(35, 26, 50, 26);
-    main.quadraticBezierTo(65, 26, 65, 30);
-    main.lineTo(61, 52);
-    main.quadraticBezierTo(58, 68, 50, 86);
-    main.quadraticBezierTo(42, 68, 39, 52);
-    main.close();
-    // Dettaglio: occhi + interno orecchie.
+    // Dettaglio: interno orecchio + collare a strisce.
     final accent = Path();
-    accent.addOval(Rect.fromCircle(center: const Offset(45, 45), radius: 2.6));
-    accent.addOval(Rect.fromCircle(center: const Offset(55, 45), radius: 2.6));
-    accent.moveTo(35, 15);
-    accent.lineTo(42, 32);
-    accent.lineTo(37, 31);
+    accent.moveTo(35, 14);
+    accent.lineTo(43, 29);
+    accent.lineTo(37, 28);
     accent.close();
-    accent.moveTo(65, 15);
-    accent.lineTo(58, 32);
-    accent.lineTo(63, 31);
+    accent.addRect(const Rect.fromLTRB(36, 62, 52, 65));
+    accent.addRect(const Rect.fromLTRB(38, 68, 50, 71));
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _achille() {
+    // Elmo corinzio di profilo (rivolto a sinistra) con cimiero.
+    final main = Path()..fillType = PathFillType.evenOdd;
+    main.moveTo(62, 28); // sommità posteriore calotta
+    main.cubicTo(75, 33, 75, 54, 62, 62); // dorso fino alla nuca
+    main.lineTo(54, 62);
+    main.lineTo(54, 53);
+    main.cubicTo(54, 49, 50, 48, 46, 48); // bordo inferiore verso il fronte
+    main.lineTo(46, 55);
+    main.lineTo(38, 55); // fondo del paranaso
+    main.lineTo(38, 40); // paranaso su (fronte)
+    main.cubicTo(38, 30, 49, 24, 62, 28); // arcata frontale fino in alto
+    main.close();
+    // feritoia dell'occhio (foro)
+    main.moveTo(44, 39);
+    main.lineTo(53, 39);
+    main.lineTo(53, 43);
+    main.lineTo(44, 43);
+    main.close();
+    // Dettaglio: cimiero (pennacchio) sopra la calotta.
+    final accent = Path();
+    accent.moveTo(52, 26);
+    accent.cubicTo(58, 10, 76, 10, 86, 24);
+    accent.cubicTo(80, 18, 66, 20, 58, 30);
     accent.close();
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _leonida() {
+    // Scudo rotondo spartano con Lambda (Λ).
+    final main = Path()
+      ..addOval(Rect.fromCircle(center: const Offset(50, 50), radius: 30));
+    // Dettaglio: bordo (anello) + Lambda.
+    final accent = Path()..fillType = PathFillType.evenOdd;
+    accent.addOval(Rect.fromCircle(center: const Offset(50, 50), radius: 30));
+    accent.addOval(Rect.fromCircle(center: const Offset(50, 50), radius: 25.5));
+    // Lambda
+    accent.moveTo(46, 30);
+    accent.lineTo(54, 30);
+    accent.lineTo(66, 72);
+    accent.lineTo(58, 72);
+    accent.lineTo(50, 44);
+    accent.lineTo(42, 72);
+    accent.lineTo(34, 72);
+    accent.close();
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _poseidon() {
+    // Tridente.
+    final main = Path();
+    main.addRect(const Rect.fromLTRB(48, 44, 52, 90)); // asta
+    main.moveTo(48, 90); // punta inferiore
+    main.lineTo(52, 90);
+    main.lineTo(50, 97);
+    main.close();
+    main.addRect(const Rect.fromLTRB(33, 42, 67, 46)); // traversa
+    // rebbio centrale
+    main.moveTo(47, 44);
+    main.lineTo(47, 24);
+    main.lineTo(50, 14);
+    main.lineTo(53, 24);
+    main.lineTo(53, 44);
+    main.close();
+    // rebbio sinistro (svasato)
+    main.moveTo(34, 45);
+    main.lineTo(29, 30);
+    main.lineTo(32, 28);
+    main.lineTo(37, 41);
+    main.lineTo(38, 45);
+    main.close();
+    // rebbio destro (svasato)
+    main.moveTo(66, 45);
+    main.lineTo(71, 30);
+    main.lineTo(68, 28);
+    main.lineTo(63, 41);
+    main.lineTo(62, 45);
+    main.close();
+    // Dettaglio: fascia decorativa sull'asta.
+    final accent = Path();
+    accent.addRect(const Rect.fromLTRB(45, 58, 55, 62));
+    accent.addRect(const Rect.fromLTRB(45, 68, 55, 72));
     return _EmblemArt(main, accent: accent);
   }
 }

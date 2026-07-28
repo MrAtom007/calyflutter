@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Cimiero (pennacchio) rosso -->
+    <path android:fillColor="#C0392B" android:pathData="M56,28 C63,11 82,11 93,26 C86,19 71,22 63,32 Z" />
+    <!-- Elmo corinzio (bronzo), con feritoia occhio -->
+    <path android:fillType="evenOdd" android:fillColor="#CF9B3C" android:pathData="M67,30 C81,36 81,58 67,67 L58,67 L58,57 C58,53 54,52 50,52 L50,59 L41,59 L41,43 C41,32 53,26 67,30 Z M48,42 L57,42 L57,46 L48,46 Z" />
+</vector>

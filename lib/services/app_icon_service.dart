@@ -69,6 +69,15 @@ class AppIconService {
     AppIconStyle('IconAnubis', 'Anubis',
         [Color(0xff16233F), Color(0xff070A12)], Color(0xffF2C14E), '',
         glyph: Icons.ac_unit_rounded, appName: 'AnubisFit'),
+    AppIconStyle('IconAchille', 'Achille',
+        [Color(0xff3A2A12), Color(0xff0C0A08)], Color(0xffCF9B3C), '',
+        glyph: Icons.shield_moon_rounded, appName: 'AchilleTrack'),
+    AppIconStyle('IconLeonida', 'Leonida',
+        [Color(0xff3A1512), Color(0xff120707)], Color(0xffD13B2F), '',
+        glyph: Icons.security_rounded, appName: 'LeonidaTrack'),
+    AppIconStyle('IconPoseidon', 'Poseidone',
+        [Color(0xff0A2A38), Color(0xff04121A)], Color(0xff2EC4B6), '',
+        glyph: Icons.water_rounded, appName: 'PoseidonTrack'),
   ];
 
   static Future<String> current() async {

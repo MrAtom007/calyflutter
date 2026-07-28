@@ -14,7 +14,8 @@ class MainActivity : FlutterFragmentActivity() {
     // Alias disponibili (devono combaciare con AndroidManifest.xml).
     private val aliases = listOf(
         "IconDefault", "IconZeus", "IconCyberpunk", "IconSpartacus", "IconKratos",
-        "IconSynthwave", "IconValkyrie", "IconRonin", "IconAnubis"
+        "IconSynthwave", "IconValkyrie", "IconRonin", "IconAnubis",
+        "IconAchille", "IconLeonida", "IconPoseidon"
     )
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
