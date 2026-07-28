@@ -34,6 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _sound = FeedbackService.soundEnabled;
   bool _haptics = FeedbackService.hapticsEnabled;
   String _appIcon = 'IconDefault';
+  String _themeTab = 'classic';
 
   static const _dayLabels = ['L', 'M', 'M', 'G', 'V', 'S', 'D'];
 
@@ -91,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.7.1',
+              child: Text('CaliStrack • v4.7.2',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),
@@ -153,12 +154,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
       BuildContext context, ThemeProvider theme, AppColors c, dynamic t) {
     return [
       _subLabel(c, t('theme_color')),
-      _themeCategory(context, theme, c, t('theme_cat_classic'),
-          _themesIn('classic')),
-      _themeCategory(
-          context, theme, c, t('theme_cat_neon'), _themesIn('neon')),
-      _themeCategory(context, theme, c, t('theme_cat_legendary'),
-          _themesIn('legendary')),
+      // Schede per stile: Classici / Neon / Leggendari.
+      Row(
+        children: [
+          ('classic', t('theme_tab_classic')),
+          ('neon', t('theme_tab_neon')),
+          ('legendary', t('theme_tab_legendary')),
+        ].map((e) {
+          final active = _themeTab == e.$1;
+          final count = _themesIn(e.$1).length;
+          final activeInside =
+              _themesIn(e.$1).any((s) => s.id == theme.themeId);
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: Spacing.sm),
+              child: _AnimatedSelectChip(
+                c: c,
+                label: e.$2,
+                hint: '$count',
+                selected: active,
+                dot: activeInside && !active,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  setState(() => _themeTab = e.$1);
+                },
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+      const SizedBox(height: Spacing.sm),
+      _themeGrid(context, theme, c, _themesIn(_themeTab)),
       if (theme.skin.neon)
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
@@ -756,58 +782,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }).toList();
   }
 
-  Widget _themeCategory(BuildContext context, ThemeProvider theme, AppColors c,
-      String title, List<AppSkin> skins,
-      {bool initiallyExpanded = false}) {
+  Widget _themeGrid(BuildContext context, ThemeProvider theme, AppColors c,
+      List<AppSkin> skins) {
     if (skins.isEmpty) return const SizedBox.shrink();
-    final activeInside = skins.any((s) => s.id == theme.themeId);
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: Spacing.sm),
-        decoration: BoxDecoration(
-          color: c.cardAlt,
-          borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: c.border.withValues(alpha: 0.6)),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: ExpansionTile(
-          initiallyExpanded: initiallyExpanded,
-          tilePadding: const EdgeInsets.symmetric(horizontal: Spacing.md),
-          childrenPadding:
-              const EdgeInsets.fromLTRB(Spacing.sm, 0, Spacing.sm, Spacing.sm),
-          title: Row(
-            children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
-              if (activeInside) ...[
-                const SizedBox(width: 8),
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration:
-                      BoxDecoration(color: c.primary, shape: BoxShape.circle),
-                ),
-              ],
-              const Spacer(),
-              Text('${skins.length}',
-                  style: TextStyle(color: c.textMuted, fontSize: 12)),
-            ],
-          ),
-          children: [
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 1.6,
-              mainAxisSpacing: Spacing.sm,
-              crossAxisSpacing: Spacing.sm,
-              children: skins
-                  .map((skin) => _themeCard(context, theme, c, skin))
-                  .toList(),
-            ),
-          ],
-        ),
-      ),
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      childAspectRatio: 1.6,
+      mainAxisSpacing: Spacing.sm,
+      crossAxisSpacing: Spacing.sm,
+      children:
+          skins.map((skin) => _themeCard(context, theme, c, skin)).toList(),
     );
   }
 
@@ -895,12 +881,14 @@ class _AnimatedSelectChip extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.hint,
+    this.dot = false,
   });
 
   final AppColors c;
   final String label;
   final String? hint;
   final bool selected;
+  final bool dot;
   final VoidCallback onTap;
 
   @override
@@ -928,13 +916,33 @@ class _AnimatedSelectChip extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: selected ? _onPrimary(c.primary) : c.text,
-                fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-                fontSize: 13,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: selected ? _onPrimary(c.primary) : c.text,
+                      fontWeight:
+                          selected ? FontWeight.w800 : FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+                if (dot) ...[
+                  const SizedBox(width: 5),
+                  Container(
+                    width: 7,
+                    height: 7,
+                    decoration:
+                        BoxDecoration(color: c.primary, shape: BoxShape.circle),
+                  ),
+                ],
+              ],
             ),
             if (hint != null)
               Text(
