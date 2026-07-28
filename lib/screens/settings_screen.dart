@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../state/theme_provider.dart';
 import '../state/onboarding_provider.dart';
@@ -89,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.4.0',
+              child: Text('CaliStrack • v4.5.0',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),
@@ -167,20 +168,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
           onChanged: (v) => theme.toggleGlow(v),
         ),
       _subLabel(c, t('density')),
-      Wrap(
-        spacing: Spacing.sm,
-        children: UiDensity.values.map((d) {
-          final active = theme.density == d;
-          return ChoiceChip(
-            label: Text(d.label),
-            selected: active,
-            selectedColor: c.primary,
-            onSelected: (_) {
-              FeedbackService.selection();
-              theme.setDensity(d);
-            },
-          );
-        }).toList(),
+      // Rebuild mirato: solo questa riga si aggiorna al cambio densità.
+      Selector<ThemeProvider, UiDensity>(
+        selector: (_, th) => th.density,
+        builder: (context, density, _) => Wrap(
+          spacing: Spacing.sm,
+          children: UiDensity.values.map((d) {
+            return _AnimatedSelectChip(
+              c: c,
+              label: d.label,
+              hint: d.hint,
+              selected: density == d,
+              onTap: () => context.read<ThemeProvider>().setDensity(d),
+            );
+          }).toList(),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: Text(t('density_hint'),
+            style: TextStyle(color: c.textMuted, fontSize: 11)),
       ),
       _subLabel(c, t('accent')),
       Padding(
@@ -219,32 +226,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       ),
       _subLabel(c, t('card_style')),
-      Wrap(
-        spacing: Spacing.sm,
-        children: [
-          (CardStyle.solid, t('card_solid')),
-          (CardStyle.glass, t('card_glass')),
-          (CardStyle.outline, t('card_outline')),
-        ].map((e) {
-          final active = theme.cardStyle == e.$1;
-          return ChoiceChip(
-            label: Text(e.$2),
-            selected: active,
-            selectedColor: c.primary,
-            onSelected: (_) {
-              FeedbackService.selection();
-              theme.setCardStyle(e.$1);
-            },
-          );
-        }).toList(),
+      Selector<ThemeProvider, CardStyle>(
+        selector: (_, th) => th.cardStyle,
+        builder: (context, cardStyle, _) => Wrap(
+          spacing: Spacing.sm,
+          children: [
+            (CardStyle.solid, t('card_solid')),
+            (CardStyle.glass, t('card_glass')),
+            (CardStyle.outline, t('card_outline')),
+          ].map((e) {
+            return _AnimatedSelectChip(
+              c: c,
+              label: e.$2,
+              selected: cardStyle == e.$1,
+              onTap: () => context.read<ThemeProvider>().setCardStyle(e.$1),
+            );
+          }).toList(),
+        ),
       ),
       _subLabel(c, t('app_icon')),
       SizedBox(
         height: 96,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          clipBehavior: Clip.none,
+          // Padding laterale per non tagliare il bordo dei primi/ultimi item.
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
           itemCount: AppIconService.styles.length,
-          separatorBuilder: (_, _) => const SizedBox(width: Spacing.sm),
+          separatorBuilder: (_, _) => const SizedBox(width: Spacing.md),
           itemBuilder: (context, i) {
             final s = AppIconService.styles[i];
             final active = _appIcon == s.id;
@@ -272,7 +282,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           width: active ? 2.5 : 1),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: Image.asset(s.asset, fit: BoxFit.cover),
+                    child: s.hasAsset
+                        ? Image.asset(s.asset, fit: BoxFit.cover)
+                        : DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: s.bg,
+                              ),
+                            ),
+                            child: Icon(s.glyph, color: s.bolt, size: 28),
+                          ),
                   ),
                   const SizedBox(height: 4),
                   Text(s.name,
@@ -651,6 +672,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // ---- Temi raggruppati per categoria ----
   static const _legendaryIds = {
     'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
+    'valkyrie', 'ronin', 'anubis',
   };
 
   List<AppSkin> _themesIn(String category) {
@@ -794,4 +816,75 @@ class _SettingsScreenState extends State<SettingsScreen> {
           border: Border.all(color: Colors.white24),
         ),
       );
+}
+
+/// Chip di selezione con feedback aptico immediato e transizione animata
+/// dello stato selezionato (150ms), prima del rebuild del tema.
+class _AnimatedSelectChip extends StatelessWidget {
+  const _AnimatedSelectChip({
+    required this.c,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.hint,
+  });
+
+  final AppColors c;
+  final String label;
+  final String? hint;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        // Feedback immediato al tocco, prima di qualsiasi rebuild.
+        HapticFeedback.selectionClick();
+        onTap();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOut,
+        padding:
+            const EdgeInsets.symmetric(horizontal: Spacing.md, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected ? c.primary : c.cardAlt,
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(
+            color: selected ? c.primary : c.border,
+            width: selected ? 2 : 1,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: selected ? _onPrimary(c.primary) : c.text,
+                fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
+            if (hint != null)
+              Text(
+                hint!,
+                style: TextStyle(
+                  color: selected
+                      ? _onPrimary(c.primary).withValues(alpha: 0.85)
+                      : c.textMuted,
+                  fontSize: 10,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Colore leggibile sopra il primary (nero o bianco a seconda della luminanza).
+  Color _onPrimary(Color primary) =>
+      primary.computeLuminance() > 0.5 ? Colors.black : Colors.white;
 }

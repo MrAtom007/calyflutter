@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nome app mostrato nel launcher, cambia in base all'icona scelta. -->
+    <string name="icon_name_default">CaliTrack</string>
+    <string name="icon_name_zeus">ZeusTrack</string>
+    <string name="icon_name_cyberpunk">CyberTrack</string>
+    <string name="icon_name_spartacus">SpartanTrack</string>
+    <string name="icon_name_kratos">KratosFit</string>
+    <string name="icon_name_synthwave">SynthTrack</string>
+    <string name="icon_name_valkyrie">ValkyrieFit</string>
+    <string name="icon_name_ronin">RoninTrack</string>
+    <string name="icon_name_anubis">AnubisFit</string>
+</resources>

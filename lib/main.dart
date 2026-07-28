@@ -79,24 +79,32 @@ class CaliStrackApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.watch<ThemeProvider>();
     final locale = context.watch<LocaleProvider>();
-    final skin = theme.skin;
-    SystemChrome.setSystemUIOverlayStyle(
-      skin.isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
-    );
-    return MaterialApp(
-      title: 'CaliStrack',
-      debugShowCheckedModeBanner: false,
-      theme: buildThemeData(skin),
-      locale: locale.locale,
-      supportedLocales: const [Locale('it'), Locale('en'), Locale('es')],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      home: const AppGate(),
+    // Il MaterialApp (e quindi tutto l'albero) viene ricostruito SOLO quando
+    // cambia il tema vero e proprio. Densità, stile card, accento e glow non
+    // toccano il ThemeData e vengono consumati puntualmente dai singoli widget,
+    // così il cambio di quei parametri non blocca il thread UI.
+    return Selector<ThemeProvider, String>(
+      selector: (_, t) => t.themeId,
+      builder: (context, themeId, _) {
+        final skin = appThemes[themeId] ?? appThemes[defaultThemeId]!;
+        SystemChrome.setSystemUIOverlayStyle(
+          skin.isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        );
+        return MaterialApp(
+          title: 'CaliStrack',
+          debugShowCheckedModeBanner: false,
+          theme: buildThemeData(skin),
+          locale: locale.locale,
+          supportedLocales: const [Locale('it'), Locale('en'), Locale('es')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: const AppGate(),
+        );
+      },
     );
   }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Sol Levante (rosso sangue) -->
+    <path android:pathData="M38,50 a16,16 0 1,0 32,0 a16,16 0 1,0 -32,0" android:fillColor="#C0392B" />
+    <!-- Katana (rame) -->
+    <path android:pathData="M30,74 L68,34 L72,38 L34,78 Z" android:fillColor="#B87333" />
+    <path android:pathData="M28,76 L34,70 L38,74 L32,80 Z" android:fillColor="#7A4A22" />
+</vector>

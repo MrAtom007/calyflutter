@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Ankh egizio (oro) -->
+    <path android:pathData="M44,40 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0" android:fillColor="#F2C14E" />
+    <path android:pathData="M51,48 h6 v26 h-6 z" android:fillColor="#F2C14E" />
+    <path android:pathData="M42,54 h24 v6 h-24 z" android:fillColor="#F2C14E" />
+    <!-- Occhio dell'ankh (turchese) -->
+    <path android:pathData="M49,40 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" android:fillColor="#2EC4B6" />
+</vector>

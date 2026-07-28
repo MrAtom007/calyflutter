@@ -353,6 +353,62 @@ final Map<String, AppSkin> appThemes = {
       border: '#1a2340', danger: '#ff4d8d',
     ),
   ),
+  'neonSynthwave': AppSkin(
+    id: 'neonSynthwave',
+    name: 'Synthwave \'84',
+    description: 'Viola scuro con magenta neon e ciano retrò',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#ff2ec4'),
+    colors: AppColors.hex(
+      bg: '#0d0221', card: '#160a2e', cardAlt: '#20103f', text: '#ffe6fb',
+      textMuted: '#9a7fc4', primary: '#ff2ec4', primaryDark: '#00e0ff',
+      border: '#2a1650', danger: '#ff3b6b',
+    ),
+  ),
+  'neonToxic': AppSkin(
+    id: 'neonToxic',
+    name: 'Toxic Green',
+    description: 'Nero profondo con verde acido fluorescente',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#7cff00'),
+    colors: AppColors.hex(
+      bg: '#020402', card: '#08120a', cardAlt: '#0e1e10', text: '#eaffdf',
+      textMuted: '#7f9a6f', primary: '#7cff00', primaryDark: '#57c400',
+      border: '#183018', danger: '#ff3b6b',
+    ),
+  ),
+  'neonElectricIce': AppSkin(
+    id: 'neonElectricIce',
+    name: 'Electric Ice',
+    description: 'Blu notte con azzurro brillante elettrico',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#3ad9ff'),
+    colors: AppColors.hex(
+      bg: '#030a18', card: '#08152a', cardAlt: '#0e2140', text: '#e6f6ff',
+      textMuted: '#6f90b5', primary: '#3ad9ff', primaryDark: '#12a8e0',
+      border: '#123050', danger: '#ff4d6d',
+    ),
+  ),
+  'neonSolarFlare': AppSkin(
+    id: 'neonSolarFlare',
+    name: 'Solar Flare',
+    description: 'Antracite scuro con arancio neon incandescente',
+    mode: Brightness.dark,
+    neon: true,
+    premium: true,
+    glow: _hex('#ff7a18'),
+    colors: AppColors.hex(
+      bg: '#0a0806', card: '#16110c', cardAlt: '#221a12', text: '#fff1e0',
+      textMuted: '#9a8770', primary: '#ff7a18', primaryDark: '#d45700',
+      border: '#332417', danger: '#ff3b4d',
+    ),
+  ),
   // ---- Temi epici "forza" ----
   'spartacus': AppSkin(
     id: 'spartacus',
@@ -421,6 +477,45 @@ final Map<String, AppSkin> appThemes = {
       border: '#241038', danger: '#ff3860',
     ),
   ),
+  'valkyrie': AppSkin(
+    id: 'valkyrie',
+    name: 'Valkyrie',
+    description: 'Argento brunito e oro siderale, mito norreno',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#e9d8a6'),
+    colors: AppColors.hex(
+      bg: '#0b0e12', card: '#151a21', cardAlt: '#20272f', text: '#f2f5f8',
+      textMuted: '#9fadb8', primary: '#cdd6df', primaryDark: '#c9a94e',
+      border: '#2a323b', danger: '#ff6b6b',
+    ),
+  ),
+  'ronin': AppSkin(
+    id: 'ronin',
+    name: 'Ronin',
+    description: 'Nero, rosso sangue e dettagli rame, Giappone feudale',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#b91c1c'),
+    colors: AppColors.hex(
+      bg: '#0b0808', card: '#161010', cardAlt: '#211717', text: '#f6ece8',
+      textMuted: '#b08f86', primary: '#c0392b', primaryDark: '#b87333',
+      border: '#2e1f1c', danger: '#ff5240',
+    ),
+  ),
+  'anubis': AppSkin(
+    id: 'anubis',
+    name: 'Anubis',
+    description: 'Cobalto scuro opaco con oro e turchese, Antico Egitto',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#f2c14e'),
+    colors: AppColors.hex(
+      bg: '#070a12', card: '#0e1424', cardAlt: '#161f33', text: '#eef3fb',
+      textMuted: '#8b9bb5', primary: '#f2c14e', primaryDark: '#2ec4b6',
+      border: '#1c2942', danger: '#ff5b6b',
+    ),
+  ),
 };
 
 /// Pacchetto sonoro caratterizzante per un tema.
@@ -458,6 +553,13 @@ const List<AppAccent> accentOptions = [
   AppAccent('magenta', 'Magenta', Color(0xffff2ec4), Color(0xffd40e9f)),
   AppAccent('lime', 'Lime', Color(0xffbef264), Color(0xff84cc16)),
   AppAccent('orange', 'Orange', Color(0xffff6a00), Color(0xffcc5200)),
+  // Nuovi accenti coordinati ai temi Neon e Leggendari.
+  AppAccent('toxic', 'Toxic', Color(0xff7cff00), Color(0xff57c400)),
+  AppAccent('ice', 'Ice', Color(0xff3ad9ff), Color(0xff12a8e0)),
+  AppAccent('solar', 'Solar', Color(0xffff7a18), Color(0xffd45700)),
+  AppAccent('gold', 'Gold', Color(0xfff2c14e), Color(0xffc9a94e)),
+  AppAccent('copper', 'Copper', Color(0xffb87333), Color(0xff8c5626)),
+  AppAccent('teal', 'Teal', Color(0xff2ec4b6), Color(0xff1a9c90)),
 ];
 
 AppAccent? accentById(String? id) {
@@ -478,6 +580,13 @@ extension UiDensityScale on UiDensity {
         UiDensity.spacious => 1.2,
       };
   String get label => switch (this) {
+        UiDensity.compact => 'Piccolo',
+        UiDensity.comfortable => 'Normale',
+        UiDensity.spacious => 'Grande',
+      };
+
+  /// Etichetta secondaria descrittiva mostrata sotto il nome.
+  String get hint => switch (this) {
         UiDensity.compact => 'Compatto',
         UiDensity.comfortable => 'Comodo',
         UiDensity.spacious => 'Ampio',
@@ -492,6 +601,8 @@ const List<String> freeThemeIds = [
   'midnight', 'ocean', 'sunset', 'grape', 'paper', 'carbon',
   'forest', 'crimson', 'amber', 'slate', 'arctic', 'rose',
   'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
+  'neonSynthwave', 'neonToxic', 'neonElectricIce', 'neonSolarFlare',
+  'valkyrie', 'ronin', 'anubis',
 ];
 const String defaultThemeId = 'midnight';
 

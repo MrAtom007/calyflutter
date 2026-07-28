@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Sole retrò synthwave -->
+    <path android:pathData="M34,50 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0">
+        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt" name="android:fillColor">
+            <gradient android:type="linear" android:startX="54" android:startY="30" android:endX="54" android:endY="70" android:startColor="#FF2EC4" android:endColor="#00E0FF" />
+        </aapt:attr>
+    </path>
+    <path android:pathData="M40,52.5 h28 v2.6 h-28 z" android:fillColor="#140627" />
+    <path android:pathData="M42,58 h24 v2.6 h-24 z" android:fillColor="#140627" />
+    <path android:pathData="M44,63 h20 v2.4 h-20 z" android:fillColor="#140627" />
+</vector>

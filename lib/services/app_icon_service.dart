@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'storage_service.dart';
 
@@ -7,9 +8,13 @@ class AppIconStyle {
   final String name;
   final List<Color> bg; // gradiente sfondo anteprima (fallback)
   final Color bolt; // colore accento
-  final String asset; // immagine emblema
+  final String asset; // immagine emblema (vuoto = usa glyph di fallback)
+  final IconData glyph; // icona di fallback quando manca l'asset
 
-  const AppIconStyle(this.id, this.name, this.bg, this.bolt, this.asset);
+  const AppIconStyle(this.id, this.name, this.bg, this.bolt, this.asset,
+      {this.glyph = Icons.bolt_rounded});
+
+  bool get hasAsset => asset.isNotEmpty;
 }
 
 /// Mappa un id tema epico all'emblema corrispondente (o null).
@@ -39,6 +44,19 @@ class AppIconService {
         Color(0xffE9B45A), 'assets/icon_previews/spartacus.png'),
     AppIconStyle('IconKratos', 'Kratos', [Color(0xff442727), Color(0xff0E0F12)],
         Color(0xffEE4A40), 'assets/icon_previews/kratos.png'),
+    // Nuove icone (anteprima vettoriale, senza PNG dedicato).
+    AppIconStyle('IconSynthwave', 'Synthwave',
+        [Color(0xff2A0A54), Color(0xff0D0221)], Color(0xffFF2EC4), '',
+        glyph: Icons.wb_sunny_rounded),
+    AppIconStyle('IconValkyrie', 'Valkyrie',
+        [Color(0xff2A323B), Color(0xff0B0E12)], Color(0xffD7DEE6), '',
+        glyph: Icons.flight_rounded),
+    AppIconStyle('IconRonin', 'Ronin',
+        [Color(0xff2E1516), Color(0xff0B0808)], Color(0xffC0392B), '',
+        glyph: Icons.brightness_1_rounded),
+    AppIconStyle('IconAnubis', 'Anubis',
+        [Color(0xff16233F), Color(0xff070A12)], Color(0xffF2C14E), '',
+        glyph: Icons.ac_unit_rounded),
   ];
 
   static Future<String> current() async {

@@ -55,7 +55,7 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
-            android:label="CaliStrack"
+            android:label="@string/icon_name_default"
             android:targetActivity=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -68,7 +68,7 @@
             android:exported="true"
             android:icon="@mipmap/ic_zeus"
             android:roundIcon="@mipmap/ic_zeus"
-            android:label="CaliStrack"
+            android:label="@string/icon_name_zeus"
             android:targetActivity=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -81,7 +81,7 @@
             android:exported="true"
             android:icon="@mipmap/ic_cyberpunk"
             android:roundIcon="@mipmap/ic_cyberpunk"
-            android:label="CaliStrack"
+            android:label="@string/icon_name_cyberpunk"
             android:targetActivity=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -94,7 +94,7 @@
             android:exported="true"
             android:icon="@mipmap/ic_spartacus"
             android:roundIcon="@mipmap/ic_spartacus"
-            android:label="CaliStrack"
+            android:label="@string/icon_name_spartacus"
             android:targetActivity=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -107,7 +107,59 @@
             android:exported="true"
             android:icon="@mipmap/ic_kratos"
             android:roundIcon="@mipmap/ic_kratos"
-            android:label="CaliStrack"
+            android:label="@string/icon_name_kratos"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconSynthwave"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_synthwave"
+            android:roundIcon="@mipmap/ic_synthwave"
+            android:label="@string/icon_name_synthwave"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconValkyrie"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_valkyrie"
+            android:roundIcon="@mipmap/ic_valkyrie"
+            android:label="@string/icon_name_valkyrie"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconRonin"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_ronin"
+            android:roundIcon="@mipmap/ic_ronin"
+            android:label="@string/icon_name_ronin"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconAnubis"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_anubis"
+            android:roundIcon="@mipmap/ic_anubis"
+            android:label="@string/icon_name_anubis"
             android:targetActivity=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
