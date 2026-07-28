@@ -57,6 +57,17 @@ String? emblemForTheme(String themeId) {
   }
 }
 
+/// Foto realistica opzionale per un soggetto (mostrata al posto dell'emblema
+/// vettoriale nelle miniature, quando disponibile).
+String? subjectPhotoAsset(String? subject) {
+  switch (subject) {
+    case 'kratos':
+      return 'assets/icon_previews/kratos_hero.jpg';
+    default:
+      return null;
+  }
+}
+
 /// Mappa un soggetto all'alias dell'icona app nativa corrispondente.
 String iconAliasForSubject(String? subject) {
   switch (subject) {

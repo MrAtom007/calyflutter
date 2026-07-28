@@ -92,7 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.7.2',
+              child: Text('CaliStrack • v4.7.3',
                   style: TextStyle(color: c.textMuted, fontSize: 12)),
             ),
           ),
@@ -311,23 +311,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           width: active ? 2.5 : 1),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: s.bg,
-                        ),
-                      ),
-                      child: Center(
-                        child: EmblemView(
-                          subject: emblemForIcon(s.id),
-                          size: 40,
-                          color: s.bolt,
-                          style: theme.emblemStyle,
-                        ),
-                      ),
-                    ),
+                    child: subjectPhotoAsset(emblemForIcon(s.id)) != null
+                        ? Image.asset(subjectPhotoAsset(emblemForIcon(s.id))!,
+                            fit: BoxFit.cover)
+                        : DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: s.bg,
+                              ),
+                            ),
+                            child: Center(
+                              child: EmblemView(
+                                subject: emblemForIcon(s.id),
+                                size: 40,
+                                color: s.bolt,
+                                style: theme.emblemStyle,
+                              ),
+                            ),
+                          ),
                   ),
                   const SizedBox(height: 4),
                   Text(s.name,
@@ -828,7 +831,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             Row(
               children: [
-                if (emblemForTheme(skin.id) != null) ...[
+                if (subjectPhotoAsset(emblemForTheme(skin.id)) != null) ...[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Image.asset(
+                        subjectPhotoAsset(emblemForTheme(skin.id))!,
+                        width: 26,
+                        height: 26,
+                        fit: BoxFit.cover),
+                  ),
+                  const SizedBox(width: 6),
+                ] else if (emblemForTheme(skin.id) != null) ...[
                   EmblemView(
                     subject: emblemForTheme(skin.id),
                     size: 26,
