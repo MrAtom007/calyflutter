@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <!-- Ankh egizio (oro) -->
-    <path android:pathData="M44,40 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0" android:fillColor="#F2C14E" />
-    <path android:pathData="M51,48 h6 v26 h-6 z" android:fillColor="#F2C14E" />
-    <path android:pathData="M42,54 h24 v6 h-24 z" android:fillColor="#F2C14E" />
-    <!-- Occhio dell'ankh (turchese) -->
-    <path android:pathData="M49,40 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" android:fillColor="#2EC4B6" />
+    <!-- Testa di sciacallo (Anubis), oro -->
+    <path android:pathData="M34,10 L48,40 L36,36 Z" android:fillColor="#F2C14E" />
+    <path android:pathData="M74,10 L60,40 L72,36 Z" android:fillColor="#F2C14E" />
+    <path android:pathData="M38,34 Q38,30 54,30 Q70,30 70,34 L66,58 Q62,74 54,92 Q46,74 42,58 Z" android:fillColor="#F2C14E" />
+    <!-- Occhi turchese -->
+    <path android:pathData="M45,44 a2.4,2.4 0 1,0 4.8,0 a2.4,2.4 0 1,0 -4.8,0" android:fillColor="#2EC4B6" />
+    <path android:pathData="M58.2,44 a2.4,2.4 0 1,0 4.8,0 a2.4,2.4 0 1,0 -4.8,0" android:fillColor="#2EC4B6" />
 </vector>

@@ -200,42 +200,52 @@ class EmblemPainter extends CustomPainter {
 
   Path _spartacus() {
     final p = Path()..fillType = PathFillType.evenOdd;
-    // cresta
-    p.moveTo(30, 20);
-    p.quadraticBezierTo(50, 0, 70, 20);
-    p.quadraticBezierTo(60, 15, 50, 15);
-    p.quadraticBezierTo(40, 15, 30, 20);
+    // cresta a ventaglio (galea da murmillo)
+    p.moveTo(50, 6);
+    p.quadraticBezierTo(66, 8, 70, 24);
+    p.quadraticBezierTo(60, 18, 50, 18);
+    p.quadraticBezierTo(40, 18, 30, 24);
+    p.quadraticBezierTo(34, 8, 50, 6);
     p.close();
-    // elmo
-    p.moveTo(34, 22);
-    p.quadraticBezierTo(34, 18, 50, 18);
-    p.quadraticBezierTo(66, 18, 66, 22);
-    p.lineTo(66, 52);
-    p.quadraticBezierTo(66, 66, 50, 72);
-    p.quadraticBezierTo(34, 66, 34, 52);
+    // calotta elmo
+    p.moveTo(34, 24);
+    p.quadraticBezierTo(34, 20, 50, 20);
+    p.quadraticBezierTo(66, 20, 66, 24);
+    p.lineTo(66, 54);
+    p.quadraticBezierTo(66, 70, 50, 78);
+    p.quadraticBezierTo(34, 70, 34, 54);
     p.close();
-    // nasale (foro)
-    p.moveTo(47, 30);
-    p.lineTo(53, 30);
-    p.lineTo(53, 62);
-    p.quadraticBezierTo(50, 65, 47, 62);
+    // apertura viso (foro)
+    p.moveTo(40, 34);
+    p.lineTo(60, 34);
+    p.lineTo(60, 58);
+    p.quadraticBezierTo(50, 66, 40, 58);
     p.close();
+    // sbarre della griglia frontale (rientrano nel foro)
+    p.addRect(const Rect.fromLTRB(43, 34, 45.5, 62));
+    p.addRect(const Rect.fromLTRB(48.75, 34, 51.25, 64));
+    p.addRect(const Rect.fromLTRB(54.5, 34, 57, 62));
     return p;
   }
 
   Path _kratos() {
     final p = Path();
     // manico
-    p.addRect(const Rect.fromLTRB(47, 24, 53, 86));
-    // lama destra
-    p.moveTo(53, 30);
-    p.cubicTo(70, 30, 76, 42, 72, 54);
-    p.lineTo(53, 50);
+    p.addRect(const Rect.fromLTRB(47.5, 20, 52.5, 88));
+    // pomello
+    p.addRRect(RRect.fromRectAndRadius(
+        const Rect.fromLTRB(45, 84, 55, 90), const Radius.circular(2)));
+    // lama destra (bordo concavo da ascia da guerra)
+    p.moveTo(52.5, 30);
+    p.lineTo(74, 26);
+    p.quadraticBezierTo(66, 42, 74, 58);
+    p.lineTo(52.5, 54);
     p.close();
     // lama sinistra
-    p.moveTo(47, 30);
-    p.cubicTo(30, 30, 24, 42, 28, 54);
-    p.lineTo(47, 50);
+    p.moveTo(47.5, 30);
+    p.lineTo(26, 26);
+    p.quadraticBezierTo(34, 42, 26, 58);
+    p.lineTo(47.5, 54);
     p.close();
     return p;
   }
@@ -281,25 +291,48 @@ class EmblemPainter extends CustomPainter {
 
   Path _ronin() {
     final p = Path();
-    p.addOval(Rect.fromCircle(center: const Offset(50, 46), radius: 18));
-    // katana
-    p.moveTo(24, 80);
-    p.lineTo(70, 30);
-    p.lineTo(76, 36);
-    p.lineTo(30, 86);
+    // disco (sol levante) sullo sfondo
+    p.addOval(Rect.fromCircle(center: const Offset(50, 30), radius: 11));
+    // katana A (dal basso-sinistra alla punta alto-destra)
+    p.moveTo(24, 86);
+    p.lineTo(74, 40);
+    p.lineTo(78, 44);
+    p.lineTo(28, 90);
     p.close();
+    // guardia (tsuba) katana A
+    p.addRect(const Rect.fromLTRB(26, 82, 36, 86));
+    // katana B (speculare)
+    p.moveTo(76, 86);
+    p.lineTo(26, 40);
+    p.lineTo(22, 44);
+    p.lineTo(72, 90);
+    p.close();
+    // guardia katana B
+    p.addRect(const Rect.fromLTRB(64, 82, 74, 86));
     return p;
   }
 
   Path _anubis() {
-    final p = Path()..fillType = PathFillType.evenOdd;
-    // anello superiore
-    p.addOval(Rect.fromCircle(center: const Offset(50, 34), radius: 13));
-    p.addOval(Rect.fromCircle(center: const Offset(50, 34), radius: 7));
-    // barra verticale
-    p.addRect(const Rect.fromLTRB(46, 44, 54, 82));
-    // barra orizzontale
-    p.addRect(const Rect.fromLTRB(37, 52, 63, 60));
+    // Testa di sciacallo (di fronte): orecchie appuntite + muso affusolato.
+    final p = Path();
+    // orecchio sinistro
+    p.moveTo(32, 8);
+    p.lineTo(45, 36);
+    p.lineTo(33, 33);
+    p.close();
+    // orecchio destro
+    p.moveTo(68, 8);
+    p.lineTo(55, 36);
+    p.lineTo(67, 33);
+    p.close();
+    // testa e muso
+    p.moveTo(35, 30);
+    p.quadraticBezierTo(35, 26, 50, 26);
+    p.quadraticBezierTo(65, 26, 65, 30);
+    p.lineTo(61, 52);
+    p.quadraticBezierTo(58, 68, 50, 86);
+    p.quadraticBezierTo(42, 68, 39, 52);
+    p.close();
     return p;
   }
 }
