@@ -47,6 +47,14 @@ Tutto consolidato su `main`.
 - [ ] Build AAB di produzione per il Play Store
 - [ ] Build iOS / TestFlight
 
+### Prossimo task
+- [ ] **Icone launcher native per i nuovi temi leggendari** (cavaliere, cerberus,
+      igris, sukuna, toji). I temi + emblemi in-app esistono già; mancano:
+      - PNG icona adattiva per soggetto (foreground/background/monochrome)
+      - `<activity-alias>` in `AndroidManifest.xml` (una per icona) + voce in
+        `AppIconService.styles` con `premium/themeId`
+      - `.appiconset` e mappa alternate-icons in `AppDelegate.swift` (iOS)
+
 ### Possibili estensioni future
 - [ ] Integrazione pagamenti reali per i contenuti premium (Play Billing / RevenueCat)
 - [ ] Import da backup JSON dall'interfaccia (funzione già presente in StorageService)
