@@ -180,4 +180,12 @@ class ThemeProvider extends ChangeNotifier {
     await StorageService.setStringList(StorageService.unlockedKey, toSave);
     notifyListeners();
   }
+
+  /// Sblocca più temi in un'unica operazione (acquisto in blocco).
+  Future<void> unlockMany(Iterable<String> ids) async {
+    _unlocked.addAll(ids);
+    final toSave = _unlocked.where((e) => !freeThemeIds.contains(e)).toList();
+    await StorageService.setStringList(StorageService.unlockedKey, toSave);
+    notifyListeners();
+  }
 }

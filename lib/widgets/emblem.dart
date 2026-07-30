@@ -15,6 +15,7 @@ const Set<String> legendarySubjects = {
   'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
   'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
   'ercole', 'odino', 'ra', 'ade',
+  'cavaliere', 'cerberus', 'igris', 'sukuna', 'toji',
 };
 
 bool isLegendarySubject(String? subject) => legendarySubjects.contains(subject);
@@ -28,6 +29,7 @@ const List<String> emblemSubjects = [
   'synthwave', 'valkyrie', 'ronin', 'anubis',
   'achille', 'leonida', 'poseidon',
   'ercole', 'odino', 'ra', 'ade',
+  'cavaliere', 'cerberus', 'igris', 'sukuna', 'toji',
 ];
 
 /// Mappa l'icona app (alias nativo) al soggetto dell'emblema.
@@ -87,6 +89,11 @@ String? emblemForTheme(String themeId) {
     case 'odino':
     case 'ra':
     case 'ade':
+    case 'cavaliere':
+    case 'cerberus':
+    case 'igris':
+    case 'sukuna':
+    case 'toji':
       return themeId;
     case 'neonSynthwave':
       return 'synthwave';
@@ -379,6 +386,16 @@ class EmblemPainter extends CustomPainter {
         return _ra();
       case 'ade':
         return _ade();
+      case 'cavaliere':
+        return _cavaliere();
+      case 'cerberus':
+        return _cerberus();
+      case 'igris':
+        return _igris();
+      case 'sukuna':
+        return _sukuna();
+      case 'toji':
+        return _toji();
       default:
         return _zeus();
     }
@@ -945,6 +962,164 @@ class EmblemPainter extends CustomPainter {
     accent.addRect(const Rect.fromLTRB(45, 56, 55, 59));
     accent.addRect(const Rect.fromLTRB(45, 66, 55, 69));
     accent.addRect(const Rect.fromLTRB(45, 76, 55, 79));
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _cavaliere() {
+    // Grande elmo del cavaliere (great helm) frontale con visiera a croce.
+    final main = Path();
+    main.moveTo(34, 26);
+    main.quadraticBezierTo(50, 20, 66, 26);
+    main.lineTo(68, 64);
+    main.quadraticBezierTo(66, 79, 50, 83);
+    main.quadraticBezierTo(34, 79, 32, 64);
+    main.close();
+    // Dettaglio: feritoia degli occhi + barra verticale (croce).
+    final accent = Path();
+    accent.addRect(const Rect.fromLTRB(36, 43, 64, 48));
+    accent.addRect(const Rect.fromLTRB(47, 30, 53, 72));
+    // fori di aerazione
+    for (final x in [42.0, 50.0, 58.0]) {
+      accent.addOval(Rect.fromCircle(center: Offset(x, 64), radius: 1.4));
+    }
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _cerberus() {
+    // Cerbero: tre teste di lupo con occhi ardenti.
+    final main = Path();
+    final accent = Path();
+    void head(double cx, double cy, double s) {
+      // muso (verso il basso)
+      main.moveTo(cx - 0.6 * s, cy - 0.5 * s);
+      main.lineTo(cx + 0.6 * s, cy - 0.5 * s);
+      main.lineTo(cx + 0.45 * s, cy + 0.4 * s);
+      main.lineTo(cx, cy + 0.95 * s);
+      main.lineTo(cx - 0.45 * s, cy + 0.4 * s);
+      main.close();
+      // orecchie
+      main.moveTo(cx - 0.55 * s, cy - 0.45 * s);
+      main.lineTo(cx - 0.72 * s, cy - 1.05 * s);
+      main.lineTo(cx - 0.18 * s, cy - 0.55 * s);
+      main.close();
+      main.moveTo(cx + 0.55 * s, cy - 0.45 * s);
+      main.lineTo(cx + 0.72 * s, cy - 1.05 * s);
+      main.lineTo(cx + 0.18 * s, cy - 0.55 * s);
+      main.close();
+      // occhi ardenti
+      accent.addOval(Rect.fromCircle(
+          center: Offset(cx - 0.24 * s, cy - 0.12 * s), radius: 0.12 * s));
+      accent.addOval(Rect.fromCircle(
+          center: Offset(cx + 0.24 * s, cy - 0.12 * s), radius: 0.12 * s));
+    }
+
+    // teste laterali (dietro) + testa centrale (davanti)
+    head(27, 54, 17);
+    head(73, 54, 17);
+    head(50, 40, 22);
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _igris() {
+    // Elmo del cavaliere comandante con cimiero fluente.
+    final main = Path();
+    main.moveTo(36, 36);
+    main.quadraticBezierTo(36, 26, 50, 26);
+    main.quadraticBezierTo(62, 26, 62, 38);
+    main.lineTo(60, 56);
+    main.quadraticBezierTo(52, 70, 44, 66);
+    main.lineTo(40, 54);
+    main.close();
+    // cresta a punta sulla sommita'
+    main.moveTo(47, 27);
+    main.lineTo(50, 14);
+    main.lineTo(56, 27);
+    main.close();
+    // Dettaglio: feritoia luminosa + cimiero all'indietro.
+    final accent = Path();
+    accent.moveTo(41, 43);
+    accent.lineTo(56, 41);
+    accent.lineTo(55, 47);
+    accent.lineTo(41, 48);
+    accent.close();
+    accent.moveTo(56, 30);
+    accent.cubicTo(64, 14, 82, 12, 92, 20);
+    accent.cubicTo(78, 16, 63, 22, 58, 36);
+    accent.close();
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _sukuna() {
+    // Volto maledetto del Re: quattro occhi, tatuaggi e ghigno.
+    final main = Path();
+    main.moveTo(50, 20);
+    main.quadraticBezierTo(72, 30, 72, 50);
+    main.quadraticBezierTo(72, 72, 50, 82);
+    main.quadraticBezierTo(28, 72, 28, 50);
+    main.quadraticBezierTo(28, 30, 50, 20);
+    main.close();
+    // Dettaglio (cremisi): quattro occhi, tatuaggi, ghigno.
+    final accent = Path();
+    // occhi superiori
+    accent.moveTo(34, 40);
+    accent.lineTo(45, 43);
+    accent.lineTo(44, 47);
+    accent.lineTo(34, 44);
+    accent.close();
+    accent.moveTo(66, 40);
+    accent.lineTo(55, 43);
+    accent.lineTo(56, 47);
+    accent.lineTo(66, 44);
+    accent.close();
+    // occhi inferiori
+    accent.moveTo(35, 52);
+    accent.lineTo(45, 54);
+    accent.lineTo(44, 58);
+    accent.lineTo(35, 56);
+    accent.close();
+    accent.moveTo(65, 52);
+    accent.lineTo(55, 54);
+    accent.lineTo(56, 58);
+    accent.lineTo(65, 56);
+    accent.close();
+    // tatuaggi sulla fronte
+    accent.addRect(const Rect.fromLTRB(46, 26, 48, 36));
+    accent.addRect(const Rect.fromLTRB(52, 26, 54, 36));
+    // ghigno
+    accent.moveTo(38, 66);
+    accent.quadraticBezierTo(50, 74, 62, 66);
+    accent.lineTo(60, 69);
+    accent.quadraticBezierTo(50, 75, 40, 69);
+    accent.close();
+    return _EmblemArt(main, accent: accent);
+  }
+
+  _EmblemArt _toji() {
+    // Lancia Inversa del Cielo: lama a doppio taglio con catena.
+    final main = Path();
+    // lama (punta verso il basso)
+    main.moveTo(50, 20);
+    main.lineTo(56, 30);
+    main.lineTo(53, 78);
+    main.lineTo(50, 90);
+    main.lineTo(47, 78);
+    main.lineTo(44, 30);
+    main.close();
+    // guardia
+    main.addRect(const Rect.fromLTRB(38, 26, 62, 31));
+    // impugnatura
+    main.addRect(const Rect.fromLTRB(47, 9, 53, 26));
+    main.addOval(Rect.fromCircle(center: const Offset(50, 8), radius: 3));
+    // Dettaglio: scanalatura + catena.
+    final accent = Path();
+    accent.addRect(const Rect.fromLTRB(49, 34, 51, 74));
+    for (final p in [
+      const Offset(64, 34),
+      const Offset(70, 40),
+      const Offset(76, 46),
+    ]) {
+      accent.addOval(Rect.fromCenter(center: p, width: 5, height: 3.6));
+    }
     return _EmblemArt(main, accent: accent);
   }
 }

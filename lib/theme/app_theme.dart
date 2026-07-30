@@ -703,6 +703,76 @@ final Map<String, AppSkin> appThemes = {
       border: '#241a38', danger: '#ff4d8d',
     ),
   ),
+  // ---- Nuovi temi leggendari ----
+  'cavaliere': AppSkin(
+    id: 'cavaliere',
+    name: 'Cavaliere',
+    description: 'Acciaio e onore, l\u2019elmo del cavaliere',
+    mode: Brightness.dark,
+    premium: true,
+    glow: _hex('#9db8db'),
+    colors: AppColors.hex(
+      bg: '#0c0f14', card: '#141922', cardAlt: '#1e2530', text: '#eef2f7',
+      textMuted: '#9aa6b6', primary: '#7f9bc0', primaryDark: '#536b8f',
+      border: '#29323f', danger: '#ff5b6a',
+    ),
+  ),
+  'cerberus': AppSkin(
+    id: 'cerberus',
+    name: 'Cerberus',
+    description: 'Tre teste di fuoco, guardiano degli inferi',
+    mode: Brightness.dark,
+    premium: true,
+    neon: true,
+    glow: _hex('#ff6a24'),
+    colors: AppColors.hex(
+      bg: '#0e0805', card: '#1a0f08', cardAlt: '#26150c', text: '#ffece0',
+      textMuted: '#c79a80', primary: '#ff5a1f', primaryDark: '#c23c0c',
+      border: '#3a2113', danger: '#ff4030',
+    ),
+  ),
+  'igris': AppSkin(
+    id: 'igris',
+    name: 'Igris',
+    description: 'Cavaliere comandante, lama cremisi',
+    mode: Brightness.dark,
+    premium: true,
+    neon: true,
+    glow: _hex('#ff2a44'),
+    colors: AppColors.hex(
+      bg: '#0a0709', card: '#150b10', cardAlt: '#201017', text: '#f3e9ee',
+      textMuted: '#b58f9d', primary: '#e0263f', primaryDark: '#a10f26',
+      border: '#301620', danger: '#ff3b4e',
+    ),
+  ),
+  'sukuna': AppSkin(
+    id: 'sukuna',
+    name: 'Sukuna',
+    description: 'Re delle maledizioni, bianco e cremisi',
+    mode: Brightness.dark,
+    premium: true,
+    neon: true,
+    glow: _hex('#ff2038'),
+    colors: AppColors.hex(
+      bg: '#0c0709', card: '#170a0d', cardAlt: '#241014', text: '#f6eef0',
+      textMuted: '#c39aa2', primary: '#d81f36', primaryDark: '#9c0f22',
+      border: '#341920', danger: '#ff4055',
+    ),
+  ),
+  'toji': AppSkin(
+    id: 'toji',
+    name: 'Toji',
+    description: 'Lo stregone che uccide, lama incatenata',
+    mode: Brightness.dark,
+    premium: true,
+    neon: true,
+    glow: _hex('#ff2436'),
+    colors: AppColors.hex(
+      bg: '#08080a', card: '#121216', cardAlt: '#1b1c22', text: '#eceef2',
+      textMuted: '#9498a2', primary: '#d21f2e', primaryDark: '#931019',
+      border: '#262830', danger: '#ff4436',
+    ),
+  ),
 };
 
 /// Pacchetto sonoro caratterizzante per un tema.

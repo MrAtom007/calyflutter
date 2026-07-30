@@ -107,6 +107,8 @@ class AppStrings {
       'neon_store': 'Neon Store',
       'store_banner': 'Neon Store — Sblocca skin neon esclusive con effetti glow.',
       'store_icon_included': 'Icona app inclusa',
+      'store_unlock_all': 'Sblocca tutto',
+      'store_owned': 'Sbloccato',
       'active': 'Attivo',
       'apply': 'Applica',
       'demo_purchases':
@@ -377,6 +379,8 @@ class AppStrings {
       'neon_store': 'Neon Store',
       'store_banner': 'Neon Store — Unlock exclusive neon skins with glow effects.',
       'store_icon_included': 'App icon included',
+      'store_unlock_all': 'Unlock all',
+      'store_owned': 'Owned',
       'active': 'Active',
       'apply': 'Apply',
       'demo_purchases':
@@ -640,6 +644,8 @@ class AppStrings {
       'neon_store': 'Neon Store',
       'store_banner': 'Neon Store — Desbloquea skins neón exclusivas con efecto glow.',
       'store_icon_included': 'Icono de app incluido',
+      'store_unlock_all': 'Desbloquear todo',
+      'store_owned': 'Desbloqueado',
       'active': 'Activo',
       'apply': 'Aplicar',
       'demo_purchases':

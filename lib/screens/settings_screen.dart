@@ -827,6 +827,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
     'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
     'ercole', 'odino', 'ra', 'ade',
+    'cavaliere', 'cerberus', 'igris', 'sukuna', 'toji',
   };
 
   List<AppSkin> _themesIn(String category) {
