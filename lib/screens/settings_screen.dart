@@ -323,9 +323,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
           itemBuilder: (context, i) {
             final s = AppIconService.styles[i];
             final active = _appIcon == s.id;
+            final locked = !theme.isIconUnlocked(s);
             return GestureDetector(
               onTap: () async {
                 FeedbackService.onTap();
+                if (locked) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const StoreScreen()));
+                  return;
+                }
                 final messenger = ScaffoldMessenger.of(context);
                 final ok = await AppIconService.setIcon(s.id);
                 if (ok) {
@@ -350,26 +356,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           width: active ? 2.5 : 1),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: subjectPhotoAsset(emblemForIcon(s.id)) != null
-                        ? Image.asset(subjectPhotoAsset(emblemForIcon(s.id))!,
-                            fit: BoxFit.cover)
-                        : DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: s.bg,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        subjectPhotoAsset(emblemForIcon(s.id)) != null
+                            ? Image.asset(
+                                subjectPhotoAsset(emblemForIcon(s.id))!,
+                                fit: BoxFit.cover)
+                            : DecoratedBox(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: s.bg,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: EmblemView(
+                                    subject: emblemForIcon(s.id),
+                                    size: 40,
+                                    color: s.bolt,
+                                    style: theme.emblemStyle,
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: EmblemView(
-                                subject: emblemForIcon(s.id),
-                                size: 40,
-                                color: s.bolt,
-                                style: theme.emblemStyle,
-                              ),
-                            ),
+                        if (locked)
+                          Container(
+                            color: Colors.black.withValues(alpha: 0.45),
+                            child: const Icon(Icons.lock_rounded,
+                                color: Colors.white, size: 22),
                           ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(s.name,

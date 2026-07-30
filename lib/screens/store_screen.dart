@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../state/theme_provider.dart';
 import '../state/locale_provider.dart';
 import '../services/feedback_service.dart';
+import '../services/app_icon_service.dart';
 import '../theme/app_theme.dart';
 
 class StoreScreen extends StatelessWidget {
@@ -64,6 +65,22 @@ class StoreScreen extends StatelessWidget {
                           fontWeight: FontWeight.w800)),
                   Text(skin.description,
                       style: TextStyle(color: skin.colors.textMuted)),
+                  if (AppIconService.styles
+                      .any((ic) => ic.premium && ic.themeId == skin.id))
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Row(
+                        children: [
+                          Icon(Icons.apps_rounded, size: 14, color: glow),
+                          const SizedBox(width: 4),
+                          Text(t('store_icon_included'),
+                              style: TextStyle(
+                                  color: glow,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                    ),
                   const SizedBox(height: Spacing.sm),
                   SizedBox(
                     width: double.infinity,

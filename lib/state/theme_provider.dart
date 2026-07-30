@@ -140,6 +140,16 @@ class ThemeProvider extends ChangeNotifier {
 
   bool isUnlocked(String id) => _unlocked.contains(id);
 
+  /// Un'icona premium e' sbloccata quando lo e' il tema associato.
+  bool isIconUnlocked(AppIconStyle icon) =>
+      !icon.premium || (icon.themeId != null && isUnlocked(icon.themeId!));
+
+  bool isIconIdUnlocked(String iconId) {
+    final icon = AppIconService.styles.firstWhere((s) => s.id == iconId,
+        orElse: () => AppIconService.styles.first);
+    return isIconUnlocked(icon);
+  }
+
   Future<void> changeTheme(String id) async {
     if (!appThemes.containsKey(id)) return;
     _themeId = id;

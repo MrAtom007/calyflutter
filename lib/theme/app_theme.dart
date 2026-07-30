@@ -788,15 +788,12 @@ extension UiDensityScale on UiDensity {
 enum CardStyle { solid, glass, outline }
 
 final List<AppSkin> themeList = appThemes.values.toList();
+// Solo i temi classici sono gratuiti. Tutti i temi Neon e Leggendari sono
+// contenuti premium sbloccabili dallo Store.
 const List<String> freeThemeIds = [
   'midnight', 'ocean', 'sunset', 'grape', 'paper', 'carbon',
   'forest', 'crimson', 'amber', 'slate', 'arctic', 'rose',
-  'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
   'obsidian', 'dracula', 'nord', 'mocha', 'sakura', 'matcha',
-  'neonSynthwave', 'neonToxic', 'neonElectricIce', 'neonSolarFlare',
-  'neonMint', 'neonGold',
-  'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
-  'ercole', 'odino', 'ra', 'ade',
 ];
 const String defaultThemeId = 'midnight';
 
