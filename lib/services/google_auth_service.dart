@@ -40,4 +40,17 @@ class GoogleAuthService {
     } catch (_) {}
     _current = null;
   }
+
+  /// Token OAuth dell'account corrente, necessari per autenticare su
+  /// Firebase Auth (GoogleAuthProvider.credential).
+  static Future<({String? idToken, String? accessToken})> tokens() async {
+    final acc = _current;
+    if (acc == null) return (idToken: null, accessToken: null);
+    try {
+      final auth = await acc.authentication;
+      return (idToken: auth.idToken, accessToken: auth.accessToken);
+    } catch (_) {
+      return (idToken: null, accessToken: null);
+    }
+  }
 }

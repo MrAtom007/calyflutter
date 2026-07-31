@@ -1,5 +1,4 @@
 import 'dart:io' show Platform;
-import 'dart:math';
 
 import 'package:health/health.dart';
 
@@ -69,18 +68,49 @@ class HealthService {
 
   /// Legge i dati reali dal sistema salute. Ritorna `null` se non ci sono
   /// dati sufficienti (in tal caso il chiamante userà i dati demo).
-  static Future<HealthSnapshot?> fetchReal() async {
+  ///
+  /// [selectedSource]: se valorizzato, considera solo i dati provenienti da
+  /// quel dispositivo/app (es. l'orologio Xiaomi via "Mi Fitness"). Se null,
+  /// aggrega tutte le sorgenti disponibili.
+  static Future<HealthSnapshot?> fetchReal({String? selectedSource}) async {
     try {
       await _ensureConfigured();
       final now = DateTime.now();
       final monthAgo = now.subtract(const Duration(days: 30));
       final todayStart = DateTime(now.year, now.month, now.day);
 
-      final points = await _health.getHealthDataFromTypes(
-        types: _types,
-        startTime: monthAgo,
-        endTime: now,
-      );
+      // Lettura tipo-per-tipo: se un tipo lancia un'eccezione (es. il bug noto
+      // dei PASSI "startTime must be before endTime"), non blocca gli altri.
+      final rawPoints = <HealthDataPoint>[];
+      for (final type in _types) {
+        try {
+          final data = await _health.getHealthDataFromTypes(
+            types: [type],
+            startTime: monthAgo,
+            endTime: now,
+          );
+          rawPoints.addAll(data);
+        } catch (_) {
+          // Tipo non disponibile o in errore: lo saltiamo.
+        }
+      }
+      if (rawPoints.isEmpty) return null;
+
+      // Elenco dei dispositivi/app che hanno scritto dati (per la scelta UI).
+      final available = <String>{
+        for (final p in rawPoints)
+          if (p.sourceName.trim().isNotEmpty) p.sourceName.trim()
+      }.toList()
+        ..sort();
+
+      // Filtra per sorgente selezionata, se valida e presente.
+      final effectiveSource =
+          (selectedSource != null && available.contains(selectedSource))
+              ? selectedSource
+              : null;
+      final points = effectiveSource == null
+          ? rawPoints
+          : rawPoints.where((p) => p.sourceName.trim() == effectiveSource).toList();
       if (points.isEmpty) return null;
 
       double? num(HealthDataPoint p) =>
@@ -187,6 +217,8 @@ class HealthService {
         series: series,
         source: _platformSource,
         updatedAt: DateTime.now(),
+        sources: available,
+        selectedSource: effectiveSource,
       );
     } catch (_) {
       return null;
@@ -228,97 +260,5 @@ class HealthService {
     });
     out.sort((a, b) => a.time.compareTo(b.time));
     return out;
-  }
-
-  // ---------------------------------------------------------------------------
-  // Motore DEMO: genera dati realistici così la UI è sempre spettacolare.
-  // ---------------------------------------------------------------------------
-  static HealthSnapshot demoSnapshot({int? seed}) {
-    final rnd = Random(seed ?? DateTime.now().day);
-    final now = DateTime.now();
-    final todayStart = DateTime(now.year, now.month, now.day);
-    final series = <HealthMetric, MetricSeries>{};
-
-    // Heart rate intraday: 120 campioni (ogni ~12 min) con oscillazione.
-    final hrToday = <HealthSample>[];
-    for (int i = 0; i < 120; i++) {
-      final t = todayStart.add(Duration(minutes: i * 12));
-      if (t.isAfter(now)) break;
-      final base = 62 +
-          14 * sin(i / 10) +
-          8 * sin(i / 3.3) +
-          (rnd.nextDouble() - 0.5) * 6;
-      hrToday.add(HealthSample(t, base.clamp(48, 165).toDouble()));
-    }
-    series[HealthMetric.heartRate] = MetricSeries(
-      metric: HealthMetric.heartRate,
-      today: hrToday,
-      daily: _demoDaily(30, () => 66 + rnd.nextInt(10).toDouble()),
-    );
-
-    series[HealthMetric.restingHeartRate] = MetricSeries(
-      metric: HealthMetric.restingHeartRate,
-      today: const [],
-      daily: _demoDaily(30, () => 54 + rnd.nextInt(8).toDouble()),
-    );
-
-    series[HealthMetric.hrv] = MetricSeries(
-      metric: HealthMetric.hrv,
-      today: const [],
-      daily: _demoDaily(30, () => 45 + rnd.nextInt(40).toDouble()),
-    );
-
-    series[HealthMetric.spo2] = MetricSeries(
-      metric: HealthMetric.spo2,
-      today: const [],
-      daily: _demoDaily(30, () => 96 + rnd.nextInt(4).toDouble()),
-    );
-
-    series[HealthMetric.steps] = MetricSeries(
-      metric: HealthMetric.steps,
-      today: const [],
-      daily: _demoDaily(30, () => 4200 + rnd.nextInt(9000).toDouble()),
-    );
-
-    series[HealthMetric.calories] = MetricSeries(
-      metric: HealthMetric.calories,
-      today: const [],
-      daily: _demoDaily(30, () => 320 + rnd.nextInt(680).toDouble()),
-    );
-
-    series[HealthMetric.sleep] = MetricSeries(
-      metric: HealthMetric.sleep,
-      today: const [],
-      daily: _demoDaily(30, () => 5.5 + rnd.nextDouble() * 3),
-    );
-
-    // Pressione: sistolica/diastolica correlate.
-    final bp = <HealthSample>[];
-    for (int i = 29; i >= 0; i--) {
-      final day = todayStart.subtract(Duration(days: i));
-      final s = 115 + rnd.nextInt(18).toDouble();
-      final d = 72 + rnd.nextInt(12).toDouble();
-      bp.add(HealthSample(day, s, value2: d));
-    }
-    series[HealthMetric.bloodPressure] = MetricSeries(
-      metric: HealthMetric.bloodPressure,
-      today: const [],
-      daily: bp,
-    );
-
-    return HealthSnapshot(
-      series: series,
-      source: HealthSource.demo,
-      updatedAt: DateTime.now(),
-    );
-  }
-
-  static List<HealthSample> _demoDaily(int days, double Function() gen) {
-    final now = DateTime.now();
-    final start = DateTime(now.year, now.month, now.day);
-    return [
-      for (int i = days - 1; i >= 0; i--)
-        HealthSample(start.subtract(Duration(days: i)), gen())
-    ];
   }
 }

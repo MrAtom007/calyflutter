@@ -20,8 +20,12 @@ class StorageService {
   static const healthConnectedKey = '@calistrack/healthConnected';
   static const googleAccountKey = '@calistrack/googleAccount';
   static const healthGoalsKey = '@calistrack/healthGoals';
+  // Dispositivo/app sorgente scelto per i dati salute (es. Xiaomi/Mi Fitness).
+  static const healthSourceKey = '@calistrack/healthSource';
   // Dashboard personalizzabile
   static const dashboardWidgetsKey = '@calistrack/dashboardWidgets';
+  // Widget personalizzabili della schermata Salute
+  static const healthWidgetsKey = '@calistrack/healthWidgets';
   // Aspetto / personalizzazione
   static const accentKey = '@calistrack/accent';
   static const densityKey = '@calistrack/density';
@@ -205,4 +209,74 @@ class StorageService {
   static Future<bool?> getBool(String key) async => (await _p).getBool(key);
   static Future<void> setBool(String key, bool v) async =>
       (await _p).setBool(key, v);
+
+  // ---------- Backup completo (cloud sync) ----------
+
+  /// Esporta tutte le chiavi dell'app (`@calistrack/...`) in una mappa
+  /// serializzabile, preservando il tipo di ogni valore. Usata dal
+  /// [CloudSyncService] per salvare i progressi su Firestore.
+  static Future<Map<String, dynamic>> exportAll() async {
+    final p = await _p;
+    final out = <String, dynamic>{};
+    for (final key in p.getKeys()) {
+      if (!key.startsWith('@calistrack/')) continue;
+      final value = p.get(key);
+      if (value == null) continue;
+      final String type;
+      final dynamic data;
+      if (value is String) {
+        type = 's';
+        data = value;
+      } else if (value is bool) {
+        type = 'b';
+        data = value;
+      } else if (value is int) {
+        type = 'i';
+        data = value;
+      } else if (value is double) {
+        type = 'd';
+        data = value;
+      } else if (value is List<String>) {
+        type = 'l';
+        data = value;
+      } else {
+        continue;
+      }
+      out[key] = {'t': type, 'v': data};
+    }
+    return out;
+  }
+
+  /// Ripristina le chiavi esportate da [exportAll] nella persistenza locale.
+  static Future<void> importAll(Map<String, dynamic> data) async {
+    final p = await _p;
+    for (final entry in data.entries) {
+      final key = entry.key;
+      if (!key.startsWith('@calistrack/')) continue;
+      final v = entry.value;
+      if (v is! Map) continue;
+      final type = v['t'];
+      final value = v['v'];
+      try {
+        switch (type) {
+          case 's':
+            await p.setString(key, value as String);
+            break;
+          case 'b':
+            await p.setBool(key, value as bool);
+            break;
+          case 'i':
+            await p.setInt(key, (value as num).toInt());
+            break;
+          case 'd':
+            await p.setDouble(key, (value as num).toDouble());
+            break;
+          case 'l':
+            await p.setStringList(
+                key, (value as List).map((e) => e.toString()).toList());
+            break;
+        }
+      } catch (_) {}
+    }
+  }
 }

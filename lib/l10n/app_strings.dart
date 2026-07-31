@@ -271,6 +271,58 @@ class AppStrings {
       'sign_in_google': 'Accedi con Google',
       'sign_in_failed': 'Accesso non riuscito. Riprova.',
       'sign_out': 'Esci',
+      'backup_now': 'Backup ora',
+      'backup_saved': 'Backup salvato',
+      'backup_failed': 'Backup non riuscito',
+      'last_backup': 'Ultimo backup',
+      'backup_never': 'mai',
+      'health_source': 'Sorgente dati',
+      'all_sources': 'Tutte le sorgenti',
+      'health_source_hint':
+          'Scegli da quale dispositivo/app leggere (es. il tuo orologio Xiaomi via Mi Fitness). "Tutte" somma le sorgenti e può gonfiare i valori.',
+      'customize_widgets': 'Personalizza widget',
+      'add_widget': 'Aggiungi widget',
+      'remove_widget': 'Rimuovi',
+      'reset_layout': 'Ripristina',
+      'reorder_hint':
+          'Trascina per riordinare, tocca − per rimuovere, aggiungi altre metriche qui sotto.',
+      'sleep_tips_title': 'Consigli per dormire meglio',
+      'sleep_status_low':
+          'Hai dormito meno del tuo obiettivo. Piccole abitudini possono aiutarti a recuperare.',
+      'sleep_status_good':
+          'Ottimo riposo! Mantieni questa costanza per continuare così.',
+      'sleep_tip_schedule':
+          'Vai a letto e svegliati sempre alla stessa ora, anche nel weekend.',
+      'sleep_tip_screens':
+          'Evita schermi e luci intense nell\'ora prima di dormire.',
+      'sleep_tip_caffeine':
+          'Niente caffeina o alcol nelle 4-6 ore prima di coricarti.',
+      'sleep_tip_dark':
+          'Tieni la camera buia e silenziosa: usa tende oscuranti o una mascherina.',
+      'sleep_tip_temp':
+          'Mantieni la stanza fresca (18-20°C) e arieggiata.',
+      'sleep_guide_open': 'Guida completa',
+      'sleep_guide_title': 'Guida al sonno',
+      'sleep_guide_intro':
+          'Il sonno di qualità si costruisce di giorno con abitudini costanti. Ecco le aree su cui agire.',
+      'sg_routine_t': 'Routine e orari',
+      'sg_routine_b':
+          'Vai a letto e svegliati alla stessa ora ogni giorno, weekend inclusi. Esponiti alla luce naturale al mattino e crea un rituale rilassante 30-60 minuti prima di dormire.',
+      'sg_env_t': 'Ambiente della camera',
+      'sg_env_b':
+          'Buio totale (tende oscuranti o mascherina), silenzio o rumore bianco, temperatura fresca 18-20°C. Usa il letto solo per dormire, non per lavorare o guardare video.',
+      'sg_food_t': 'Alimentazione',
+      'sg_food_b':
+          'Evita caffeina dal primo pomeriggio e alcol la sera. Non andare a letto affamato né troppo pieno: se serve, uno spuntino leggero. Limita i liquidi nell\'ultima ora.',
+      'sg_move_t': 'Movimento',
+      'sg_move_b':
+          'Allenati regolarmente, ma evita sforzi intensi nelle 2-3 ore prima di coricarti. Una camminata o stretching leggero la sera favoriscono il rilassamento.',
+      'sg_relax_t': 'Rilassamento mentale',
+      'sg_relax_b':
+          'Spegni gli schermi un\'ora prima. Prova respirazione lenta, meditazione o lettura. Se non prendi sonno entro 20 minuti, alzati e fai qualcosa di calmo finché non arriva.',
+      'stat_latest': 'Ultimo',
+      'stat_max': 'Massimo',
+      'hr_zones': 'Zone cardiache',
       'min': 'min',
       'avg': 'media',
       // aspetto
@@ -537,6 +589,57 @@ class AppStrings {
       'sign_in_google': 'Sign in with Google',
       'sign_in_failed': 'Sign-in failed. Try again.',
       'sign_out': 'Sign out',
+      'backup_now': 'Back up now',
+      'backup_saved': 'Backup saved',
+      'backup_failed': 'Backup failed',
+      'last_backup': 'Last backup',
+      'backup_never': 'never',
+      'health_source': 'Data source',
+      'all_sources': 'All sources',
+      'health_source_hint':
+          'Choose which device/app to read from (e.g. your Xiaomi watch via Mi Fitness). "All" sums the sources and may inflate the values.',
+      'customize_widgets': 'Customize widgets',
+      'add_widget': 'Add widget',
+      'remove_widget': 'Remove',
+      'reset_layout': 'Reset',
+      'reorder_hint':
+          'Drag to reorder, tap − to remove, add more metrics below.',
+      'sleep_tips_title': 'Tips for better sleep',
+      'sleep_status_low':
+          'You slept less than your goal. Small habits can help you recover.',
+      'sleep_status_good':
+          'Great rest! Keep this consistency to stay on track.',
+      'sleep_tip_schedule':
+          'Go to bed and wake up at the same time, even on weekends.',
+      'sleep_tip_screens':
+          'Avoid screens and bright lights in the hour before bed.',
+      'sleep_tip_caffeine':
+          'No caffeine or alcohol 4-6 hours before bedtime.',
+      'sleep_tip_dark':
+          'Keep the room dark and quiet: use blackout curtains or a mask.',
+      'sleep_tip_temp': 'Keep the room cool (18-20°C) and well aired.',
+      'sleep_guide_open': 'Full guide',
+      'sleep_guide_title': 'Sleep guide',
+      'sleep_guide_intro':
+          'Quality sleep is built during the day with consistent habits. Here are the areas to work on.',
+      'sg_routine_t': 'Routine and schedule',
+      'sg_routine_b':
+          'Go to bed and wake up at the same time every day, weekends included. Get natural light in the morning and build a relaxing ritual 30-60 minutes before bed.',
+      'sg_env_t': 'Bedroom environment',
+      'sg_env_b':
+          'Total darkness (blackout curtains or a mask), quiet or white noise, cool temperature 18-20°C. Use the bed only for sleep, not for work or videos.',
+      'sg_food_t': 'Nutrition',
+      'sg_food_b':
+          'Avoid caffeine from early afternoon and alcohol in the evening. Don\'t go to bed hungry or too full: a light snack if needed. Limit fluids in the last hour.',
+      'sg_move_t': 'Movement',
+      'sg_move_b':
+          'Exercise regularly, but avoid intense effort in the 2-3 hours before bed. An evening walk or light stretching helps you relax.',
+      'sg_relax_t': 'Mental relaxation',
+      'sg_relax_b':
+          'Turn off screens an hour before. Try slow breathing, meditation or reading. If you can\'t fall asleep within 20 minutes, get up and do something calm until you can.',
+      'stat_latest': 'Latest',
+      'stat_max': 'Max',
+      'hr_zones': 'Heart zones',
       'min': 'min',
       'avg': 'avg',
       'appearance': 'Appearance',
@@ -802,6 +905,58 @@ class AppStrings {
       'sign_in_google': 'Acceder con Google',
       'sign_in_failed': 'Error al acceder. Inténtalo de nuevo.',
       'sign_out': 'Cerrar sesión',
+      'backup_now': 'Copia ahora',
+      'backup_saved': 'Copia guardada',
+      'backup_failed': 'Copia fallida',
+      'last_backup': 'Última copia',
+      'backup_never': 'nunca',
+      'health_source': 'Fuente de datos',
+      'all_sources': 'Todas las fuentes',
+      'health_source_hint':
+          'Elige de qué dispositivo/app leer (p. ej. tu reloj Xiaomi vía Mi Fitness). "Todas" suma las fuentes y puede inflar los valores.',
+      'customize_widgets': 'Personalizar widgets',
+      'add_widget': 'Añadir widget',
+      'remove_widget': 'Quitar',
+      'reset_layout': 'Restablecer',
+      'reorder_hint':
+          'Arrastra para reordenar, toca − para quitar, añade más métricas abajo.',
+      'sleep_tips_title': 'Consejos para dormir mejor',
+      'sleep_status_low':
+          'Has dormido menos de tu objetivo. Pequeños hábitos pueden ayudarte a recuperarte.',
+      'sleep_status_good':
+          '¡Buen descanso! Mantén esta constancia para seguir así.',
+      'sleep_tip_schedule':
+          'Acuéstate y despiértate a la misma hora, también los fines de semana.',
+      'sleep_tip_screens':
+          'Evita pantallas y luces intensas en la hora antes de dormir.',
+      'sleep_tip_caffeine':
+          'Nada de cafeína ni alcohol 4-6 horas antes de acostarte.',
+      'sleep_tip_dark':
+          'Mantén la habitación oscura y en silencio: usa cortinas opacas o antifaz.',
+      'sleep_tip_temp':
+          'Mantén la habitación fresca (18-20°C) y ventilada.',
+      'sleep_guide_open': 'Guía completa',
+      'sleep_guide_title': 'Guía del sueño',
+      'sleep_guide_intro':
+          'El sueño de calidad se construye durante el día con hábitos constantes. Estas son las áreas en las que actuar.',
+      'sg_routine_t': 'Rutina y horarios',
+      'sg_routine_b':
+          'Acuéstate y despiértate a la misma hora cada día, fines de semana incluidos. Recibe luz natural por la mañana y crea un ritual relajante 30-60 minutos antes de dormir.',
+      'sg_env_t': 'Ambiente del dormitorio',
+      'sg_env_b':
+          'Oscuridad total (cortinas opacas o antifaz), silencio o ruido blanco, temperatura fresca 18-20°C. Usa la cama solo para dormir, no para trabajar o ver vídeos.',
+      'sg_food_t': 'Alimentación',
+      'sg_food_b':
+          'Evita la cafeína desde primera hora de la tarde y el alcohol por la noche. No te acuestes con hambre ni demasiado lleno: un tentempié ligero si hace falta. Limita los líquidos en la última hora.',
+      'sg_move_t': 'Movimiento',
+      'sg_move_b':
+          'Haz ejercicio con regularidad, pero evita esfuerzos intensos en las 2-3 horas previas. Un paseo o estiramientos suaves por la noche ayudan a relajarte.',
+      'sg_relax_t': 'Relajación mental',
+      'sg_relax_b':
+          'Apaga las pantallas una hora antes. Prueba respiración lenta, meditación o lectura. Si no te duermes en 20 minutos, levántate y haz algo tranquilo hasta que llegue el sueño.',
+      'stat_latest': 'Último',
+      'stat_max': 'Máximo',
+      'hr_zones': 'Zonas cardíacas',
       'min': 'mín',
       'avg': 'media',
       'appearance': 'Apariencia',

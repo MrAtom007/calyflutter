@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/workout.dart';
 import '../services/storage_service.dart';
+import '../services/cloud_sync_service.dart';
 
 /// Cache reattiva degli allenamenti.
 class WorkoutProvider extends ChangeNotifier {
@@ -21,22 +22,26 @@ class WorkoutProvider extends ChangeNotifier {
   Future<void> save(Workout w) async {
     _all = await StorageService.saveWorkout(w);
     notifyListeners();
+    CloudSyncService.backupSoon();
   }
 
   Future<void> update(Workout w) async {
     _all = await StorageService.updateWorkout(w);
     notifyListeners();
+    CloudSyncService.backupSoon();
   }
 
   Future<void> delete(String id) async {
     _all = await StorageService.deleteWorkout(id);
     notifyListeners();
+    CloudSyncService.backupSoon();
   }
 
   Future<void> clear() async {
     await StorageService.clearAll();
     _all = [];
     notifyListeners();
+    CloudSyncService.backupSoon();
   }
 
   Future<void> reencrypt() async {

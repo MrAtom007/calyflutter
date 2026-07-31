@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'firebase_options.dart';
 
 import 'state/theme_provider.dart';
 import 'state/discipline_provider.dart';
@@ -12,6 +15,7 @@ import 'state/levelup_provider.dart';
 import 'state/workout_provider.dart';
 import 'state/locale_provider.dart';
 import 'state/health_provider.dart';
+import 'state/health_layout_provider.dart';
 import 'state/dashboard_provider.dart';
 import 'state/draft_provider.dart';
 import 'services/notification_service.dart';
@@ -29,6 +33,14 @@ void main() async {
   await NotificationService.init();
   await FeedbackService.init();
 
+  // Backend cloud (salvataggio progressi legato all'account Google).
+  // Se Firebase non è configurato l'app continua comunque in locale.
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (_) {}
+
   final theme = ThemeProvider();
   final discipline = DisciplineProvider();
   final onboarding = OnboardingProvider();
@@ -36,20 +48,32 @@ void main() async {
   final workouts = WorkoutProvider();
   final locale = LocaleProvider();
   final health = HealthProvider();
+  final healthLayout = HealthLayoutProvider();
   final dashboard = DashboardProvider();
   final draft = DraftProvider();
 
-  await Future.wait([
-    theme.load(),
-    discipline.load(),
-    onboarding.load(),
-    security.load(),
-    workouts.load(),
-    locale.load(),
-    health.load(),
-    dashboard.load(),
-    draft.load(),
-  ]);
+  // Ricarica tutti i provider (tranne health) dai dati locali: usata dopo il
+  // ripristino di un backup dal cloud, così l'UI riflette i progressi scaricati.
+  Future<void> reloadLocalProviders() async {
+    await Future.wait([
+      theme.load(),
+      discipline.load(),
+      onboarding.load(),
+      security.load(),
+      workouts.load(),
+      locale.load(),
+      dashboard.load(),
+      healthLayout.load(),
+      draft.load(),
+    ]);
+  }
+
+  health.onCloudRestored = reloadLocalProviders;
+
+  await reloadLocalProviders();
+  // health.load() per ultimo: può ripristinare un backup dal cloud e
+  // riallineare gli altri provider tramite onCloudRestored.
+  await health.load();
 
   // Popola il widget della schermata home col rango attuale (dati allenamento).
   final pts = totalPoints(workouts.forDiscipline(discipline.discipline));
@@ -65,6 +89,7 @@ void main() async {
         ChangeNotifierProvider.value(value: workouts),
         ChangeNotifierProvider.value(value: locale),
         ChangeNotifierProvider.value(value: health),
+        ChangeNotifierProvider.value(value: healthLayout),
         ChangeNotifierProvider.value(value: dashboard),
         ChangeNotifierProvider.value(value: draft),
         ChangeNotifierProvider(create: (_) => LevelUpProvider()),

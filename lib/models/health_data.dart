@@ -152,10 +152,20 @@ class HealthSnapshot {
   final HealthSource source;
   final DateTime updatedAt;
 
+  /// Dispositivi/app rilevati come sorgente dei dati (es. "Mi Fitness",
+  /// "Samsung Health", "Zepp Life"). Utile per farne scegliere/filtrare uno.
+  final List<String> sources;
+
+  /// Sorgente attualmente selezionata (nome dispositivo/app) oppure null =
+  /// "tutte le sorgenti".
+  final String? selectedSource;
+
   const HealthSnapshot({
     required this.series,
     required this.source,
     required this.updatedAt,
+    this.sources = const [],
+    this.selectedSource,
   });
 
   MetricSeries? of(HealthMetric m) => series[m];
@@ -164,6 +174,8 @@ class HealthSnapshot {
         'source': source.name,
         'updatedAt': updatedAt.toIso8601String(),
         'series': series.values.map((e) => e.toJson()).toList(),
+        'sources': sources,
+        if (selectedSource != null) 'selectedSource': selectedSource,
       };
 
   factory HealthSnapshot.fromJson(Map<String, dynamic> j) {
@@ -175,6 +187,8 @@ class HealthSnapshot {
           .firstWhere((e) => e.name == j['source'], orElse: () => HealthSource.demo),
       updatedAt: DateTime.tryParse(j['updatedAt'] as String? ?? '') ?? DateTime.now(),
       series: {for (final s in list) s.metric: s},
+      sources: (j['sources'] as List?)?.map((e) => e.toString()).toList() ?? const [],
+      selectedSource: j['selectedSource'] as String?,
     );
   }
 }
