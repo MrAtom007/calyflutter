@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 import 'firebase_options.dart';
 
@@ -38,6 +40,13 @@ void main() async {
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // App Check: protegge il backend (Firestore/Auth) accettando solo richieste
+    // dalla app autentica. In debug usa il debug provider (registra il token
+    // stampato nel logcat), in release usa Play Integrity.
+    await FirebaseAppCheck.instance.activate(
+      androidProvider:
+          kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
     );
   } catch (_) {}
 

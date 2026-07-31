@@ -89,6 +89,7 @@ dependencies:
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.1
   cloud_firestore: ^5.4.4
+  firebase_app_check: ^0.3.1+4
 
   # Widget da schermata home del telefono (Android/iOS)
   home_widget: ^0.7.0
