@@ -16,7 +16,8 @@ class MainActivity : FlutterFragmentActivity() {
         "IconDefault", "IconZeus", "IconCyberpunk", "IconSpartacus", "IconKratos",
         "IconSynthwave", "IconValkyrie", "IconRonin", "IconAnubis",
         "IconAchille", "IconLeonida", "IconPoseidon",
-        "IconErcole", "IconOdino", "IconRa", "IconAde"
+        "IconErcole", "IconOdino", "IconRa", "IconAde",
+        "IconCavaliere", "IconCerberus", "IconIgris", "IconSukuna", "IconToji"
     )
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

@@ -1,0 +1,59 @@
+name: iOS build (unsigned IPA)
+
+# Builda un .ipa NON firmato su runner macOS e lo pubblica come artifact
+# scaricabile. Utile per sideload (AltStore/Sideloadly) o come base per una
+# firma successiva. Per TestFlight/App Store serve una build firmata con
+# certificati Apple (vedi commento in fondo).
+
+on:
+  workflow_dispatch: # avvio manuale dalla tab "Actions"
+  push:
+    tags:
+      - 'v*' # anche su ogni tag di release
+
+jobs:
+  build-ios:
+    name: Build unsigned IPA
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.44.8
+          cache: true
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build iOS (no codesign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Package unsigned IPA
+        run: |
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          cp -R Runner.app Payload/Runner.app
+          zip -qr app-unsigned.ipa Payload
+          rm -rf Payload
+          ls -lh app-unsigned.ipa
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-unsigned-ipa
+          path: build/ios/iphoneos/app-unsigned.ipa
+          if-no-files-found: error
+
+# ---------------------------------------------------------------------------
+# Per una build FIRMATA (TestFlight / installazione diretta) occorre:
+#  - Certificato di distribuzione Apple (.p12) e provisioning profile,
+#    caricati come secrets del repository e importati nel keychain del runner.
+#  - GoogleService-Info.plist (Firebase) aggiunto a ios/Runner/ (ora assente).
+#  - Sostituire lo step "Build iOS (no codesign)" con:
+#      flutter build ipa --export-options-plist=ios/ExportOptions.plist
+# ---------------------------------------------------------------------------

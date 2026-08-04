@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Grande elmo del cavaliere (acciaio) -->
+    <path android:fillColor="#8FA9C8" android:pathData="M38,32 Q54,26 70,32 L72,66 Q70,82 54,86 Q38,82 36,66 Z" />
+    <!-- Feritoia degli occhi + barra verticale (croce) -->
+    <path android:fillColor="#1B2735" android:pathData="M40,48 L68,48 L68,54 L40,54 Z" />
+    <path android:fillColor="#1B2735" android:pathData="M51,34 L57,34 L57,74 L51,74 Z" />
+    <!-- Rivetti di aerazione -->
+    <path android:fillColor="#C3D3E6" android:pathData="M42.4,64 a1.6,1.6 0 1,0 3.2,0 a1.6,1.6 0 1,0 -3.2,0" />
+    <path android:fillColor="#C3D3E6" android:pathData="M52.4,64 a1.6,1.6 0 1,0 3.2,0 a1.6,1.6 0 1,0 -3.2,0" />
+    <path android:fillColor="#C3D3E6" android:pathData="M62.4,64 a1.6,1.6 0 1,0 3.2,0 a1.6,1.6 0 1,0 -3.2,0" />
+</vector>

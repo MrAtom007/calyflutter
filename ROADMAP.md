@@ -48,12 +48,14 @@ Tutto consolidato su `main`.
 - [ ] Build iOS / TestFlight
 
 ### Prossimo task
-- [ ] **Icone launcher native per i nuovi temi leggendari** (cavaliere, cerberus,
-      igris, sukuna, toji). I temi + emblemi in-app esistono già; mancano:
-      - PNG icona adattiva per soggetto (foreground/background/monochrome)
-      - `<activity-alias>` in `AndroidManifest.xml` (una per icona) + voce in
-        `AppIconService.styles` con `premium/themeId`
-      - `.appiconset` e mappa alternate-icons in `AppDelegate.swift` (iOS)
+- [x] **Icone launcher native per i nuovi temi leggendari** (cavaliere, cerberus,
+      igris, sukuna, toji) — Android:
+      - [x] Icona adattiva vettoriale per soggetto (foreground/background/monochrome)
+      - [x] `<activity-alias>` in `AndroidManifest.xml` (una per icona) + alias in
+        `MainActivity.kt` + stringhe dock + voce in `AppIconService.styles`
+        (`premium/themeId`)
+      - [ ] iOS: `.appiconset` + mappa in `AppDelegate.swift` (rimandato: come per
+        gli altri temi leggendari, le icone iOS alternative non sono ancora fornite)
 
 ### Possibili estensioni future
 - [ ] Integrazione pagamenti reali per i contenuti premium (Play Billing / RevenueCat)

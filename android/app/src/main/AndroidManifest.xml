@@ -257,6 +257,71 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity-alias>
+        <activity-alias
+            android:name=".IconCavaliere"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_cavaliere"
+            android:roundIcon="@mipmap/ic_cavaliere"
+            android:label="@string/icon_name_cavaliere"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconCerberus"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_cerberus"
+            android:roundIcon="@mipmap/ic_cerberus"
+            android:label="@string/icon_name_cerberus"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconIgris"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_igris"
+            android:roundIcon="@mipmap/ic_igris"
+            android:label="@string/icon_name_igris"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconSukuna"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_sukuna"
+            android:roundIcon="@mipmap/ic_sukuna"
+            android:label="@string/icon_name_sukuna"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconToji"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_toji"
+            android:roundIcon="@mipmap/ic_toji"
+            android:label="@string/icon_name_toji"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
         <!-- Health Connect: motivazione permessi su Android 14+ -->
         <activity-alias
             android:name="ViewPermissionUsageActivity"

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Cerbero: tre teste di lupo con occhi ardenti -->
+    <!-- Testa sinistra (dietro) -->
+    <path android:fillColor="#C7431A" android:pathData="M21.2,49 L42.8,49 L40.1,65.2 L32,75.1 L23.9,65.2 Z" />
+    <path android:fillColor="#C7431A" android:pathData="M22.1,49.9 L19,39.1 L28.8,48.1 Z" />
+    <path android:fillColor="#C7431A" android:pathData="M41.9,49.9 L45,39.1 L35.2,48.1 Z" />
+    <!-- Testa destra (dietro) -->
+    <path android:fillColor="#C7431A" android:pathData="M65.2,49 L86.8,49 L84.1,65.2 L76,75.1 L67.9,65.2 Z" />
+    <path android:fillColor="#C7431A" android:pathData="M66.1,49.9 L63,39.1 L72.8,48.1 Z" />
+    <path android:fillColor="#C7431A" android:pathData="M85.9,49.9 L89,39.1 L79.2,48.1 Z" />
+    <!-- Testa centrale (davanti) -->
+    <path android:fillColor="#FF5A1F" android:pathData="M39.6,28 L68.4,28 L64.8,49.6 L54,62.8 L43.2,49.6 Z" />
+    <path android:fillColor="#FF5A1F" android:pathData="M40.8,29.2 L36.7,14.8 L49.7,26.8 Z" />
+    <path android:fillColor="#FF5A1F" android:pathData="M67.2,29.2 L71.3,14.8 L58.3,26.8 Z" />
+    <!-- Occhi ardenti -->
+    <path android:fillColor="#FFD08A" android:pathData="M25.54,55.8 a2.16,2.16 0 1,0 4.32,0 a2.16,2.16 0 1,0 -4.32,0" />
+    <path android:fillColor="#FFD08A" android:pathData="M34.14,55.8 a2.16,2.16 0 1,0 4.32,0 a2.16,2.16 0 1,0 -4.32,0" />
+    <path android:fillColor="#FFD08A" android:pathData="M69.54,55.8 a2.16,2.16 0 1,0 4.32,0 a2.16,2.16 0 1,0 -4.32,0" />
+    <path android:fillColor="#FFD08A" android:pathData="M78.14,55.8 a2.16,2.16 0 1,0 4.32,0 a2.16,2.16 0 1,0 -4.32,0" />
+    <path android:fillColor="#FFE08A" android:pathData="M45.32,37.1 a2.88,2.88 0 1,0 5.76,0 a2.88,2.88 0 1,0 -5.76,0" />
+    <path android:fillColor="#FFE08A" android:pathData="M56.92,37.1 a2.88,2.88 0 1,0 5.76,0 a2.88,2.88 0 1,0 -5.76,0" />
+</vector>
