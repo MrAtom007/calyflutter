@@ -14,11 +14,20 @@ on:
 jobs:
   build-ios:
     name: Build unsigned IPA
-    runs-on: macos-14
+    # macos-15 fornisce Xcode 16 di default, richiesto dal firebase-ios-sdk
+    # recente (usa la keyword Swift `sending`, non supportata da Xcode 15).
+    runs-on: macos-15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          XC=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
+          echo "Uso $XC"
+          sudo xcode-select -s "$XC/Contents/Developer"
+          xcodebuild -version
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
