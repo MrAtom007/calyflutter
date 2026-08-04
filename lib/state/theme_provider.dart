@@ -13,8 +13,6 @@ class ThemeProvider extends ChangeNotifier {
   String _accentId = 'default';
   UiDensity _density = UiDensity.comfortable;
   String _appIconId = 'IconDefault';
-  EmblemStyle _emblemStyle = EmblemStyle.classic;
-  bool _emblemFollowIcon = true;
   bool ready = false;
 
   AppSkin get skin => appThemes[_themeId] ?? appThemes[defaultThemeId]!;
@@ -37,16 +35,17 @@ class ThemeProvider extends ChangeNotifier {
   bool get glow => _glow;
 
   String get appIconId => _appIconId;
-  EmblemStyle get emblemStyle => _emblemStyle;
-  bool get emblemFollowIcon => _emblemFollowIcon;
+
+  /// Lo stile dell'emblema e' determinato dal tema (neon -> glow, altrimenti
+  /// classic), non scelto liberamente dall'utente.
+  EmblemStyle get emblemStyle =>
+      skin.neon ? EmblemStyle.glow : EmblemStyle.classic;
 
   /// Nome dell'app attualmente mostrato nel launcher (dock).
   String get launcherName => launcherAppName(_appIconId);
 
-  /// Soggetto dell'emblema attivo: segue l'icona app oppure il tema.
-  String? get activeEmblemSubject => _emblemFollowIcon
-      ? emblemForIcon(_appIconId)
-      : emblemForTheme(_themeId);
+  /// Soggetto dell'emblema attivo: determinato dal tema selezionato.
+  String? get activeEmblemSubject => emblemForTheme(_themeId);
 
   /// Il glow è attivo solo per i temi neon con glow abilitato.
   bool get glowActive => skin.neon && _glow;
@@ -69,13 +68,6 @@ class ThemeProvider extends ChangeNotifier {
     }
     final icon = await StorageService.getString(StorageService.appIconKey);
     if (icon != null) _appIconId = icon;
-    final es = await StorageService.getString(StorageService.emblemStyleKey);
-    if (es != null) {
-      _emblemStyle = EmblemStyle.values
-          .firstWhere((e) => e.name == es, orElse: () => EmblemStyle.classic);
-    }
-    final ef = await StorageService.getBool(StorageService.emblemFollowKey);
-    if (ef != null) _emblemFollowIcon = ef;
     ready = true;
     notifyListeners();
   }
@@ -86,18 +78,6 @@ class ThemeProvider extends ChangeNotifier {
     if (alias == _appIconId) return;
     final ok = await AppIconService.setIcon(alias);
     if (ok) _appIconId = alias;
-  }
-
-  Future<void> setEmblemStyle(EmblemStyle s) async {
-    _emblemStyle = s;
-    await StorageService.setString(StorageService.emblemStyleKey, s.name);
-    notifyListeners();
-  }
-
-  Future<void> setEmblemFollowIcon(bool v) async {
-    _emblemFollowIcon = v;
-    await StorageService.setBool(StorageService.emblemFollowKey, v);
-    notifyListeners();
   }
 
   Future<void> setAccent(String id) async {

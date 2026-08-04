@@ -287,37 +287,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }).toList(),
       ),
       ),
-      _subLabel(c, t('emblem_style')),
-      Selector<ThemeProvider, EmblemStyle>(
-        selector: (_, th) => th.emblemStyle,
-        builder: (context, style, _) => Wrap(
-          spacing: Spacing.sm,
-          children: [
-            (EmblemStyle.classic, t('emblem_classic')),
-            (EmblemStyle.line, t('emblem_line')),
-            (EmblemStyle.glow, t('emblem_glow')),
-          ].map((e) {
-            return _AnimatedSelectChip(
-              c: c,
-              label: e.$2,
-              selected: style == e.$1,
-              onTap: () => context.read<ThemeProvider>().setEmblemStyle(e.$1),
-            );
-          }).toList(),
-        ),
-      ),
-      SwitchListTile(
-        contentPadding: EdgeInsets.zero,
-        title: Text(t('emblem_follow_icon')),
-        subtitle: Text(t('emblem_follow_icon_hint'),
-            style: TextStyle(color: c.textMuted, fontSize: 12)),
-        value: theme.emblemFollowIcon,
-        activeThumbColor: c.primary,
-        onChanged: (v) {
-          FeedbackService.selection();
-          theme.setEmblemFollowIcon(v);
-        },
-      ),
       Padding(
         padding: const EdgeInsets.only(top: 4),
         child: Row(
