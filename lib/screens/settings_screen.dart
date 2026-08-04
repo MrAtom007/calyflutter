@@ -229,64 +229,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           activeThumbColor: c.primary,
           onChanged: (v) => theme.toggleGlow(v),
         ),
-      _subLabel(c, t('density')),
-      // Rebuild mirato: solo questa riga si aggiorna al cambio densità.
-      Selector<ThemeProvider, UiDensity>(
-        selector: (_, th) => th.density,
-        builder: (context, density, _) => Wrap(
-          spacing: Spacing.sm,
-          children: UiDensity.values.map((d) {
-            return _AnimatedSelectChip(
-              c: c,
-              label: d.label,
-              hint: d.hint,
-              selected: density == d,
-              onTap: () => context.read<ThemeProvider>().setDensity(d),
-            );
-          }).toList(),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 6),
-        child: Text(t('density_hint'),
-            style: TextStyle(color: c.textMuted, fontSize: 11)),
-      ),
-      _subLabel(c, t('accent')),
-      Padding(
-        // Evita che il primo pallino venga tagliato sul bordo sinistro.
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: accentOptions.map((a) {
-          final active = theme.accentId == a.id;
-          final isDefault = a.id == 'default';
-          return GestureDetector(
-            onTap: () {
-              FeedbackService.selection();
-              theme.setAccent(a.id);
-            },
-            child: Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: isDefault ? c.card : a.color,
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: active ? c.text : c.border,
-                    width: active ? 2.5 : 1),
-              ),
-              child: isDefault
-                  ? Icon(Icons.format_color_reset_rounded,
-                      size: 15, color: c.textMuted)
-                  : (active
-                      ? const Icon(Icons.check, size: 15, color: Colors.white)
-                      : null),
-            ),
-          );
-        }).toList(),
-      ),
-      ),
       Padding(
         padding: const EdgeInsets.only(top: 4),
         child: Row(

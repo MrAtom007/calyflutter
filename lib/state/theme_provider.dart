@@ -10,22 +10,17 @@ class ThemeProvider extends ChangeNotifier {
   String _themeId = defaultThemeId;
   bool _glow = true;
   Set<String> _unlocked = {...freeThemeIds};
-  String _accentId = 'default';
-  UiDensity _density = UiDensity.comfortable;
+  // Densita' fissa su Normale.
+  final UiDensity _density = UiDensity.comfortable;
   String _appIconId = 'IconDefault';
   bool ready = false;
 
   AppSkin get skin => appThemes[_themeId] ?? appThemes[defaultThemeId]!;
   String get themeId => _themeId;
 
-  /// Colori effettivi, con eventuale accento personalizzato applicato.
-  AppColors get colors {
-    final accent = accentById(_accentId);
-    if (accent == null) return skin.colors;
-    return skin.colors.copyWith(primary: accent.color, primaryDark: accent.dark);
-  }
+  /// Colori del tema selezionato.
+  AppColors get colors => skin.colors;
 
-  String get accentId => _accentId;
   UiDensity get density => _density;
   double get densityScale => _density.scale;
 
@@ -59,13 +54,6 @@ class ThemeProvider extends ChangeNotifier {
     if (g != null) _glow = g;
     final saved = await StorageService.getStringList(StorageService.unlockedKey);
     _unlocked = {...freeThemeIds, ...saved};
-    final acc = await StorageService.getString(StorageService.accentKey);
-    if (acc != null && accentOptions.any((a) => a.id == acc)) _accentId = acc;
-    final den = await StorageService.getString(StorageService.densityKey);
-    if (den != null) {
-      _density = UiDensity.values.firstWhere((d) => d.name == den,
-          orElse: () => UiDensity.comfortable);
-    }
     final icon = await StorageService.getString(StorageService.appIconKey);
     if (icon != null) _appIconId = icon;
     ready = true;
@@ -78,18 +66,6 @@ class ThemeProvider extends ChangeNotifier {
     if (alias == _appIconId) return;
     final ok = await AppIconService.setIcon(alias);
     if (ok) _appIconId = alias;
-  }
-
-  Future<void> setAccent(String id) async {
-    _accentId = id;
-    await StorageService.setString(StorageService.accentKey, id);
-    notifyListeners();
-  }
-
-  Future<void> setDensity(UiDensity d) async {
-    _density = d;
-    await StorageService.setString(StorageService.densityKey, d.name);
-    notifyListeners();
   }
 
   bool isUnlocked(String id) => _unlocked.contains(id);
