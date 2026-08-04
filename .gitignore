@@ -1,10 +1,9 @@
 # Secrets / dati sensibili
 android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
-# Config Firebase generata da `flutterfire configure` (contiene le API key client)
-lib/firebase_options.dart
 android/app/src/*/google-services.json
 macos/Runner/GoogleService-Info.plist
+# Nota: ios/Runner/GoogleService-Info.plist e lib/firebase_options.dart sono
+# committati (config client, gia' spedita dentro l'app) per far funzionare la CI iOS.
 
 # Miscellaneous
 *.class

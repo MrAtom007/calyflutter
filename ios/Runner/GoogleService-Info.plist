@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>851828223422-ta9b670fekka28gi0pqoso1r5d1acf4m.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.851828223422-ta9b670fekka28gi0pqoso1r5d1acf4m</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>851828223422-8um19vknrkhq9qfcikgqhvjm6jliova6.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAt6OVuSIbNvaMUdOCjuh5xUlVQzTC_Wng</string>
+	<key>GCM_SENDER_ID</key>
+	<string>851828223422</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.calistrack.calistrack</string>
+	<key>PROJECT_ID</key>
+	<string>calistrack-a4f69</string>
+	<key>STORAGE_BUCKET</key>
+	<string>calistrack-a4f69.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:851828223422:ios:7ee073992f0d1e52101def</string>
+</dict>
+</plist>
