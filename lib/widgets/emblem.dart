@@ -65,6 +65,16 @@ String emblemForIcon(String appIconId) {
       return 'ra';
     case 'IconAde':
       return 'ade';
+    case 'IconCavaliere':
+      return 'cavaliere';
+    case 'IconCerberus':
+      return 'cerberus';
+    case 'IconIgris':
+      return 'igris';
+    case 'IconSukuna':
+      return 'sukuna';
+    case 'IconToji':
+      return 'toji';
     case 'IconDefault':
     default:
       return 'ulisse';
@@ -146,6 +156,16 @@ String iconAliasForSubject(String? subject) {
       return 'IconRa';
     case 'ade':
       return 'IconAde';
+    case 'cavaliere':
+      return 'IconCavaliere';
+    case 'cerberus':
+      return 'IconCerberus';
+    case 'igris':
+      return 'IconIgris';
+    case 'sukuna':
+      return 'IconSukuna';
+    case 'toji':
+      return 'IconToji';
     case 'ulisse':
     default:
       return 'IconDefault';
