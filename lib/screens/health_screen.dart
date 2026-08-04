@@ -137,7 +137,9 @@ class _HealthScreenState extends State<HealthScreen> {
       final tiles = List<Widget>.of(pendingSmall);
       pendingSmall.clear();
       widgets.add(LayoutBuilder(builder: (context, cns) {
-        final w = (cns.maxWidth - gap) / 2;
+        // 2 colonne su telefono, di più su schermi larghi (desktop/PC).
+        final cols = (cns.maxWidth / 220).floor().clamp(2, 4);
+        final w = (cns.maxWidth - gap * (cols - 1)) / cols;
         return Wrap(
           spacing: gap,
           runSpacing: gap,
@@ -473,7 +475,7 @@ class _ConnectCard extends StatelessWidget {
                 ],
               ],
             )
-          else
+          else if (isMobilePlatform)
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -489,24 +491,48 @@ class _ConnectCard extends StatelessWidget {
                 icon: const Icon(Icons.account_circle_rounded),
                 label: Text(t('sign_in_google')),
               ),
+            )
+          else
+            // Desktop/Web: login Google e cloud non supportati.
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(Spacing.md),
+              decoration: BoxDecoration(
+                color: c.cardAlt,
+                borderRadius: BorderRadius.circular(Radii.md),
+                border: Border.all(color: c.border),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline_rounded,
+                      size: 18, color: c.textMuted),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(t('login_mobile_only'),
+                        style: TextStyle(color: c.textMuted, fontSize: 13)),
+                  ),
+                ],
+              ),
             ),
-          const SizedBox(height: Spacing.sm),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              style: FilledButton.styleFrom(backgroundColor: c.primary),
-              onPressed: () async {
-                FeedbackService.onTap();
-                final ok = await health.connectHealthPlatform();
-                if (!ok && context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(t('health_connect_failed'))));
-                }
-              },
-              icon: const Icon(Icons.link_rounded),
-              label: Text(t('health_connect')),
+          if (isMobilePlatform) ...[
+            const SizedBox(height: Spacing.sm),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                style: FilledButton.styleFrom(backgroundColor: c.primary),
+                onPressed: () async {
+                  FeedbackService.onTap();
+                  final ok = await health.connectHealthPlatform();
+                  if (!ok && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(t('health_connect_failed'))));
+                  }
+                },
+                icon: const Icon(Icons.link_rounded),
+                label: Text(t('health_connect')),
+              ),
             ),
-          ),
+          ],
           // Selettore sorgente dispositivo/app (es. orologio Xiaomi).
           if (health.connected && health.availableSources.isNotEmpty) ...[
             const SizedBox(height: Spacing.sm),

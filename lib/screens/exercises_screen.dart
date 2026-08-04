@@ -8,6 +8,7 @@ import '../data/category_icons.dart';
 import '../models/exercise.dart';
 import '../theme/app_theme.dart';
 import '../widgets/discipline_switch.dart';
+import '../widgets/design_system.dart';
 import '../modules/skills/skills_screen.dart';
 import 'exercise_detail_screen.dart';
 import 'timer_screen.dart';
@@ -96,38 +97,46 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           ],
         ),
       ),
-      ...items.map((ex) => Card(
-            color: c.card,
-            margin: const EdgeInsets.only(bottom: 6),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Radii.md),
-              side: BorderSide(color: c.border),
-            ),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: c.primary.withValues(alpha: 0.14),
-                child: Icon(categoryIcon(ex.category),
-                    color: c.primary, size: 20),
-              ),
-              title: Text(ex.name),
-              subtitle: Text(_meta(ex), style: TextStyle(color: c.textMuted)),
-              trailing: ex.unit == 'sec'
-                  ? IconButton(
-                      icon: Icon(Icons.timer_outlined, color: c.primary),
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  TimerScreen(exerciseName: ex.name))),
-                    )
-                  : Icon(Icons.chevron_right, color: c.textMuted),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => ExerciseDetailScreen(exerciseId: ex.id)),
-              ),
-            ),
-          )),
+      ResponsiveWrap(
+        minTileWidth: 340,
+        maxColumns: 2,
+        children: items
+            .map((ex) => Card(
+                  color: c.card,
+                  margin: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Radii.md),
+                    side: BorderSide(color: c.border),
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: c.primary.withValues(alpha: 0.14),
+                      child: Icon(categoryIcon(ex.category),
+                          color: c.primary, size: 20),
+                    ),
+                    title: Text(ex.name),
+                    subtitle:
+                        Text(_meta(ex), style: TextStyle(color: c.textMuted)),
+                    trailing: ex.unit == 'sec'
+                        ? IconButton(
+                            icon: Icon(Icons.timer_outlined, color: c.primary),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        TimerScreen(exerciseName: ex.name))),
+                          )
+                        : Icon(Icons.chevron_right, color: c.textMuted),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              ExerciseDetailScreen(exerciseId: ex.id)),
+                    ),
+                  ),
+                ))
+            .toList(),
+      ),
     ];
   }
 

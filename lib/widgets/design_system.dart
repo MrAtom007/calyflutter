@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart'
+    show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/theme_provider.dart';
@@ -7,6 +9,65 @@ import 'ui_kit.dart';
 /// Spaziatura effettiva scalata sulla densità scelta dall'utente.
 double sp(BuildContext context, double base) =>
     base * context.watch<ThemeProvider>().densityScale;
+
+/// true solo su piattaforme mobile (Android/iOS). Su desktop (Linux/Windows/
+/// macOS) e Web è false: usato per nascondere feature mobile-only come il
+/// login Google / salvataggio cloud, non supportati su desktop.
+bool get isMobilePlatform =>
+    !kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS);
+
+/// Dispone [children] in colonne responsive: 1 colonna su schermi stretti
+/// (telefono), più colonne su schermi larghi (desktop/PC). Ogni figlio riceve
+/// la stessa larghezza. Utile per liste omogenee di card.
+class ResponsiveWrap extends StatelessWidget {
+  const ResponsiveWrap({
+    super.key,
+    required this.children,
+    this.minTileWidth = 260,
+    this.maxColumns = 3,
+    this.spacing = Spacing.sm,
+    this.runSpacing = Spacing.sm,
+  });
+
+  final List<Widget> children;
+  final double minTileWidth;
+  final int maxColumns;
+  final double spacing;
+  final double runSpacing;
+
+  @override
+  Widget build(BuildContext context) {
+    if (children.isEmpty) return const SizedBox.shrink();
+    return LayoutBuilder(
+      builder: (context, cns) {
+        final cols =
+            (cns.maxWidth / minTileWidth).floor().clamp(1, maxColumns);
+        if (cols <= 1) {
+          // Mobile: colonna singola con spaziatura verticale.
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < children.length; i++) ...[
+                if (i > 0) SizedBox(height: runSpacing),
+                children[i],
+              ],
+            ],
+          );
+        }
+        final w = (cns.maxWidth - spacing * (cols - 1)) / cols;
+        return Wrap(
+          spacing: spacing,
+          runSpacing: runSpacing,
+          children: [
+            for (final ch in children) SizedBox(width: w, child: ch),
+          ],
+        );
+      },
+    );
+  }
+}
 
 /// Intestazione di sezione uniforme (icona + titolo + azione opzionale).
 class SectionHeader extends StatelessWidget {

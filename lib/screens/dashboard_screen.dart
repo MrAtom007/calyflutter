@@ -13,6 +13,7 @@ import '../theme/app_theme.dart';
 import '../widgets/ui_kit.dart';
 import '../widgets/discipline_switch.dart';
 import '../widgets/dashboard_widgets.dart';
+import '../widgets/design_system.dart';
 
 /// Home personalizzabile a widget.
 class DashboardScreen extends StatefulWidget {
@@ -71,49 +72,82 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         body: SafeArea(
           top: false,
-          child: ReorderableListView(
-            padding: EdgeInsets.fromLTRB(gap, gap, gap, gap * 4),
-            buildDefaultDragHandles: false,
-            onReorderItem: (o, n) {
-              FeedbackService.selection();
-              dash.reorder(o, n);
-            },
-            header: Column(
-              children: [
-                if (!_editing) ...[
-                  DashboardHero(onOpenTab: widget.onOpenTab),
-                  SizedBox(height: gap),
-                ],
-                const DisciplineSwitch(),
-                SizedBox(height: gap),
-              ],
-            ),
-            footer: _editing
-                ? Padding(
-                    padding: EdgeInsets.only(top: gap),
-                    child: TextButton.icon(
-                      onPressed: () => dash.reset(),
-                      icon: const Icon(Icons.restart_alt_rounded),
-                      label: Text(t('dash_reset')),
-                    ),
-                  )
-                : null,
-            children: [
-              for (int i = 0; i < dash.widgets.length; i++)
-                Padding(
-                  key: ValueKey(dash.widgets[i].name),
-                  padding: EdgeInsets.only(bottom: gap),
-                  child: _wrap(
-                    context,
-                    dash,
-                    i,
-                    buildDashWidget(context, dash.widgets[i], widget.onOpenTab),
-                  ),
-                ),
-            ],
-          ),
+          child: _buildBody(context, dash, t, gap),
         ),
       ),
+    );
+  }
+
+  Widget _buildBody(
+      BuildContext context, DashboardProvider dash, dynamic t, double gap) {
+    final header = Column(
+      children: [
+        if (!_editing) ...[
+          DashboardHero(onOpenTab: widget.onOpenTab),
+          SizedBox(height: gap),
+        ],
+        const DisciplineSwitch(),
+        SizedBox(height: gap),
+      ],
+    );
+
+    // Su desktop e in sola visualizzazione mostra i widget in griglia.
+    // In modalità modifica si torna alla lista singola per il drag & drop.
+    final isWide = MediaQuery.of(context).size.width >= 800;
+    if (isWide && !_editing) {
+      return SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(gap, gap, gap, gap * 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            header,
+            ResponsiveWrap(
+              minTileWidth: 340,
+              maxColumns: 2,
+              spacing: gap,
+              runSpacing: gap,
+              children: [
+                for (int i = 0; i < dash.widgets.length; i++)
+                  buildDashWidget(
+                      context, dash.widgets[i], widget.onOpenTab),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ReorderableListView(
+      padding: EdgeInsets.fromLTRB(gap, gap, gap, gap * 4),
+      buildDefaultDragHandles: false,
+      onReorderItem: (o, n) {
+        FeedbackService.selection();
+        dash.reorder(o, n);
+      },
+      header: header,
+      footer: _editing
+          ? Padding(
+              padding: EdgeInsets.only(top: gap),
+              child: TextButton.icon(
+                onPressed: () => dash.reset(),
+                icon: const Icon(Icons.restart_alt_rounded),
+                label: Text(t('dash_reset')),
+              ),
+            )
+          : null,
+      children: [
+        for (int i = 0; i < dash.widgets.length; i++)
+          Padding(
+            key: ValueKey(dash.widgets[i].name),
+            padding: EdgeInsets.only(bottom: gap),
+            child: _wrap(
+              context,
+              dash,
+              i,
+              buildDashWidget(context, dash.widgets[i], widget.onOpenTab),
+            ),
+          ),
+      ],
     );
   }
 

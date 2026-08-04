@@ -16,6 +16,7 @@ import '../widgets/discipline_switch.dart';
 import '../widgets/medal.dart';
 import '../widgets/animated_number.dart';
 import '../widgets/ui_kit.dart';
+import '../widgets/design_system.dart';
 import 'new_workout_screen.dart';
 import 'workout_detail_screen.dart';
 import 'timer_screen.dart';
@@ -172,46 +173,47 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             )
           else
-            ...workouts.asMap().entries.map((entry) {
-              final i = entry.key;
-              final w = entry.value;
-              return Padding(
-                padding: const EdgeInsets.only(bottom: Spacing.sm),
-                child: GlowCard(
-                padding: EdgeInsets.zero,
-                radius: Radii.md,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => WorkoutDetailScreen(id: w.id)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Spacing.md, vertical: 4),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(
-                      backgroundColor: c.primary.withValues(alpha: 0.15),
-                      child: Icon(
-                          dp.discipline == 'gym'
-                              ? Icons.fitness_center
-                              : Icons.sports_gymnastics,
-                          color: c.primary,
-                          size: 20),
-                    ),
-                    title: Text(formatDate(w.date),
-                        style: const TextStyle(fontWeight: FontWeight.w700)),
-                    subtitle: Text(workoutSummary(w),
-                        style: TextStyle(color: c.textMuted)),
-                    trailing: Icon(Icons.chevron_right, color: c.textMuted),
+            ResponsiveWrap(
+              minTileWidth: 340,
+              maxColumns: 2,
+              children: workouts.asMap().entries.map((entry) {
+                final i = entry.key;
+                final w = entry.value;
+                return GlowCard(
+                  padding: EdgeInsets.zero,
+                  radius: Radii.md,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => WorkoutDetailScreen(id: w.id)),
                   ),
-                ),
-              )
-                  .animate()
-                  .fadeIn(delay: (60 * i).ms, duration: 350.ms)
-                  .slideX(begin: 0.08, curve: Curves.easeOut),
-              );
-            }),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Spacing.md, vertical: 4),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: CircleAvatar(
+                        backgroundColor: c.primary.withValues(alpha: 0.15),
+                        child: Icon(
+                            dp.discipline == 'gym'
+                                ? Icons.fitness_center
+                                : Icons.sports_gymnastics,
+                            color: c.primary,
+                            size: 20),
+                      ),
+                      title: Text(formatDate(w.date),
+                          style: const TextStyle(fontWeight: FontWeight.w700)),
+                      subtitle: Text(workoutSummary(w),
+                          style: TextStyle(color: c.textMuted)),
+                      trailing: Icon(Icons.chevron_right, color: c.textMuted),
+                    ),
+                  ),
+                )
+                    .animate()
+                    .fadeIn(delay: (60 * i).ms, duration: 350.ms)
+                    .slideX(begin: 0.08, curve: Curves.easeOut);
+              }).toList(),
+            ),
           const SizedBox(height: 90),
         ],
       ),

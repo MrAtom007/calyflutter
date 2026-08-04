@@ -269,6 +269,8 @@ class AppStrings {
           'I dati arrivano da Health Connect (Android) o Apple Health (iOS): collega Garmin, Samsung Health, Honor Health o Google.',
       'health_connect_failed': 'Collegamento non riuscito o permessi negati.',
       'sign_in_google': 'Accedi con Google',
+      'login_mobile_only':
+          'Accesso Google e salvataggio cloud disponibili solo su mobile.',
       'sign_in_failed': 'Accesso non riuscito. Riprova.',
       'sign_out': 'Esci',
       'backup_now': 'Backup ora',
@@ -587,6 +589,8 @@ class AppStrings {
           'Data comes from Health Connect (Android) or Apple Health (iOS): connect Garmin, Samsung Health, Honor Health or Google.',
       'health_connect_failed': 'Connection failed or permissions denied.',
       'sign_in_google': 'Sign in with Google',
+      'login_mobile_only':
+          'Google sign-in and cloud sync are available on mobile only.',
       'sign_in_failed': 'Sign-in failed. Try again.',
       'sign_out': 'Sign out',
       'backup_now': 'Back up now',
@@ -903,6 +907,8 @@ class AppStrings {
           'Los datos vienen de Health Connect (Android) o Apple Health (iOS): conecta Garmin, Samsung Health, Honor Health o Google.',
       'health_connect_failed': 'Conexión fallida o permisos denegados.',
       'sign_in_google': 'Acceder con Google',
+      'login_mobile_only':
+          'Acceso con Google y copia en la nube solo disponibles en móvil.',
       'sign_in_failed': 'Error al acceder. Inténtalo de nuevo.',
       'sign_out': 'Cerrar sesión',
       'backup_now': 'Copia ahora',

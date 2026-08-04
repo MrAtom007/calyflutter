@@ -11,6 +11,7 @@ import '../services/export_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/discipline_switch.dart';
 import '../widgets/charts.dart';
+import '../widgets/design_system.dart';
 
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({super.key});
@@ -116,32 +117,39 @@ class ProgressScreen extends StatelessWidget {
           if (top.isNotEmpty) ...[
             _sectionTitle(c, t('top_exercises')),
             const SizedBox(height: Spacing.sm),
-            ...top.map((e) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ResponsiveWrap(
+              minTileWidth: 300,
+              maxColumns: 2,
+              runSpacing: 8,
+              children: top
+                  .map((e) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(getExercise(e.key)?.name ?? e.key),
-                          Text('${e.value.toInt()}',
-                              style: TextStyle(color: c.textMuted)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                  child: Text(getExercise(e.key)?.name ?? e.key,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis)),
+                              Text('${e.value.toInt()}',
+                                  style: TextStyle(color: c.textMuted)),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: LinearProgressIndicator(
+                              value: e.value / maxVol,
+                              minHeight: 8,
+                              backgroundColor: c.cardAlt,
+                              valueColor: AlwaysStoppedAnimation(c.primary),
+                            ),
+                          ),
                         ],
-                      ),
-                      const SizedBox(height: 4),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: LinearProgressIndicator(
-                          value: e.value / maxVol,
-                          minHeight: 8,
-                          backgroundColor: c.cardAlt,
-                          valueColor: AlwaysStoppedAnimation(c.primary),
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
+                      ))
+                  .toList(),
+            ),
             const SizedBox(height: Spacing.lg),
           ],
           _sectionTitle(c, t('export_data')),

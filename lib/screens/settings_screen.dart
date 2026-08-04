@@ -631,15 +631,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _themeGrid(BuildContext context, ThemeProvider theme, AppColors c,
       List<AppSkin> skins) {
     if (skins.isEmpty) return const SizedBox.shrink();
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      childAspectRatio: 1.6,
-      mainAxisSpacing: Spacing.sm,
-      crossAxisSpacing: Spacing.sm,
-      children:
-          skins.map((skin) => _themeCard(context, theme, c, skin)).toList(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Colonne in base allo spazio: tile larghi ~220px, min 2 colonne.
+        final cols = (constraints.maxWidth / 220).floor().clamp(2, 4);
+        return GridView.count(
+          crossAxisCount: cols,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          childAspectRatio: 1.6,
+          mainAxisSpacing: Spacing.sm,
+          crossAxisSpacing: Spacing.sm,
+          children:
+              skins.map((skin) => _themeCard(context, theme, c, skin)).toList(),
+        );
+      },
     );
   }
 
