@@ -12,11 +12,9 @@ class ThemeProvider extends ChangeNotifier {
   Set<String> _unlocked = {...freeThemeIds};
   String _accentId = 'default';
   UiDensity _density = UiDensity.comfortable;
-  CardStyle _cardStyle = CardStyle.solid;
   String _appIconId = 'IconDefault';
   EmblemStyle _emblemStyle = EmblemStyle.classic;
   bool _emblemFollowIcon = true;
-  bool _iconFollowsTheme = false;
   bool ready = false;
 
   AppSkin get skin => appThemes[_themeId] ?? appThemes[defaultThemeId]!;
@@ -32,13 +30,15 @@ class ThemeProvider extends ChangeNotifier {
   String get accentId => _accentId;
   UiDensity get density => _density;
   double get densityScale => _density.scale;
-  CardStyle get cardStyle => _cardStyle;
+
+  /// Lo stile delle card e' determinato dal tema selezionato (non scelto
+  /// liberamente dall'utente).
+  CardStyle get cardStyle => skin.effectiveCardStyle;
   bool get glow => _glow;
 
   String get appIconId => _appIconId;
   EmblemStyle get emblemStyle => _emblemStyle;
   bool get emblemFollowIcon => _emblemFollowIcon;
-  bool get iconFollowsTheme => _iconFollowsTheme;
 
   /// Nome dell'app attualmente mostrato nel launcher (dock).
   String get launcherName => launcherAppName(_appIconId);
@@ -67,11 +67,6 @@ class ThemeProvider extends ChangeNotifier {
       _density = UiDensity.values.firstWhere((d) => d.name == den,
           orElse: () => UiDensity.comfortable);
     }
-    final cs = await StorageService.getString(StorageService.cardStyleKey);
-    if (cs != null) {
-      _cardStyle = CardStyle.values
-          .firstWhere((c) => c.name == cs, orElse: () => CardStyle.solid);
-    }
     final icon = await StorageService.getString(StorageService.appIconKey);
     if (icon != null) _appIconId = icon;
     final es = await StorageService.getString(StorageService.emblemStyleKey);
@@ -81,8 +76,6 @@ class ThemeProvider extends ChangeNotifier {
     }
     final ef = await StorageService.getBool(StorageService.emblemFollowKey);
     if (ef != null) _emblemFollowIcon = ef;
-    final ift = await StorageService.getBool(StorageService.iconFollowThemeKey);
-    if (ift != null) _iconFollowsTheme = ift;
     ready = true;
     notifyListeners();
   }
@@ -93,19 +86,6 @@ class ThemeProvider extends ChangeNotifier {
     if (alias == _appIconId) return;
     final ok = await AppIconService.setIcon(alias);
     if (ok) _appIconId = alias;
-  }
-
-  Future<void> setIconFollowsTheme(bool v) async {
-    _iconFollowsTheme = v;
-    await StorageService.setBool(StorageService.iconFollowThemeKey, v);
-    if (v) await _applyIconForTheme();
-    notifyListeners();
-  }
-
-  Future<void> setAppIcon(String id) async {
-    _appIconId = id;
-    await StorageService.setString(StorageService.appIconKey, id);
-    notifyListeners();
   }
 
   Future<void> setEmblemStyle(EmblemStyle s) async {
@@ -132,12 +112,6 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setCardStyle(CardStyle c) async {
-    _cardStyle = c;
-    await StorageService.setString(StorageService.cardStyleKey, c.name);
-    notifyListeners();
-  }
-
   bool isUnlocked(String id) => _unlocked.contains(id);
 
   /// Un'icona premium e' sbloccata quando lo e' il tema associato.
@@ -155,7 +129,8 @@ class ThemeProvider extends ChangeNotifier {
     _themeId = id;
     FeedbackService.setPack(soundPackForTheme(id));
     await StorageService.setString(StorageService.themeKey, id);
-    if (_iconFollowsTheme) await _applyIconForTheme();
+    // L'icona dell'app segue sempre il tema selezionato.
+    await _applyIconForTheme();
     notifyListeners();
   }
 

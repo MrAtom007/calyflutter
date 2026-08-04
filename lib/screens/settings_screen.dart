@@ -12,7 +12,6 @@ import '../services/security_service.dart';
 import '../services/storage_service.dart';
 import '../services/notification_service.dart';
 import '../services/export_service.dart';
-import '../services/app_icon_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/emblem.dart';
 import '../modules/weighted/weighted_settings_screen.dart';
@@ -34,7 +33,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _policy = LockPolicy.launch;
   bool _sound = FeedbackService.soundEnabled;
   bool _haptics = FeedbackService.hapticsEnabled;
-  String _appIcon = 'IconDefault';
   String _themeTab = 'classic';
 
   static const _dayLabels = ['L', 'M', 'M', 'G', 'V', 'S', 'D'];
@@ -51,7 +49,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _reminder = await NotificationService.getSettings();
     _bioQuick = await SecurityService.isBioQuickEnabled();
     _policy = await SecurityService.getLockPolicy();
-    _appIcon = await AppIconService.current();
     if (mounted) setState(() {});
   }
 
@@ -290,118 +287,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }).toList(),
       ),
       ),
-      _subLabel(c, t('card_style')),
-      Selector<ThemeProvider, CardStyle>(
-        selector: (_, th) => th.cardStyle,
-        builder: (context, cardStyle, _) => Wrap(
-          spacing: Spacing.sm,
-          children: [
-            (CardStyle.solid, t('card_solid')),
-            (CardStyle.glass, t('card_glass')),
-            (CardStyle.outline, t('card_outline')),
-          ].map((e) {
-            return _AnimatedSelectChip(
-              c: c,
-              label: e.$2,
-              selected: cardStyle == e.$1,
-              onTap: () => context.read<ThemeProvider>().setCardStyle(e.$1),
-            );
-          }).toList(),
-        ),
-      ),
-      _subLabel(c, t('app_icon')),
-      SizedBox(
-        height: 96,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          clipBehavior: Clip.none,
-          // Padding laterale per non tagliare il bordo dei primi/ultimi item.
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          itemCount: AppIconService.styles.length,
-          separatorBuilder: (_, _) => const SizedBox(width: Spacing.md),
-          itemBuilder: (context, i) {
-            final s = AppIconService.styles[i];
-            final active = _appIcon == s.id;
-            final locked = !theme.isIconUnlocked(s);
-            return GestureDetector(
-              onTap: () async {
-                FeedbackService.onTap();
-                if (locked) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const StoreScreen()));
-                  return;
-                }
-                final messenger = ScaffoldMessenger.of(context);
-                final ok = await AppIconService.setIcon(s.id);
-                if (ok) {
-                  if (context.mounted) {
-                    context.read<ThemeProvider>().setAppIcon(s.id);
-                  }
-                  setState(() => _appIcon = s.id);
-                } else if (mounted) {
-                  messenger.showSnackBar(
-                      SnackBar(content: Text(t('app_icon_failed'))));
-                }
-              },
-              child: Column(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                          color: active ? c.primary : c.border,
-                          width: active ? 2.5 : 1),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        subjectPhotoAsset(emblemForIcon(s.id)) != null
-                            ? Image.asset(
-                                subjectPhotoAsset(emblemForIcon(s.id))!,
-                                fit: BoxFit.cover)
-                            : DecoratedBox(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: s.bg,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: EmblemView(
-                                    subject: emblemForIcon(s.id),
-                                    size: 40,
-                                    color: s.bolt,
-                                    style: theme.emblemStyle,
-                                  ),
-                                ),
-                              ),
-                        if (locked)
-                          Container(
-                            color: Colors.black.withValues(alpha: 0.45),
-                            child: const Icon(Icons.lock_rounded,
-                                color: Colors.white, size: 22),
-                          ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(s.name,
-                      style: TextStyle(
-                          fontSize: 11,
-                          color: active ? c.primary : c.textMuted,
-                          fontWeight:
-                              active ? FontWeight.w800 : FontWeight.w500)),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
       _subLabel(c, t('emblem_style')),
       Selector<ThemeProvider, EmblemStyle>(
         selector: (_, th) => th.emblemStyle,
@@ -431,18 +316,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         onChanged: (v) {
           FeedbackService.selection();
           theme.setEmblemFollowIcon(v);
-        },
-      ),
-      SwitchListTile(
-        contentPadding: EdgeInsets.zero,
-        title: Text(t('icon_follow_theme')),
-        subtitle: Text(t('icon_follow_theme_hint'),
-            style: TextStyle(color: c.textMuted, fontSize: 12)),
-        value: theme.iconFollowsTheme,
-        activeThumbColor: c.primary,
-        onChanged: (v) {
-          FeedbackService.selection();
-          theme.setIconFollowsTheme(v);
         },
       ),
       Padding(

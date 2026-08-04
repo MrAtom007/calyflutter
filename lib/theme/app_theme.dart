@@ -93,6 +93,10 @@ class AppSkin {
   final Color? glow;
   final AppColors colors;
 
+  /// Stile delle card imposto dal tema. Se null viene derivato dalle
+  /// caratteristiche del tema (neon -> glass, altrimenti solid).
+  final CardStyle? cardStyle;
+
   const AppSkin({
     required this.id,
     required this.name,
@@ -102,9 +106,14 @@ class AppSkin {
     this.premium = false,
     this.glow,
     required this.colors,
+    this.cardStyle,
   });
 
   bool get isDark => mode == Brightness.dark;
+
+  /// Stile card effettivo del tema (con fallback derivato).
+  CardStyle get effectiveCardStyle =>
+      cardStyle ?? (neon ? CardStyle.glass : CardStyle.solid);
 }
 
 /// Tutti gli skin disponibili.
