@@ -45,7 +45,16 @@ Tutto consolidato su `main`.
 
 ### Distribuzione
 - [ ] Build AAB di produzione per il Play Store
-- [ ] Build iOS / TestFlight
+- [~] Build iOS / TestFlight
+  - [x] Firebase iOS configurato (`flutterfire configure`): sezione iOS in
+    `lib/firebase_options.dart` + `GoogleService-Info.plist` in `ios/Runner/`
+    aggiunto al target Xcode (build file / group / Resources)
+  - [x] `firebase_options.dart` e `GoogleService-Info.plist` committati (config
+    client) così la CI iOS compila senza segreti aggiuntivi
+  - [x] Workflow CI `ios-build.yml`: IPA NON firmato su runner macOS come artifact
+  - [ ] Build FIRMATA per TestFlight/App Store: Apple Developer Program,
+    certificato di distribuzione (.p12) + provisioning profile come secrets,
+    `ios/ExportOptions.plist`, step `flutter build ipa`
 
 ### Prossimo task
 - [x] **Icone launcher native per i nuovi temi leggendari** (cavaliere, cerberus,
