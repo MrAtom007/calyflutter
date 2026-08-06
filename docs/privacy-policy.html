@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy - CaliStrack</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+         max-width: 820px; margin: 0 auto; padding: 24px; line-height: 1.6; color: #1a1a1a; }
+  h1 { font-size: 1.8rem; }
+  h2 { margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+  code { background: #f4f4f4; padding: 1px 5px; border-radius: 4px; }
+  .muted { color: #666; font-size: 0.9rem; }
+  ul { padding-left: 1.2rem; }
+</style>
+</head>
+<body>
+
+<h1>Privacy Policy di CaliStrack</h1>
+<p class="muted">Ultimo aggiornamento: 6 agosto 2026</p>
+
+<p>Questa Privacy Policy descrive come l'applicazione <strong>CaliStrack</strong>
+(package <code>com.calistrack.calistrack</code>, di seguito "l'App") tratta i dati
+degli utenti. L'App è un tracker per allenamenti di calisthenics e palestra.
+Utilizzando l'App accetti le pratiche descritte in questo documento.</p>
+
+<h2>1. Titolare del trattamento</h2>
+<p>Titolare: <strong>Tomas Racioppi</strong> (sviluppatore di CaliStrack).<br>
+Contatto: <strong>[INSERISCI EMAIL DI CONTATTO]</strong></p>
+
+<h2>2. Principio generale: i dati restano sul tuo dispositivo</h2>
+<p>CaliStrack è progettata per funzionare in locale. Tutti i tuoi dati
+(allenamenti, impostazioni, obiettivi, dati di salute in cache) sono salvati
+<strong>sul tuo dispositivo</strong>. L'App funziona pienamente <strong>senza
+alcun account</strong> e senza connessione a servizi cloud.</p>
+<p>Il salvataggio su cloud avviene <strong>solo se scegli volontariamente di
+effettuare l'accesso con il tuo account Google</strong> (vedi sezione 5).</p>
+
+<h2>3. Dati di salute e fitness</h2>
+<p>Se concedi il permesso, l'App legge (in <strong>sola lettura</strong>, non
+scrive mai) i seguenti dati da <strong>Health Connect</strong> (Android) o
+<strong>Apple Health</strong> (iOS), per mostrarti statistiche e progressi:</p>
+<ul>
+  <li>Frequenza cardiaca e frequenza cardiaca a riposo</li>
+  <li>Variabilità della frequenza cardiaca (HRV)</li>
+  <li>Pressione sanguigna</li>
+  <li>Ossigenazione del sangue (SpO2)</li>
+  <li>Passi</li>
+  <li>Calorie attive e totali bruciate</li>
+  <li>Sonno</li>
+  <li>Riconoscimento attività fisica</li>
+</ul>
+<p>Questi dati vengono usati <strong>esclusivamente all'interno dell'App</strong>
+per mostrarti dashboard e andamenti. Sono salvati in cache sul dispositivo.
+Non vengono venduti né condivisi con terze parti per pubblicità.
+Se effettui l'accesso con Google, questi dati sono inclusi nel backup del tuo
+account (vedi sezione 5). Puoi revocare in qualsiasi momento i permessi salute
+dalle impostazioni di Health Connect / Apple Health.</p>
+
+<h2>4. Autenticazione con Google (facoltativa)</h2>
+<p>L'accesso è <strong>opzionale</strong>. Se scegli di accedere tramite
+<strong>Google Sign-In</strong>, l'App raccoglie:</p>
+<ul>
+  <li><strong>Indirizzo email</strong> del tuo account Google (salvato per
+      associare il backup al tuo account);</li>
+  <li><strong>Nome e foto profilo</strong> (usati solo per la visualizzazione
+      nell'interfaccia, non salvati sul cloud).</li>
+</ul>
+<p>L'autenticazione è gestita tramite <strong>Firebase Authentication</strong> di Google.</p>
+
+<h2>5. Backup su cloud (Firestore) — solo con accesso effettuato</h2>
+<p>Se hai effettuato l'accesso con Google, l'App effettua un backup del tuo stato
+su <strong>Google Cloud Firestore</strong>, in un documento privato associato al
+tuo account. Il backup può includere:</p>
+<ul>
+  <li>I tuoi allenamenti e progressi</li>
+  <li>Obiettivi e impostazioni</li>
+  <li>Dati di salute in cache (vedi sezione 3)</li>
+  <li>Preferenze di aspetto (tema) e disciplina</li>
+  <li>L'indirizzo email dell'account</li>
+</ul>
+<p>Questi dati sono accessibili <strong>solo a te</strong> tramite il tuo account.
+Se non effettui l'accesso, <strong>nessun dato lascia il dispositivo</strong>.</p>
+
+<h2>6. Sicurezza dell'App</h2>
+<p>L'App offre funzioni di sicurezza locali:</p>
+<ul>
+  <li><strong>Blocco con PIN o biometria</strong> (impronta/volto). Il PIN è
+      salvato solo come hash cifrato (SHA-256 con salt) in un archivio sicuro del
+      dispositivo. I dati biometrici sono gestiti dal sistema operativo e non sono
+      mai letti né memorizzati dall'App.</li>
+  <li><strong>Cifratura opzionale AES-256</strong> dei dati di allenamento sul dispositivo.</li>
+  <li><strong>Firebase App Check</strong> (Play Integrity) per proteggere le
+      comunicazioni con i servizi cloud da abusi.</li>
+</ul>
+
+<h2>7. Notifiche</h2>
+<p>L'App usa <strong>solo notifiche locali</strong> per i promemoria di
+allenamento che imposti tu. <strong>Non</strong> vengono usate notifiche push né
+inviati dati a server per le notifiche.</p>
+
+<h2>8. Altri permessi</h2>
+<ul>
+  <li><strong>Notifiche / allarmi esatti</strong>: per i promemoria programmati.</li>
+  <li><strong>Biometria</strong>: per lo sblocco dell'App.</li>
+  <li><strong>Condivisione</strong>: per esportare i tuoi dati (CSV/JSON) tramite
+      il menu di condivisione del sistema, su tua richiesta.</li>
+  <li><strong>Widget schermata home</strong>: mostra dati (es. battito, passi,
+      rango) che restano sul dispositivo.</li>
+</ul>
+
+<h2>9. Assenza di tracciamento e pubblicità</h2>
+<p>CaliStrack <strong>non</strong> contiene sistemi di analytics, <strong>non</strong>
+traccia gli utenti a fini pubblicitari, <strong>non</strong> mostra pubblicità e
+<strong>non</strong> vende i tuoi dati. Gli unici servizi esterni utilizzati sono
+Firebase (Authentication, Firestore, App Check), forniti da Google, e solo per le
+finalità di autenticazione e backup descritte sopra.</p>
+
+<h2>10. Servizi di terze parti</h2>
+<ul>
+  <li><strong>Google / Firebase</strong> — autenticazione e backup cloud.
+      Privacy: <a href="https://policies.google.com/privacy">policies.google.com/privacy</a></li>
+  <li><strong>Health Connect (Android) / Apple Health (iOS)</strong> — origine dei
+      dati di salute, previo tuo consenso.</li>
+</ul>
+
+<h2>11. Conservazione ed eliminazione dei dati</h2>
+<p>I dati locali restano finché non disinstalli l'App o cancelli i dati dalle sue
+impostazioni. Se hai usato il backup cloud, puoi richiedere l'eliminazione dei
+dati associati al tuo account scrivendo all'indirizzo di contatto indicato nella
+sezione 1. Revocando i permessi salute interrompi la lettura dei relativi dati.</p>
+
+<h2>12. Minori</h2>
+<p>L'App non è destinata a minori di 13 anni e non raccoglie consapevolmente i
+loro dati.</p>
+
+<h2>13. Modifiche a questa policy</h2>
+<p>Questa policy può essere aggiornata. La data in alto indica l'ultima revisione.
+Le modifiche rilevanti saranno comunicate tramite l'App o questa pagina.</p>
+
+<h2>14. Contatti</h2>
+<p>Per domande sulla privacy o richieste sui tuoi dati:
+<strong>[INSERISCI EMAIL DI CONTATTO]</strong></p>
+
+</body>
+</html>
