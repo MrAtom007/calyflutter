@@ -1036,7 +1036,7 @@ class _LayoutSheet extends StatelessWidget {
                   ReorderableListView(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    onReorder: layout.reorder,
+                    onReorderItem: layout.reorder,
                     children: [
                       for (final m in layout.enabled)
                         Card(
