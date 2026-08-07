@@ -62,7 +62,9 @@ class _LockScreenState extends State<LockScreen> {
   }
 
   void _backspace() {
-    if (_pin.isNotEmpty) setState(() => _pin = _pin.substring(0, _pin.length - 1));
+    if (_pin.isNotEmpty) {
+      setState(() => _pin = _pin.substring(0, _pin.length - 1));
+    }
   }
 
   @override
@@ -80,11 +82,14 @@ class _LockScreenState extends State<LockScreen> {
             children: [
               const Icon(Icons.lock, size: 64),
               const SizedBox(height: Spacing.md),
-              Text(t('locked_title'),
-                  style: TextStyle(
-                      color: c.text,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700)),
+              Text(
+                t('locked_title'),
+                style: TextStyle(
+                  color: c.text,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               const SizedBox(height: Spacing.lg),
               FilledButton(
                 style: FilledButton.styleFrom(backgroundColor: c.primary),
@@ -112,13 +117,11 @@ class _LockScreenState extends State<LockScreen> {
           children: [
             const Icon(Icons.lock_outline, size: 48),
             const SizedBox(height: Spacing.md),
-            Text(t('enter_pin'),
-                style: TextStyle(color: c.text, fontSize: 18)),
+            Text(t('enter_pin'), style: TextStyle(color: c.text, fontSize: 18)),
             if (_error)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text(t('wrong_pin'),
-                    style: TextStyle(color: c.danger)),
+                child: Text(t('wrong_pin'), style: TextStyle(color: c.danger)),
               ),
             const SizedBox(height: Spacing.lg),
             Row(
@@ -180,11 +183,14 @@ class _LockScreenState extends State<LockScreen> {
               ),
               child: k == '<'
                   ? Icon(Icons.backspace_outlined, color: c.text)
-                  : Text(k,
+                  : Text(
+                      k,
                       style: TextStyle(
-                          color: c.text,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600)),
+                        color: c.text,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
             ),
           );
         }).toList(),

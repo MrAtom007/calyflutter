@@ -6,14 +6,12 @@ class HomeWidgetService {
   static const _ios = 'CaliWidget';
 
   /// Salva i valori e forza il refresh del widget.
-  static Future<void> update({
-    String? bpm,
-    String? steps,
-    String? rank,
-  }) async {
+  static Future<void> update({String? bpm, String? steps, String? rank}) async {
     try {
       if (bpm != null) await HomeWidget.saveWidgetData<String>('bpm', bpm);
-      if (steps != null) await HomeWidget.saveWidgetData<String>('steps', steps);
+      if (steps != null) {
+        await HomeWidget.saveWidgetData<String>('steps', steps);
+      }
       if (rank != null) await HomeWidget.saveWidgetData<String>('rank', rank);
       await HomeWidget.updateWidget(androidName: _android, iOSName: _ios);
     } catch (_) {

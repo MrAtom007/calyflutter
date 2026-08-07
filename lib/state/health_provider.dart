@@ -60,16 +60,22 @@ class HealthProvider extends ChangeNotifier {
     if (raw != null && raw.isNotEmpty) {
       try {
         _snapshot = HealthSnapshot.fromJson(
-            Map<String, dynamic>.from(jsonDecode(raw)));
+          Map<String, dynamic>.from(jsonDecode(raw)),
+        );
         _status = HealthStatus.ready;
       } catch (_) {}
     }
     _connected =
-        (await StorageService.getBool(StorageService.healthConnectedKey)) ?? false;
+        (await StorageService.getBool(StorageService.healthConnectedKey)) ??
+        false;
     final src = await StorageService.getString(StorageService.healthSourceKey);
     _selectedSource = (src == null || src.isEmpty) ? null : src;
-    _googleEmail = await StorageService.getString(StorageService.googleAccountKey);
-    final goalsRaw = await StorageService.getString(StorageService.healthGoalsKey);
+    _googleEmail = await StorageService.getString(
+      StorageService.googleAccountKey,
+    );
+    final goalsRaw = await StorageService.getString(
+      StorageService.healthGoalsKey,
+    );
     if (goalsRaw != null && goalsRaw.isNotEmpty) {
       try {
         final g = Map<String, dynamic>.from(jsonDecode(goalsRaw));
@@ -86,7 +92,9 @@ class HealthProvider extends ChangeNotifier {
       _googleName = acc.displayName;
       _googlePhoto = acc.photoUrl;
       await StorageService.setString(
-          StorageService.googleAccountKey, acc.email);
+        StorageService.googleAccountKey,
+        acc.email,
+      );
     }
 
     // Firebase mantiene la propria sessione: se già autenticato, ripristina
@@ -104,11 +112,12 @@ class HealthProvider extends ChangeNotifier {
   Future<void> _persist() async {
     if (_snapshot != null) {
       await StorageService.setString(
-          StorageService.healthDataKey, jsonEncode(_snapshot!.toJson()));
+        StorageService.healthDataKey,
+        jsonEncode(_snapshot!.toJson()),
+      );
       _pushWidget();
     }
-    await StorageService.setBool(
-        StorageService.healthConnectedKey, _connected);
+    await StorageService.setBool(StorageService.healthConnectedKey, _connected);
     // Salva i dati salute sul cloud (debounced), se l'account è collegato.
     CloudSyncService.backupSoon();
   }
@@ -124,13 +133,21 @@ class HealthProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> setGoals({double? steps, double? calories, double? sleep}) async {
+  Future<void> setGoals({
+    double? steps,
+    double? calories,
+    double? sleep,
+  }) async {
     if (steps != null) _goalSteps = steps;
     if (calories != null) _goalCalories = calories;
     if (sleep != null) _goalSleep = sleep;
     await StorageService.setString(
       StorageService.healthGoalsKey,
-      jsonEncode({'steps': _goalSteps, 'calories': _goalCalories, 'sleep': _goalSleep}),
+      jsonEncode({
+        'steps': _goalSteps,
+        'calories': _goalCalories,
+        'sleep': _goalSleep,
+      }),
     );
     notifyListeners();
     CloudSyncService.backupSoon();
@@ -259,7 +276,9 @@ class HealthProvider extends ChangeNotifier {
   Future<void> setSource(String? source) async {
     _selectedSource = source;
     await StorageService.setString(
-        StorageService.healthSourceKey, source ?? '');
+      StorageService.healthSourceKey,
+      source ?? '',
+    );
     notifyListeners();
     if (_connected) {
       await sync();

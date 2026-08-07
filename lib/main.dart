@@ -47,8 +47,9 @@ void main() async {
     // dalla app autentica. In debug usa il debug provider (registra il token
     // stampato nel logcat), in release usa Play Integrity.
     await FirebaseAppCheck.instance.activate(
-      androidProvider:
-          kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
+      androidProvider: kReleaseMode
+          ? AndroidProvider.playIntegrity
+          : AndroidProvider.debug,
     );
     // Telemetria di prodotto + crash reporting (no-op se non configurato/in debug).
     await AnalyticsService.init();

@@ -53,14 +53,10 @@ class PlateResult {
 /// Calcolatore di dischi con decomposizione greedy sui tagli disponibili.
 class PlateMath {
   /// Tagli disponibili di default (kg), dal più pesante al più leggero.
-  static const List<double> defaultPlatesKg = [
-    25, 20, 15, 10, 5, 2.5, 1.25,
-  ];
+  static const List<double> defaultPlatesKg = [25, 20, 15, 10, 5, 2.5, 1.25];
 
   /// Tagli disponibili di default (lb).
-  static const List<double> defaultPlatesLb = [
-    45, 35, 25, 10, 5, 2.5,
-  ];
+  static const List<double> defaultPlatesLb = [45, 35, 25, 10, 5, 2.5];
 
   /// Peso barra olimpica standard.
   static const double olympicBarKg = 20;
@@ -134,15 +130,13 @@ class PlateMath {
   static double effectiveLoad({
     required double bodyWeight,
     required double addedWeight,
-  }) =>
-      bodyWeight + addedWeight;
+  }) => bodyWeight + addedWeight;
 
   /// Percentuale di zavorra rispetto al peso corporeo (es. +50% BW).
   static double addedPercentOfBody({
     required double bodyWeight,
     required double addedWeight,
-  }) =>
-      bodyWeight <= _eps ? 0 : (addedWeight / bodyWeight) * 100;
+  }) => bodyWeight <= _eps ? 0 : (addedWeight / bodyWeight) * 100;
 
   /// Colore convenzionale per un disco, in base all'unità.
   static Color colorFor(double v, String unit) =>

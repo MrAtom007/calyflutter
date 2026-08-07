@@ -119,8 +119,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
     final c = context.watch<ThemeProvider>().colors;
     final t = context.watch<LocaleProvider>().t;
     _computeBest(context.watch<WorkoutProvider>());
-    final unlockedCount =
-        skillNodes.where((n) => _pct(n.id) >= 100).length;
+    final unlockedCount = skillNodes.where((n) => _pct(n.id) >= 100).length;
 
     return Scaffold(
       appBar: AppBar(
@@ -129,9 +128,13 @@ class _SkillsScreenState extends State<SkillsScreen> {
           Center(
             child: Padding(
               padding: const EdgeInsets.only(right: Spacing.md),
-              child: Text('$unlockedCount/${skillNodes.length}',
-                  style: TextStyle(
-                      color: c.textMuted, fontWeight: FontWeight.w700)),
+              child: Text(
+                '$unlockedCount/${skillNodes.length}',
+                style: TextStyle(
+                  color: c.textMuted,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
           ),
         ],
@@ -162,8 +165,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
                                 child: CustomPaint(
                                   painter: _EdgePainter(
                                     canvas: Size(width, height),
-                                    statusOf: (id) =>
-                                        _status(skillById[id]!),
+                                    statusOf: (id) => _status(skillById[id]!),
                                     primary: c.primary,
                                     muted: c.border,
                                   ),
@@ -186,18 +188,19 @@ class _SkillsScreenState extends State<SkillsScreen> {
 
   Widget _legend(AppColors c, dynamic t) {
     Widget item(Widget dot, String label) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            dot,
-            const SizedBox(width: 5),
-            Text(label,
-                style: TextStyle(color: c.textMuted, fontSize: 11)),
-          ],
-        );
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        dot,
+        const SizedBox(width: 5),
+        Text(label, style: TextStyle(color: c.textMuted, fontSize: 11)),
+      ],
+    );
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-          horizontal: Spacing.md, vertical: Spacing.sm),
+        horizontal: Spacing.md,
+        vertical: Spacing.sm,
+      ),
       decoration: BoxDecoration(
         color: c.card,
         border: Border(top: BorderSide(color: c.border)),
@@ -208,22 +211,32 @@ class _SkillsScreenState extends State<SkillsScreen> {
         runSpacing: 6,
         children: [
           item(
-              Icon(Icons.lock_rounded, size: 14, color: c.textMuted),
-              t('skills_state_locked')),
+            Icon(Icons.lock_rounded, size: 14, color: c.textMuted),
+            t('skills_state_locked'),
+          ),
           item(
-              Icon(Icons.radio_button_unchecked_rounded,
-                  size: 14, color: c.primary),
-              t('skills_state_progress')),
+            Icon(
+              Icons.radio_button_unchecked_rounded,
+              size: 14,
+              color: c.primary,
+            ),
+            t('skills_state_progress'),
+          ),
           item(
-              Icon(Icons.check_circle_rounded, size: 14, color: c.primary),
-              t('skills_state_done')),
+            Icon(Icons.check_circle_rounded, size: 14, color: c.primary),
+            t('skills_state_done'),
+          ),
         ],
       ),
     );
   }
 
   Widget _positionedNode(
-      SkillNode n, double width, double height, AppColors c) {
+    SkillNode n,
+    double width,
+    double height,
+    AppColors c,
+  ) {
     const size = 62.0;
     final cx = n.x * width;
     final cy = n.y * height;
@@ -255,7 +268,8 @@ class _SkillsScreenState extends State<SkillsScreen> {
       context: context,
       backgroundColor: c.card,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.lg))),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.lg)),
+      ),
       builder: (_) => StatefulBuilder(
         builder: (context, setSheet) {
           final pct = _pct(n.id);
@@ -271,27 +285,38 @@ class _SkillsScreenState extends State<SkillsScreen> {
                       Icon(n.icon, color: c.primary),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(n.name,
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w800)),
+                        child: Text(
+                          n.name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                       _statusBadge(status, c, t),
                     ],
                   ),
                   const SizedBox(height: Spacing.sm),
-                  Text(n.criteria,
-                      style: TextStyle(color: c.textMuted, fontSize: 13)),
+                  Text(
+                    n.criteria,
+                    style: TextStyle(color: c.textMuted, fontSize: 13),
+                  ),
                   const SizedBox(height: Spacing.md),
                   if (status == SkillStatus.locked)
-                    Text(t('skills_locked_hint'),
-                        style: TextStyle(color: c.danger, fontSize: 12))
+                    Text(
+                      t('skills_locked_hint'),
+                      style: TextStyle(color: c.danger, fontSize: 12),
+                    )
                   else ...[
                     Row(
                       children: [
-                        Text('${pct.round()}%',
-                            style: TextStyle(
-                                color: c.primary,
-                                fontWeight: FontWeight.w800)),
+                        Text(
+                          '${pct.round()}%',
+                          style: TextStyle(
+                            color: c.primary,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                         Expanded(
                           child: Slider(
                             value: pct,
@@ -314,10 +339,12 @@ class _SkillsScreenState extends State<SkillsScreen> {
                             onPressed: () {
                               FeedbackService.onTap();
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => TimerScreen(
-                                          exerciseName: n.name)));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      TimerScreen(exerciseName: n.name),
+                                ),
+                              );
                             },
                             icon: const Icon(Icons.timer_outlined),
                             label: Text(t('skills_start_set')),
@@ -327,7 +354,8 @@ class _SkillsScreenState extends State<SkillsScreen> {
                         Expanded(
                           child: FilledButton.icon(
                             style: FilledButton.styleFrom(
-                                backgroundColor: c.primary),
+                              backgroundColor: c.primary,
+                            ),
                             onPressed: () {
                               FeedbackService.medium();
                               _setProgress(n.id, 100);
@@ -361,9 +389,14 @@ class _SkillsScreenState extends State<SkillsScreen> {
         color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(Radii.sm),
       ),
-      child: Text(label,
-          style: TextStyle(
-              color: color, fontSize: 10, fontWeight: FontWeight.w800)),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
     );
   }
 }
@@ -418,7 +451,8 @@ class _SkillNodeWidget extends StatelessWidget {
                         strokeWidth: 3.5,
                         backgroundColor: c.cardAlt,
                         valueColor: AlwaysStoppedAnimation(
-                            unlocked ? c.primary : c.primary),
+                          unlocked ? c.primary : c.primary,
+                        ),
                       ),
                     ),
                   ),
@@ -431,7 +465,9 @@ class _SkillNodeWidget extends StatelessWidget {
                     color: locked
                         ? c.cardAlt
                         : Color.alphaBlend(
-                            c.primary.withValues(alpha: 0.18), c.card),
+                            c.primary.withValues(alpha: 0.18),
+                            c.card,
+                          ),
                     border: Border.all(
                       color: locked ? c.border : c.primary,
                       width: unlocked ? 2 : 1.4,
@@ -442,7 +478,7 @@ class _SkillNodeWidget extends StatelessWidget {
                               color: c.primary.withValues(alpha: 0.5),
                               blurRadius: 12,
                               spreadRadius: 1,
-                            )
+                            ),
                           ]
                         : null,
                   ),
@@ -461,12 +497,16 @@ class _SkillNodeWidget extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
-                          color: c.primary, shape: BoxShape.circle),
-                      child: Icon(Icons.check_rounded,
-                          size: 12,
-                          color: c.bg.computeLuminance() > 0.5
-                              ? Colors.white
-                              : Colors.black),
+                        color: c.primary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.check_rounded,
+                        size: 12,
+                        color: c.bg.computeLuminance() > 0.5
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
               ],
@@ -479,9 +519,10 @@ class _SkillNodeWidget extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                fontSize: 9,
-                fontWeight: FontWeight.w600,
-                color: locked ? c.textMuted : c.text),
+              fontSize: 9,
+              fontWeight: FontWeight.w600,
+              color: locked ? c.textMuted : c.text,
+            ),
           ),
         ],
       ),
@@ -520,8 +561,14 @@ class _EdgePainter extends CustomPainter {
       // Curva morbida verticale.
       final path = Path()
         ..moveTo(p1.dx, p1.dy)
-        ..cubicTo(p1.dx, (p1.dy + p2.dy) / 2, p2.dx,
-            (p1.dy + p2.dy) / 2, p2.dx, p2.dy);
+        ..cubicTo(
+          p1.dx,
+          (p1.dy + p2.dy) / 2,
+          p2.dx,
+          (p1.dy + p2.dy) / 2,
+          p2.dx,
+          p2.dy,
+        );
       c.drawPath(path, paint);
     }
   }

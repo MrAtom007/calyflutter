@@ -18,11 +18,11 @@ class WorkoutDraft {
   });
 
   Map<String, dynamic> toJson() => {
-        'discipline': discipline,
-        'sets': sets.map((s) => s.toJson()).toList(),
-        'startedAt': startedAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
-      };
+    'discipline': discipline,
+    'sets': sets.map((s) => s.toJson()).toList(),
+    'startedAt': startedAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+  };
 
   factory WorkoutDraft.fromJson(Map<String, dynamic> j) {
     final updated =
@@ -56,7 +56,8 @@ class DraftProvider extends ChangeNotifier {
     if (raw != null && raw.isNotEmpty) {
       try {
         _draft = WorkoutDraft.fromJson(
-            Map<String, dynamic>.from(jsonDecode(raw)));
+          Map<String, dynamic>.from(jsonDecode(raw)),
+        );
       } catch (_) {}
     }
     notifyListeners();
@@ -72,10 +73,11 @@ class DraftProvider extends ChangeNotifier {
         ? _draft!.startedAt
         : DateTime.now();
     _draft = WorkoutDraft(
-        discipline: discipline,
-        sets: sets,
-        startedAt: started,
-        updatedAt: DateTime.now());
+      discipline: discipline,
+      sets: sets,
+      startedAt: started,
+      updatedAt: DateTime.now(),
+    );
     await StorageService.setString(_key, jsonEncode(_draft!.toJson()));
     notifyListeners();
   }

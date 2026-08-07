@@ -23,7 +23,10 @@ class SecuritySupport {
   final String biometricLabel;
   final bool deviceLockAvailable;
   const SecuritySupport(
-      this.biometricAvailable, this.biometricLabel, this.deviceLockAvailable);
+    this.biometricAvailable,
+    this.biometricLabel,
+    this.deviceLockAvailable,
+  );
 }
 
 /// Sicurezza: PIN, biometria, blocco dispositivo.

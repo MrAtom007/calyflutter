@@ -88,9 +88,12 @@ class _TimerScreenState extends State<TimerScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(widget.exerciseName != null
+        title: Text(
+          widget.exerciseName != null
               ? 'Timer • ${widget.exerciseName}'
-              : 'Timer')),
+              : 'Timer',
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -111,11 +114,14 @@ class _TimerScreenState extends State<TimerScreen> {
                       valueColor: AlwaysStoppedAnimation(c.primary),
                     ),
                   ),
-                  Text(_fmt(_remaining),
-                      style: TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.w800,
-                          color: c.text)),
+                  Text(
+                    _fmt(_remaining),
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.w800,
+                      color: c.text,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -137,17 +143,16 @@ class _TimerScreenState extends State<TimerScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                OutlinedButton(
-                  onPressed: _reset,
-                  child: Text(t('reset')),
-                ),
+                OutlinedButton(onPressed: _reset, child: Text(t('reset'))),
                 const SizedBox(width: Spacing.md),
                 FilledButton(
                   style: FilledButton.styleFrom(backgroundColor: c.primary),
                   onPressed: _toggle,
-                  child: Text(_running
-                      ? t('pause')
-                      : (_remaining == 0 ? t('restart') : t('start'))),
+                  child: Text(
+                    _running
+                        ? t('pause')
+                        : (_remaining == 0 ? t('restart') : t('start')),
+                  ),
                 ),
               ],
             ),

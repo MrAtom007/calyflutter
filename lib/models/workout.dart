@@ -13,18 +13,18 @@ class WorkoutSet {
   });
 
   Map<String, dynamic> toJson() => {
-        'exerciseId': exerciseId,
-        'reps': reps,
-        'sec': sec,
-        'weight': weight,
-      };
+    'exerciseId': exerciseId,
+    'reps': reps,
+    'sec': sec,
+    'weight': weight,
+  };
 
   factory WorkoutSet.fromJson(Map<String, dynamic> j) => WorkoutSet(
-        exerciseId: j['exerciseId'] as String,
-        reps: (j['reps'] as num?)?.toInt(),
-        sec: (j['sec'] as num?)?.toInt(),
-        weight: (j['weight'] as num?)?.toDouble(),
-      );
+    exerciseId: j['exerciseId'] as String,
+    reps: (j['reps'] as num?)?.toInt(),
+    sec: (j['sec'] as num?)?.toInt(),
+    weight: (j['weight'] as num?)?.toDouble(),
+  );
 }
 
 /// Un allenamento completo.
@@ -48,20 +48,20 @@ class Workout {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'date': date.toIso8601String(),
-        'discipline': discipline,
-        'single': single,
-        'sets': sets.map((s) => s.toJson()).toList(),
-      };
+    'id': id,
+    'date': date.toIso8601String(),
+    'discipline': discipline,
+    'single': single,
+    'sets': sets.map((s) => s.toJson()).toList(),
+  };
 
   factory Workout.fromJson(Map<String, dynamic> j) => Workout(
-        id: j['id'].toString(),
-        date: DateTime.tryParse(j['date']?.toString() ?? '') ?? DateTime.now(),
-        discipline: (j['discipline'] as String?) ?? 'calisthenics',
-        single: j['single'] == true,
-        sets: ((j['sets'] as List?) ?? [])
-            .map((s) => WorkoutSet.fromJson(Map<String, dynamic>.from(s)))
-            .toList(),
-      );
+    id: j['id'].toString(),
+    date: DateTime.tryParse(j['date']?.toString() ?? '') ?? DateTime.now(),
+    discipline: (j['discipline'] as String?) ?? 'calisthenics',
+    single: j['single'] == true,
+    sets: ((j['sets'] as List?) ?? [])
+        .map((s) => WorkoutSet.fromJson(Map<String, dynamic>.from(s)))
+        .toList(),
+  );
 }

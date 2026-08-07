@@ -49,10 +49,14 @@ class StorageService {
       if (parsed is Map && parsed['__enc'] != null) {
         final plain = await CryptoService.decryptString(parsed['data']);
         final list = jsonDecode(plain) as List;
-        return list.map((e) => Workout.fromJson(Map<String, dynamic>.from(e))).toList();
+        return list
+            .map((e) => Workout.fromJson(Map<String, dynamic>.from(e)))
+            .toList();
       }
       final list = parsed as List;
-      return list.map((e) => Workout.fromJson(Map<String, dynamic>.from(e))).toList();
+      return list
+          .map((e) => Workout.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
     } catch (_) {
       return [];
     }
@@ -103,8 +107,10 @@ class StorageService {
     return updated;
   }
 
-  static Future<List<Workout>> importWorkouts(List<Workout> list,
-      {bool merge = true}) async {
+  static Future<List<Workout>> importWorkouts(
+    List<Workout> list, {
+    bool merge = true,
+  }) async {
     final base = merge ? await _readAll() : <Workout>[];
     final byId = <String, Workout>{};
     for (final w in [...list, ...base]) {
@@ -199,7 +205,8 @@ class StorageService {
   }
 
   // ---------- Preferenze semplici ----------
-  static Future<String?> getString(String key) async => (await _p).getString(key);
+  static Future<String?> getString(String key) async =>
+      (await _p).getString(key);
   static Future<void> setString(String key, String value) async =>
       (await _p).setString(key, value);
   static Future<List<String>> getStringList(String key) async =>
@@ -273,7 +280,9 @@ class StorageService {
             break;
           case 'l':
             await p.setStringList(
-                key, (value as List).map((e) => e.toString()).toList());
+              key,
+              (value as List).map((e) => e.toString()).toList(),
+            );
             break;
         }
       } catch (_) {}

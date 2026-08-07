@@ -32,8 +32,9 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
     vsync: this,
     duration: const Duration(milliseconds: 900),
   )..forward();
-  late final ConfettiController _confetti =
-      ConfettiController(duration: const Duration(seconds: 2));
+  late final ConfettiController _confetti = ConfettiController(
+    duration: const Duration(seconds: 2),
+  );
 
   @override
   void initState() {
@@ -64,7 +65,9 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
     final accent = rank.glow;
     final scale = CurvedAnimation(parent: _ctrl, curve: Curves.elasticOut);
     final fade = CurvedAnimation(
-        parent: _ctrl, curve: const Interval(0, 0.4, curve: Curves.easeOut));
+      parent: _ctrl,
+      curve: const Interval(0, 0.4, curve: Curves.easeOut),
+    );
 
     // Material (transparency) + DefaultTextStyle: garantisce font corretto
     // dell'app e nessuna sottolineatura di debug (l'overlay sta fuori da Scaffold).
@@ -118,8 +121,9 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
   }
 
   Widget _card(BuildContext context, dynamic t, Rank rank, Color accent) {
-    final onAccent =
-        accent.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    final onAccent = accent.computeLuminance() > 0.5
+        ? Colors.black
+        : Colors.white;
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 340),
       child: Padding(
@@ -133,10 +137,11 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
                 color: const Color(0xFF16161E).withValues(alpha: 0.92),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                    color: accent.withValues(alpha: 0.3), width: 1.5),
+                  color: accent.withValues(alpha: 0.3),
+                  width: 1.5,
+                ),
               ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 26),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 26),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -215,7 +220,8 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
                         backgroundColor: accent,
                         foregroundColor: onAccent,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: () {
                         FeedbackService.onTap();
@@ -245,10 +251,12 @@ class _LevelUpOverlayState extends State<LevelUpOverlay>
 /// Path casuale (stella o cerchio) per le particelle, così niente rettangoli.
 Path _starOrCircle(Size size) {
   if (_rnd.nextBool()) {
-    return Path()
-      ..addOval(Rect.fromCircle(
-          center: Offset(size.width / 2, size.height / 2),
-          radius: size.width / 2));
+    return Path()..addOval(
+      Rect.fromCircle(
+        center: Offset(size.width / 2, size.height / 2),
+        radius: size.width / 2,
+      ),
+    );
   }
   return _starPath(size);
 }

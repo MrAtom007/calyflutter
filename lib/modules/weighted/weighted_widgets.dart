@@ -57,9 +57,14 @@ class BigTapButton extends StatelessWidget {
                 Icon(icon, size: 18, color: fg),
                 const SizedBox(width: 6),
               ],
-              Text(label,
-                  style: TextStyle(
-                      color: fg, fontWeight: FontWeight.w800, fontSize: 14)),
+              Text(
+                label,
+                style: TextStyle(
+                  color: fg,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14,
+                ),
+              ),
             ],
           ),
         ),
@@ -132,13 +137,16 @@ class _QuickStepperState extends State<QuickStepper> {
               Text(
                 widget.controller.text.isEmpty ? '0' : widget.controller.text,
                 style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: c.primary),
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                  color: c.primary,
+                ),
               ),
               const SizedBox(width: 6),
-              Text(widget.unit,
-                  style: TextStyle(color: c.textMuted, fontSize: 13)),
+              Text(
+                widget.unit,
+                style: TextStyle(color: c.textMuted, fontSize: 13),
+              ),
             ],
           ),
         ),
@@ -152,7 +160,10 @@ class _QuickStepperState extends State<QuickStepper> {
               BigTapButton(label: '-${_fmt(s)}', onTap: () => _apply(-s)),
             for (final s in widget.steps)
               BigTapButton(
-                  label: '+${_fmt(s)}', filled: true, onTap: () => _apply(s)),
+                label: '+${_fmt(s)}',
+                filled: true,
+                onTap: () => _apply(s),
+              ),
           ],
         ),
       ],
@@ -186,14 +197,14 @@ class _PlateSheet extends StatefulWidget {
 
 class _PlateSheetState extends State<_PlateSheet> {
   late LoadMode _mode = LoadMode.belt;
-  late final TextEditingController _weight =
-      TextEditingController(text: _fmtInput(widget.addedWeight));
+  late final TextEditingController _weight = TextEditingController(
+    text: _fmtInput(widget.addedWeight),
+  );
 
   String _fmtInput(double v) =>
       v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toString();
 
-  double get _target =>
-      double.tryParse(_weight.text.replaceAll(',', '.')) ?? 0;
+  double get _target => double.tryParse(_weight.text.replaceAll(',', '.')) ?? 0;
 
   @override
   void dispose() {
@@ -214,7 +225,9 @@ class _PlateSheetState extends State<_PlateSheet> {
       barWeight: s.barWeight,
     );
     final effective = PlateMath.effectiveLoad(
-        bodyWeight: s.bodyWeight, addedWeight: _target);
+      bodyWeight: s.bodyWeight,
+      addedWeight: _target,
+    );
     final u = s.unit;
     final steps = u == 'lb'
         ? const <double>[2.5, 5, 10, 25]
@@ -223,8 +236,9 @@ class _PlateSheetState extends State<_PlateSheet> {
     return Container(
       decoration: BoxDecoration(
         color: c.card,
-        borderRadius:
-            const BorderRadius.vertical(top: Radius.circular(Radii.lg)),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(Radii.lg),
+        ),
         border: Border.all(color: c.border),
       ),
       padding: EdgeInsets.only(
@@ -242,26 +256,36 @@ class _PlateSheetState extends State<_PlateSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                  color: c.border,
-                  borderRadius: BorderRadius.circular(2)),
+                color: c.border,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
           const SizedBox(height: Spacing.md),
-          Text(t('plate_title'),
-              style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+          Text(
+            t('plate_title'),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: Spacing.sm),
           // Toggle modalità cintura / bilanciere.
           Row(
             children: [
               Expanded(
-                child: _modeChip(c, t('plate_belt'), Icons.link_rounded,
-                    LoadMode.belt),
+                child: _modeChip(
+                  c,
+                  t('plate_belt'),
+                  Icons.link_rounded,
+                  LoadMode.belt,
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: _modeChip(c, t('plate_barbell'),
-                    Icons.fitness_center_rounded, LoadMode.barbell),
+                child: _modeChip(
+                  c,
+                  t('plate_barbell'),
+                  Icons.fitness_center_rounded,
+                  LoadMode.barbell,
+                ),
               ),
             ],
           ),
@@ -271,10 +295,16 @@ class _PlateSheetState extends State<_PlateSheet> {
           // Riepilogo pesi.
           _summaryRow(c, t('plate_added'), '${_fmtInput(_target)} $u'),
           if (_mode == LoadMode.barbell)
-            _summaryRow(c, t('plate_total_bar'),
-                '${_fmtInput(result.totalSystemWeight)} $u'),
-          _summaryRow(c, t('plate_effective'),
-              '${_fmtInput(effective)} $u (BW+${_fmtInput(_target)})'),
+            _summaryRow(
+              c,
+              t('plate_total_bar'),
+              '${_fmtInput(result.totalSystemWeight)} $u',
+            ),
+          _summaryRow(
+            c,
+            t('plate_effective'),
+            '${_fmtInput(effective)} $u (BW+${_fmtInput(_target)})',
+          ),
           if (!result.isExact && !result.isEmpty)
             Container(
               margin: const EdgeInsets.only(top: 8),
@@ -286,8 +316,7 @@ class _PlateSheetState extends State<_PlateSheet> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.warning_amber_rounded,
-                      size: 16, color: c.danger),
+                  Icon(Icons.warning_amber_rounded, size: 16, color: c.danger),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
@@ -328,22 +357,27 @@ class _PlateSheetState extends State<_PlateSheet> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon,
-                size: 18,
-                color: active
-                    ? (c.bg.computeLuminance() > 0.5
+            Icon(
+              icon,
+              size: 18,
+              color: active
+                  ? (c.bg.computeLuminance() > 0.5
                         ? Colors.white
                         : Colors.black)
-                    : c.textMuted),
+                  : c.textMuted,
+            ),
             const SizedBox(width: 6),
-            Text(label,
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: active
-                        ? (c.bg.computeLuminance() > 0.5
-                            ? Colors.white
-                            : Colors.black)
-                        : c.text)),
+            Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: active
+                    ? (c.bg.computeLuminance() > 0.5
+                          ? Colors.white
+                          : Colors.black)
+                    : c.text,
+              ),
+            ),
           ],
         ),
       ),
@@ -357,9 +391,10 @@ class _PlateSheetState extends State<_PlateSheet> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(k, style: TextStyle(color: c.textMuted, fontSize: 13)),
-          Text(v,
-              style:
-                  const TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
+          Text(
+            v,
+            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+          ),
         ],
       ),
     );

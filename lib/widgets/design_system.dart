@@ -42,8 +42,7 @@ class ResponsiveWrap extends StatelessWidget {
     if (children.isEmpty) return const SizedBox.shrink();
     return LayoutBuilder(
       builder: (context, cns) {
-        final cols =
-            (cns.maxWidth / minTileWidth).floor().clamp(1, maxColumns);
+        final cols = (cns.maxWidth / minTileWidth).floor().clamp(1, maxColumns);
         if (cols <= 1) {
           // Mobile: colonna singola con spaziatura verticale.
           return Column(
@@ -60,9 +59,7 @@ class ResponsiveWrap extends StatelessWidget {
         return Wrap(
           spacing: spacing,
           runSpacing: runSpacing,
-          children: [
-            for (final ch in children) SizedBox(width: w, child: ch),
-          ],
+          children: [for (final ch in children) SizedBox(width: w, child: ch)],
         );
       },
     );
@@ -144,16 +141,14 @@ class SurfaceCard extends StatelessWidget {
     final theme = context.watch<ThemeProvider>();
     final c = theme.colors;
     final style = theme.cardStyle;
-    final pad = padding ??
-        EdgeInsets.all(Spacing.md * theme.densityScale);
+    final pad = padding ?? EdgeInsets.all(Spacing.md * theme.densityScale);
     final accentColor = accent ?? c.primary;
 
     BoxDecoration deco;
     switch (style) {
       case CardStyle.glass:
         deco = BoxDecoration(
-          color: Color.alphaBlend(
-              c.card.withValues(alpha: 0.6), c.bg),
+          color: Color.alphaBlend(c.card.withValues(alpha: 0.6), c.bg),
           borderRadius: BorderRadius.circular(Radii.lg),
           border: Border.all(color: c.text.withValues(alpha: 0.06)),
           gradient: LinearGradient(
@@ -170,7 +165,10 @@ class SurfaceCard extends StatelessWidget {
         deco = BoxDecoration(
           color: c.bg,
           borderRadius: BorderRadius.circular(Radii.lg),
-          border: Border.all(color: accentColor.withValues(alpha: 0.35), width: 1.4),
+          border: Border.all(
+            color: accentColor.withValues(alpha: 0.35),
+            width: 1.4,
+          ),
         );
         break;
       case CardStyle.solid:
@@ -189,8 +187,9 @@ class SurfaceCard extends StatelessWidget {
               ? glowShadow(accentColor, blur: 16)
               : [
                   BoxShadow(
-                    color: Colors.black
-                        .withValues(alpha: theme.skin.isDark ? 0.32 : 0.06),
+                    color: Colors.black.withValues(
+                      alpha: theme.skin.isDark ? 0.32 : 0.06,
+                    ),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -237,23 +236,36 @@ class StatTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Text(value,
-                style: TextStyle(
-                    fontSize: 22, fontWeight: FontWeight.w800, color: c.text)),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: c.text,
+              ),
+            ),
             if (unit != null) ...[
               const SizedBox(width: 3),
-              Text(unit!,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: c.textMuted)),
+              Text(
+                unit!,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: c.textMuted,
+                ),
+              ),
             ],
           ],
         ),
         const SizedBox(height: 2),
-        Text(label,
-            style: TextStyle(
-                fontSize: 11, color: c.textMuted, fontWeight: FontWeight.w600)),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            color: c.textMuted,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }

@@ -12,10 +12,26 @@ extension EmblemStyleLabel on EmblemStyle {
 /// Soggetti "leggendari" (temi/icone mitologiche) che ricevono una resa
 /// premium: aura piu' intensa e bordo dorato luminoso.
 const Set<String> legendarySubjects = {
-  'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
-  'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
-  'ercole', 'odino', 'ra', 'ade',
-  'cavaliere', 'cerberus', 'igris', 'sukuna', 'toji',
+  'spartacus',
+  'kratos',
+  'ulisse',
+  'zeus',
+  'cyberpunk',
+  'valkyrie',
+  'ronin',
+  'anubis',
+  'achille',
+  'leonida',
+  'poseidon',
+  'ercole',
+  'odino',
+  'ra',
+  'ade',
+  'cavaliere',
+  'cerberus',
+  'igris',
+  'sukuna',
+  'toji',
 };
 
 bool isLegendarySubject(String? subject) => legendarySubjects.contains(subject);
@@ -25,11 +41,27 @@ const Color _legendaryGold = Color(0xFFFFE39A);
 
 /// Soggetti disponibili (bicromatici, ricolorati dal tema).
 const List<String> emblemSubjects = [
-  'ulisse', 'zeus', 'cyberpunk', 'spartacus', 'kratos',
-  'synthwave', 'valkyrie', 'ronin', 'anubis',
-  'achille', 'leonida', 'poseidon',
-  'ercole', 'odino', 'ra', 'ade',
-  'cavaliere', 'cerberus', 'igris', 'sukuna', 'toji',
+  'ulisse',
+  'zeus',
+  'cyberpunk',
+  'spartacus',
+  'kratos',
+  'synthwave',
+  'valkyrie',
+  'ronin',
+  'anubis',
+  'achille',
+  'leonida',
+  'poseidon',
+  'ercole',
+  'odino',
+  'ra',
+  'ade',
+  'cavaliere',
+  'cerberus',
+  'igris',
+  'sukuna',
+  'toji',
 ];
 
 /// Mappa l'icona app (alias nativo) al soggetto dell'emblema.
@@ -216,8 +248,7 @@ class _EmblemArt {
 
 /// Disegna il soggetto (bicromatico) in uno spazio 100x100 riscalato.
 class EmblemPainter extends CustomPainter {
-  EmblemPainter(this.subject, this.color, this.style,
-      {this.legendary = false});
+  EmblemPainter(this.subject, this.color, this.style, {this.legendary = false});
 
   final String subject;
   final Color color;
@@ -353,8 +384,9 @@ class EmblemPainter extends CustomPainter {
     canvas.drawPath(
       path,
       Paint()
-        ..color = (legendary ? _legendaryGold : Colors.white)
-            .withValues(alpha: legendary ? 0.6 : 0.45)
+        ..color = (legendary ? _legendaryGold : Colors.white).withValues(
+          alpha: legendary ? 0.6 : 0.45,
+        )
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.1
         ..strokeJoin = StrokeJoin.round
@@ -609,6 +641,7 @@ class EmblemPainter extends CustomPainter {
       accent.lineTo(50, 70);
       accent.close();
     }
+
     ray(8);
     ray(27);
     ray(50);
@@ -733,10 +766,12 @@ class EmblemPainter extends CustomPainter {
     accent.lineTo(46, 34);
     accent.close();
     // occhi
-    accent.addOval(Rect.fromCenter(
-        center: const Offset(46, 51), width: 5, height: 3));
-    accent.addOval(Rect.fromCenter(
-        center: const Offset(54, 51), width: 5, height: 3));
+    accent.addOval(
+      Rect.fromCenter(center: const Offset(46, 51), width: 5, height: 3),
+    );
+    accent.addOval(
+      Rect.fromCenter(center: const Offset(54, 51), width: 5, height: 3),
+    );
     // naso
     accent.moveTo(47, 78);
     accent.lineTo(53, 78);
@@ -811,9 +846,12 @@ class EmblemPainter extends CustomPainter {
     // borchie sul bordo dello scudo
     for (var i = 0; i < 8; i++) {
       final a = i * 3.14159 / 4;
-      accent.addOval(Rect.fromCircle(
+      accent.addOval(
+        Rect.fromCircle(
           center: Offset(50 + 27.5 * math.cos(a), 50 + 27.5 * math.sin(a)),
-          radius: 1.4));
+          radius: 1.4,
+        ),
+      );
     }
     return _EmblemArt(main, accent: accent);
   }
@@ -910,7 +948,9 @@ class EmblemPainter extends CustomPainter {
       final a = i * 3.14159 / 6;
       final cx = 50 + 42 * math.cos(a);
       final cy = 48 + 42 * math.sin(a);
-      accent.addRect(Rect.fromCenter(center: Offset(cx, cy), width: 2, height: 2));
+      accent.addRect(
+        Rect.fromCenter(center: Offset(cx, cy), width: 2, height: 2),
+      );
     }
     return _EmblemArt(ring, accent: accent, accentBehind: true);
   }
@@ -1027,10 +1067,18 @@ class EmblemPainter extends CustomPainter {
       main.lineTo(cx + 0.18 * s, cy - 0.55 * s);
       main.close();
       // occhi ardenti
-      accent.addOval(Rect.fromCircle(
-          center: Offset(cx - 0.24 * s, cy - 0.12 * s), radius: 0.12 * s));
-      accent.addOval(Rect.fromCircle(
-          center: Offset(cx + 0.24 * s, cy - 0.12 * s), radius: 0.12 * s));
+      accent.addOval(
+        Rect.fromCircle(
+          center: Offset(cx - 0.24 * s, cy - 0.12 * s),
+          radius: 0.12 * s,
+        ),
+      );
+      accent.addOval(
+        Rect.fromCircle(
+          center: Offset(cx + 0.24 * s, cy - 0.12 * s),
+          radius: 0.12 * s,
+        ),
+      );
     }
 
     // teste laterali (dietro) + testa centrale (davanti)

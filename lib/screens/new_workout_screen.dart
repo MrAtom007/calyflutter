@@ -21,7 +21,12 @@ class _EditSet {
   final reps = TextEditingController();
   final sec = TextEditingController();
   final weight = TextEditingController();
-  _EditSet(this.exercise, {int? presetReps, int? presetSec, double? presetWeight}) {
+  _EditSet(
+    this.exercise, {
+    int? presetReps,
+    int? presetSec,
+    double? presetWeight,
+  }) {
     if (presetReps != null) reps.text = '$presetReps';
     if (presetSec != null) sec.text = '$presetSec';
     if (presetWeight != null) weight.text = presetWeight.toString();
@@ -36,8 +41,12 @@ class NewWorkoutScreen extends StatefulWidget {
 
   /// Se valorizzato, la schermata è in modalità "Modifica allenamento".
   final Workout? workoutToEdit;
-  const NewWorkoutScreen(
-      {super.key, this.preset, this.resumeDraft = false, this.workoutToEdit});
+  const NewWorkoutScreen({
+    super.key,
+    this.preset,
+    this.resumeDraft = false,
+    this.workoutToEdit,
+  });
 
   @override
   State<NewWorkoutScreen> createState() => _NewWorkoutScreenState();
@@ -58,8 +67,14 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
       for (final ws in widget.workoutToEdit!.sets) {
         final ex = getExercise(ws.exerciseId);
         if (ex != null) {
-          _sets.add(_EditSet(ex,
-              presetReps: ws.reps, presetSec: ws.sec, presetWeight: ws.weight));
+          _sets.add(
+            _EditSet(
+              ex,
+              presetReps: ws.reps,
+              presetSec: ws.sec,
+              presetWeight: ws.weight,
+            ),
+          );
         }
       }
     }
@@ -69,10 +84,14 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
         for (final ws in d.sets) {
           final ex = getExercise(ws.exerciseId);
           if (ex != null) {
-            _sets.add(_EditSet(ex,
+            _sets.add(
+              _EditSet(
+                ex,
                 presetReps: ws.reps,
                 presetSec: ws.sec,
-                presetWeight: ws.weight));
+                presetWeight: ws.weight,
+              ),
+            );
           }
         }
       }
@@ -81,19 +100,25 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
       for (final p in widget.preset!) {
         final ex = getExercise(p.exerciseId);
         if (ex != null) {
-          _sets.add(_EditSet(ex,
-              presetReps: p.reps, presetSec: p.sec, presetWeight: p.weight));
+          _sets.add(
+            _EditSet(
+              ex,
+              presetReps: p.reps,
+              presetSec: p.sec,
+              presetWeight: p.weight,
+            ),
+          );
         }
       }
     }
   }
 
   WorkoutSet _toSet(_EditSet s) => WorkoutSet(
-        exerciseId: s.exercise.id,
-        reps: int.tryParse(s.reps.text),
-        sec: int.tryParse(s.sec.text),
-        weight: double.tryParse(s.weight.text.replaceAll(',', '.')),
-      );
+    exerciseId: s.exercise.id,
+    reps: int.tryParse(s.reps.text),
+    sec: int.tryParse(s.sec.text),
+    weight: double.tryParse(s.weight.text.replaceAll(',', '.')),
+  );
 
   /// Salva la bozza corrente (per riprendere l'allenamento dalla Home).
   void _persistDraft() {
@@ -111,9 +136,9 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
   void _save() {
     final t = context.read<LocaleProvider>().t;
     if (_sets.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t('add_one_set'))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t('add_one_set'))));
       return;
     }
     final sets = _sets.map(_toSet).toList();
@@ -154,12 +179,14 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
     final t = context.watch<LocaleProvider>().t;
     final discipline = context.watch<DisciplineProvider>().discipline;
     final categories = getCategories(discipline);
-    final library =
-        getLibrary(discipline).where((e) => e.category == _category).toList();
+    final library = getLibrary(
+      discipline,
+    ).where((e) => e.category == _category).toList();
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(_isEdit ? t('edit_workout') : t('new_workout'))),
+        title: Text(_isEdit ? t('edit_workout') : t('new_workout')),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -180,11 +207,12 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                           onSelected: (_) => setState(() => _category = cat),
                           selectedColor: c.primary,
                           labelStyle: TextStyle(
-                              color: sel
-                                  ? (context.read<ThemeProvider>().skin.isDark
+                            color: sel
+                                ? (context.read<ThemeProvider>().skin.isDark
                                       ? Colors.black
                                       : Colors.white)
-                                  : c.text),
+                                : c.text,
+                          ),
                           backgroundColor: c.cardAlt,
                         ),
                       );
@@ -200,7 +228,9 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                       onTap: () => _addSet(ex),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
                           color: c.card,
                           borderRadius: BorderRadius.circular(Radii.md),
@@ -210,12 +240,19 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(ex.name,
-                                style:
-                                    const TextStyle(fontWeight: FontWeight.w600)),
-                            Text(ex.level,
-                                style: TextStyle(
-                                    color: c.textMuted, fontSize: 11)),
+                            Text(
+                              ex.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              ex.level,
+                              style: TextStyle(
+                                color: c.textMuted,
+                                fontSize: 11,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -224,11 +261,17 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                 ),
                 const SizedBox(height: Spacing.lg),
                 if (_sets.isNotEmpty)
-                  Text(t('added_sets'),
-                      style: TextStyle(
-                          color: c.textMuted, fontWeight: FontWeight.w700)),
+                  Text(
+                    t('added_sets'),
+                    style: TextStyle(
+                      color: c.textMuted,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 const SizedBox(height: Spacing.sm),
-                ..._sets.asMap().entries.map((e) => _buildSetRow(e.key, e.value, c)),
+                ..._sets.asMap().entries.map(
+                  (e) => _buildSetRow(e.key, e.value, c),
+                ),
               ],
             ),
           ),
@@ -242,7 +285,9 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
                   onPressed: _save,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Text(_isEdit ? t('save_changes') : t('save_workout')),
+                    child: Text(
+                      _isEdit ? t('save_changes') : t('save_workout'),
+                    ),
                   ),
                 ),
               ),
@@ -268,8 +313,10 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
         children: [
           Expanded(
             flex: 3,
-            child: Text(s.exercise.name,
-                style: const TextStyle(fontWeight: FontWeight.w600)),
+            child: Text(
+              s.exercise.name,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
           ),
           if (unit == 'weight') ...[
             Expanded(child: _numField(s.weight, 'kg', decimal: true)),
@@ -277,13 +324,15 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
             Expanded(child: _numField(s.reps, 'reps')),
             IconButton(
               tooltip: t2('show_plates'),
-              icon: Icon(Icons.fitness_center_rounded,
-                  color: c.primary, size: 20),
+              icon: Icon(
+                Icons.fitness_center_rounded,
+                color: c.primary,
+                size: 20,
+              ),
               onPressed: () {
                 FeedbackService.onTap();
-                final w = double.tryParse(
-                        s.weight.text.replaceAll(',', '.')) ??
-                    0;
+                final w =
+                    double.tryParse(s.weight.text.replaceAll(',', '.')) ?? 0;
                 showPlateSheet(context, addedWeight: w);
               },
             ),
@@ -303,23 +352,26 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
     );
   }
 
-  Widget _numField(TextEditingController ctrl, String hint,
-      {bool decimal = false}) {
+  Widget _numField(
+    TextEditingController ctrl,
+    String hint, {
+    bool decimal = false,
+  }) {
     return TextField(
       controller: ctrl,
       keyboardType: TextInputType.numberWithOptions(decimal: decimal),
       // Sanity check: solo cifre (con virgola per i pesi) e valore max 1000.
       inputFormatters: [
         FilteringTextInputFormatter.allow(
-            decimal ? RegExp(r'[0-9.,]') : RegExp(r'[0-9]')),
+          decimal ? RegExp(r'[0-9.,]') : RegExp(r'[0-9]'),
+        ),
         _MaxValueFormatter(1000, decimal: decimal),
       ],
       onChanged: (_) => _persistDraft(),
       decoration: InputDecoration(
         hintText: hint,
         isDense: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         border: const OutlineInputBorder(),
       ),
     );
@@ -334,7 +386,9 @@ class _MaxValueFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final text = newValue.text;
     if (text.isEmpty) return newValue;
     final v = double.tryParse(text.replaceAll(',', '.'));

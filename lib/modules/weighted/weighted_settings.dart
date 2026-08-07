@@ -31,11 +31,11 @@ class WeightedSettings {
   static const _key = '@calistrack/weightedSettings';
 
   factory WeightedSettings.defaults() => WeightedSettings(
-        availablePlates: List.of(PlateMath.defaultPlatesKg),
-        barWeight: PlateMath.olympicBarKg,
-        bodyWeight: 75,
-        unit: 'kg',
-      );
+    availablePlates: List.of(PlateMath.defaultPlatesKg),
+    barWeight: PlateMath.olympicBarKg,
+    bodyWeight: 75,
+    unit: 'kg',
+  );
 
   /// Applica i valori standard (barra e dischi) per l'unità indicata.
   void applyUnitDefaults(String u) {
@@ -52,28 +52,30 @@ class WeightedSettings {
   }
 
   Map<String, dynamic> toJson() => {
-        'plates': availablePlates,
-        'bar': barWeight,
-        'body': bodyWeight,
-        'unit': unit,
-      };
+    'plates': availablePlates,
+    'bar': barWeight,
+    'body': bodyWeight,
+    'unit': unit,
+  };
 
   factory WeightedSettings.fromJson(Map<String, dynamic> j) => WeightedSettings(
-        availablePlates: ((j['plates'] as List?) ?? PlateMath.defaultPlatesKg)
+    availablePlates:
+        ((j['plates'] as List?) ?? PlateMath.defaultPlatesKg)
             .map((e) => (e as num).toDouble())
             .toList()
           ..sort((a, b) => b.compareTo(a)),
-        barWeight: (j['bar'] as num?)?.toDouble() ?? PlateMath.olympicBarKg,
-        bodyWeight: (j['body'] as num?)?.toDouble() ?? 75,
-        unit: (j['unit'] as String?) ?? 'kg',
-      );
+    barWeight: (j['bar'] as num?)?.toDouble() ?? PlateMath.olympicBarKg,
+    bodyWeight: (j['body'] as num?)?.toDouble() ?? 75,
+    unit: (j['unit'] as String?) ?? 'kg',
+  );
 
   static Future<WeightedSettings> load() async {
     final raw = await StorageService.getString(_key);
     if (raw != null && raw.isNotEmpty) {
       try {
         return WeightedSettings.fromJson(
-            Map<String, dynamic>.from(jsonDecode(raw)));
+          Map<String, dynamic>.from(jsonDecode(raw)),
+        );
       } catch (_) {}
     }
     return WeightedSettings.defaults();

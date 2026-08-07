@@ -17,26 +17,33 @@ class ReminderSettings {
     this.days = const [1, 2, 3, 4, 5],
   });
 
-  Map<String, dynamic> toJson() =>
-      {'enabled': enabled, 'hour': hour, 'minute': minute, 'days': days};
+  Map<String, dynamic> toJson() => {
+    'enabled': enabled,
+    'hour': hour,
+    'minute': minute,
+    'days': days,
+  };
 
   factory ReminderSettings.fromJson(Map<String, dynamic> j) => ReminderSettings(
-        enabled: j['enabled'] == true,
-        hour: (j['hour'] as num?)?.toInt() ?? 18,
-        minute: (j['minute'] as num?)?.toInt() ?? 0,
-        days: ((j['days'] as List?) ?? [1, 2, 3, 4, 5])
-            .map((e) => (e as num).toInt())
-            .toList(),
-      );
+    enabled: j['enabled'] == true,
+    hour: (j['hour'] as num?)?.toInt() ?? 18,
+    minute: (j['minute'] as num?)?.toInt() ?? 0,
+    days: ((j['days'] as List?) ?? [1, 2, 3, 4, 5])
+        .map((e) => (e as num).toInt())
+        .toList(),
+  );
 
-  ReminderSettings copyWith(
-          {bool? enabled, int? hour, int? minute, List<int>? days}) =>
-      ReminderSettings(
-        enabled: enabled ?? this.enabled,
-        hour: hour ?? this.hour,
-        minute: minute ?? this.minute,
-        days: days ?? this.days,
-      );
+  ReminderSettings copyWith({
+    bool? enabled,
+    int? hour,
+    int? minute,
+    List<int>? days,
+  }) => ReminderSettings(
+    enabled: enabled ?? this.enabled,
+    hour: hour ?? this.hour,
+    minute: minute ?? this.minute,
+    days: days ?? this.days,
+  );
 }
 
 class NotificationService {
@@ -78,19 +85,28 @@ class NotificationService {
 
   static Future<void> _saveSettings(ReminderSettings s) =>
       StorageService.setString(
-          StorageService.reminderKey, jsonEncode(s.toJson()));
+        StorageService.reminderKey,
+        jsonEncode(s.toJson()),
+      );
 
   static Future<bool> _ensurePermission() async {
     try {
-      final android = _plugin.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+      final android = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       final granted = await android?.requestNotificationsPermission();
       // Richiede il permesso per gli allarmi esatti (Android 12+).
       await android?.requestExactAlarmsPermission();
-      final ios = _plugin.resolvePlatformSpecificImplementation<
-          IOSFlutterLocalNotificationsPlugin>();
+      final ios = _plugin
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
       final iosGranted = await ios?.requestPermissions(
-          alert: true, badge: true, sound: true);
+        alert: true,
+        badge: true,
+        sound: true,
+      );
       // Su piattaforme dove il metodo non ritorna nulla, consideriamo concesso.
       return granted ?? iosGranted ?? true;
     } catch (_) {
@@ -101,8 +117,10 @@ class NotificationService {
   /// True se il dispositivo consente allarmi esatti (Android 12+).
   static Future<bool> _canScheduleExact() async {
     try {
-      final android = _plugin.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+      final android = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       if (android == null) return true; // iOS/altro: sempre preciso
       return (await android.canScheduleExactNotifications()) ?? false;
     } catch (_) {
@@ -131,7 +149,9 @@ class NotificationService {
         title,
         body,
         const NotificationDetails(
-            android: _androidDetails, iOS: DarwinNotificationDetails()),
+          android: _androidDetails,
+          iOS: DarwinNotificationDetails(),
+        ),
       );
       return true;
     } catch (_) {
@@ -142,8 +162,14 @@ class NotificationService {
   static tz.TZDateTime _nextInstance(int weekday, int hour, int minute) {
     // weekday: 1=lun .. 7=dom (DateTime). Convertiamo dom=0..sab=6.
     final now = tz.TZDateTime.now(tz.local);
-    var scheduled =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+    var scheduled = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      hour,
+      minute,
+    );
     while (scheduled.weekday != weekday || scheduled.isBefore(now)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
@@ -164,7 +190,9 @@ class NotificationService {
         return false;
       }
       const details = NotificationDetails(
-          android: _androidDetails, iOS: DarwinNotificationDetails());
+        android: _androidDetails,
+        iOS: DarwinNotificationDetails(),
+      );
       // Usa allarmi esatti se consentiti, altrimenti fallback inesatto.
       final exact = await _canScheduleExact();
       final scheduleMode = exact

@@ -57,19 +57,21 @@ class FeedbackService {
         final p = AudioPlayer();
         // Riproduce sul canale multimediale a volume pieno, senza abbassare
         // gli altri suoni (mix), per la massima udibilità in palestra.
-        p.setAudioContext(AudioContext(
-          android: const AudioContextAndroid(
-            isSpeakerphoneOn: false,
-            stayAwake: false,
-            contentType: AndroidContentType.sonification,
-            usageType: AndroidUsageType.media,
-            audioFocus: AndroidAudioFocus.none,
+        p.setAudioContext(
+          AudioContext(
+            android: const AudioContextAndroid(
+              isSpeakerphoneOn: false,
+              stayAwake: false,
+              contentType: AndroidContentType.sonification,
+              usageType: AndroidUsageType.media,
+              audioFocus: AndroidAudioFocus.none,
+            ),
+            iOS: AudioContextIOS(
+              category: AVAudioSessionCategory.ambient,
+              options: const {AVAudioSessionOptions.mixWithOthers},
+            ),
           ),
-          iOS: AudioContextIOS(
-            category: AVAudioSessionCategory.ambient,
-            options: const {AVAudioSessionOptions.mixWithOthers},
-          ),
-        ));
+        );
         return p;
       });
       await player.stop();
@@ -135,7 +137,10 @@ class FeedbackService {
     HapticFeedback.heavyImpact();
     Future.delayed(const Duration(milliseconds: 100), () {
       HapticFeedback.mediumImpact();
-      Future.delayed(const Duration(milliseconds: 90), HapticFeedback.mediumImpact);
+      Future.delayed(
+        const Duration(milliseconds: 90),
+        HapticFeedback.mediumImpact,
+      );
     });
   }
 

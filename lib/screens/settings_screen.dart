@@ -65,27 +65,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(Spacing.md),
         children: [
-          _categoryCard(c,
-              icon: Icons.palette_rounded,
-              title: t('cat_personalization'),
-              initiallyExpanded: true,
-              children: _personalizationChildren(context, theme, c, t)),
-          _categoryCard(c,
-              icon: Icons.fitness_center_rounded,
-              title: t('cat_equipment'),
-              children: _equipmentChildren(context, c, t)),
-          _categoryCard(c,
-              icon: Icons.shield_rounded,
-              title: t('cat_security'),
-              children: _securityChildren(context, security, c, t)),
-          _categoryCard(c,
-              icon: Icons.tune_rounded,
-              title: t('cat_preferences'),
-              children: _preferencesChildren(context, localeP, c, t)),
-          _categoryCard(c,
-              icon: Icons.storage_rounded,
-              title: t('cat_data'),
-              children: _dataChildren(context, c, t)),
+          _categoryCard(
+            c,
+            icon: Icons.palette_rounded,
+            title: t('cat_personalization'),
+            initiallyExpanded: true,
+            children: _personalizationChildren(context, theme, c, t),
+          ),
+          _categoryCard(
+            c,
+            icon: Icons.fitness_center_rounded,
+            title: t('cat_equipment'),
+            children: _equipmentChildren(context, c, t),
+          ),
+          _categoryCard(
+            c,
+            icon: Icons.shield_rounded,
+            title: t('cat_security'),
+            children: _securityChildren(context, security, c, t),
+          ),
+          _categoryCard(
+            c,
+            icon: Icons.tune_rounded,
+            title: t('cat_preferences'),
+            children: _preferencesChildren(context, localeP, c, t),
+          ),
+          _categoryCard(
+            c,
+            icon: Icons.storage_rounded,
+            title: t('cat_data'),
+            children: _dataChildren(context, c, t),
+          ),
           // Traguardi (link a schermata dedicata)
           Container(
             margin: const EdgeInsets.only(bottom: Spacing.md),
@@ -97,18 +107,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
             clipBehavior: Clip.antiAlias,
             child: ListTile(
               leading: Icon(Icons.emoji_events_rounded, color: c.primary),
-              title: Text(t('achievements'),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, fontSize: 15)),
-              subtitle: Text(t('achievements_hint'),
-                  style: TextStyle(color: c.textMuted, fontSize: 12)),
+              title: Text(
+                t('achievements'),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 15,
+                ),
+              ),
+              subtitle: Text(
+                t('achievements_hint'),
+                style: TextStyle(color: c.textMuted, fontSize: 12),
+              ),
               trailing: Icon(Icons.chevron_right_rounded, color: c.textMuted),
               onTap: () {
                 FeedbackService.onTap();
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const AchievementsScreen()));
+                  context,
+                  MaterialPageRoute(builder: (_) => const AchievementsScreen()),
+                );
               },
             ),
           ),
@@ -116,8 +132,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Center(
             child: Opacity(
               opacity: 0.5,
-              child: Text('CaliStrack • v4.11.0',
-                  style: TextStyle(color: c.textMuted, fontSize: 12)),
+              child: Text(
+                'CaliStrack • v4.11.0',
+                style: TextStyle(color: c.textMuted, fontSize: 12),
+              ),
             ),
           ),
           const SizedBox(height: 40),
@@ -129,11 +147,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // ===========================================================================
   // Card categoria
   // ===========================================================================
-  Widget _categoryCard(AppColors c,
-      {required IconData icon,
-      required String title,
-      bool initiallyExpanded = false,
-      required List<Widget> children}) {
+  Widget _categoryCard(
+    AppColors c, {
+    required IconData icon,
+    required String title,
+    bool initiallyExpanded = false,
+    required List<Widget> children,
+  }) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: Container(
@@ -148,11 +168,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           initiallyExpanded: initiallyExpanded,
           leading: Icon(icon, color: c.primary),
           tilePadding: const EdgeInsets.symmetric(horizontal: Spacing.md),
-          childrenPadding:
-              const EdgeInsets.fromLTRB(Spacing.md, 0, Spacing.md, Spacing.md),
-          title: Text(title,
-              style:
-                  const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+          childrenPadding: const EdgeInsets.fromLTRB(
+            Spacing.md,
+            0,
+            Spacing.md,
+            Spacing.md,
+          ),
+          title: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+          ),
           children: children,
         ),
       ),
@@ -160,52 +185,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _subLabel(AppColors c, String text) => Padding(
-        padding: const EdgeInsets.only(top: Spacing.md, bottom: 6),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(text,
-              style: TextStyle(
-                  color: c.textMuted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700)),
+    padding: const EdgeInsets.only(top: Spacing.md, bottom: 6),
+    child: Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: c.textMuted,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
         ),
-      );
+      ),
+    ),
+  );
 
   // ===========================================================================
   // 1. Personalizzazione & Temi
   // ===========================================================================
   List<Widget> _personalizationChildren(
-      BuildContext context, ThemeProvider theme, AppColors c, dynamic t) {
+    BuildContext context,
+    ThemeProvider theme,
+    AppColors c,
+    dynamic t,
+  ) {
     return [
       _subLabel(c, t('theme_color')),
       // Schede per stile: Classici / Neon / Leggendari.
       Row(
-        children: [
-          ('classic', t('theme_tab_classic')),
-          ('neon', t('theme_tab_neon')),
-          ('legendary', t('theme_tab_legendary')),
-        ].map((e) {
-          final active = _themeTab == e.$1;
-          final count = _themesIn(e.$1).length;
-          final activeInside =
-              _themesIn(e.$1).any((s) => s.id == theme.themeId);
-          return Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: Spacing.sm),
-              child: _AnimatedSelectChip(
-                c: c,
-                label: e.$2,
-                hint: '$count',
-                selected: active,
-                dot: activeInside && !active,
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  setState(() => _themeTab = e.$1);
-                },
-              ),
-            ),
-          );
-        }).toList(),
+        children:
+            [
+              ('classic', t('theme_tab_classic')),
+              ('neon', t('theme_tab_neon')),
+              ('legendary', t('theme_tab_legendary')),
+            ].map((e) {
+              final active = _themeTab == e.$1;
+              final count = _themesIn(e.$1).length;
+              final activeInside = _themesIn(
+                e.$1,
+              ).any((s) => s.id == theme.themeId);
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: Spacing.sm),
+                  child: _AnimatedSelectChip(
+                    c: c,
+                    label: e.$2,
+                    hint: '$count',
+                    selected: active,
+                    dot: activeInside && !active,
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      setState(() => _themeTab = e.$1);
+                    },
+                  ),
+                ),
+              );
+            }).toList(),
       ),
       const SizedBox(height: Spacing.sm),
       _themeGrid(context, theme, c, _themesIn(_themeTab)),
@@ -235,13 +269,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             Icon(Icons.smartphone_rounded, size: 16, color: c.textMuted),
             const SizedBox(width: 6),
-            Text('${t('dock_name')}: ',
-                style: TextStyle(color: c.textMuted, fontSize: 12)),
-            Text(theme.launcherName,
-                style: TextStyle(
-                    color: c.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800)),
+            Text(
+              '${t('dock_name')}: ',
+              style: TextStyle(color: c.textMuted, fontSize: 12),
+            ),
+            Text(
+              theme.launcherName,
+              style: TextStyle(
+                color: c.primary,
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ],
         ),
       ),
@@ -252,21 +291,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // 2. Attrezzatura & Pesi
   // ===========================================================================
   List<Widget> _equipmentChildren(
-      BuildContext context, AppColors c, dynamic t) {
+    BuildContext context,
+    AppColors c,
+    dynamic t,
+  ) {
     return [
       ListTile(
         contentPadding: EdgeInsets.zero,
         leading: Icon(Icons.scale_rounded, color: c.primary),
         title: Text(t('weighted_settings')),
-        subtitle: Text(t('weighted_settings_hint'),
-            style: TextStyle(color: c.textMuted, fontSize: 12)),
+        subtitle: Text(
+          t('weighted_settings_hint'),
+          style: TextStyle(color: c.textMuted, fontSize: 12),
+        ),
         trailing: Icon(Icons.chevron_right_rounded, color: c.textMuted),
         onTap: () {
           FeedbackService.onTap();
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => const WeightedSettingsScreen()));
+            context,
+            MaterialPageRoute(builder: (_) => const WeightedSettingsScreen()),
+          );
         },
       ),
     ];
@@ -276,7 +320,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // 3. Sicurezza & Privacy
   // ===========================================================================
   List<Widget> _securityChildren(
-      BuildContext context, SecurityProvider security, AppColors c, dynamic t) {
+    BuildContext context,
+    SecurityProvider security,
+    AppColors c,
+    dynamic t,
+  ) {
     return [
       _radioTile(t('no_protection'), LockMode.none, security.mode, () async {
         await SecurityService.disableLock();
@@ -339,7 +387,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // 4. Preferenze & Suoni
   // ===========================================================================
   List<Widget> _preferencesChildren(
-      BuildContext context, LocaleProvider localeP, AppColors c, dynamic t) {
+    BuildContext context,
+    LocaleProvider localeP,
+    AppColors c,
+    dynamic t,
+  ) {
     return [
       Row(
         children: [
@@ -357,10 +409,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }
             },
             items: AppStrings.supported
-                .map((code) => DropdownMenuItem(
-                      value: code,
-                      child: Text(AppStrings.languageNames[code]!),
-                    ))
+                .map(
+                  (code) => DropdownMenuItem(
+                    value: code,
+                    child: Text(AppStrings.languageNames[code]!),
+                  ),
+                )
                 .toList(),
           ),
         ],
@@ -406,16 +460,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
           contentPadding: EdgeInsets.zero,
           title: Text(t('time')),
           trailing: Text(
-              '${_reminder.hour.toString().padLeft(2, '0')}:${_reminder.minute.toString().padLeft(2, '0')}'),
+            '${_reminder.hour.toString().padLeft(2, '0')}:${_reminder.minute.toString().padLeft(2, '0')}',
+          ),
           onTap: () async {
             final picked = await showTimePicker(
               context: context,
-              initialTime:
-                  TimeOfDay(hour: _reminder.hour, minute: _reminder.minute),
+              initialTime: TimeOfDay(
+                hour: _reminder.hour,
+                minute: _reminder.minute,
+              ),
             );
             if (picked != null) {
-              final updated =
-                  _reminder.copyWith(hour: picked.hour, minute: picked.minute);
+              final updated = _reminder.copyWith(
+                hour: picked.hour,
+                minute: picked.minute,
+              );
               await NotificationService.reschedule(updated);
               setState(() => _reminder = updated);
             }
@@ -511,11 +570,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (ctx) => AlertDialog(
         title: const Text('Cancella tutti i dati'),
         content: const Text(
-            'Questa azione eliminerà definitivamente tutti gli allenamenti. Continuare?'),
+          'Questa azione eliminerà definitivamente tutti gli allenamenti. Continuare?',
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Annulla')),
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annulla'),
+          ),
           TextButton(
             onPressed: () {
               context.read<WorkoutProvider>().clear();
@@ -556,16 +617,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Annulla')),
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annulla'),
+          ),
           TextButton(
             onPressed: () {
               final p = ctrl.text;
               if (p.length >= 4 && p == ctrl2.text) {
                 Navigator.pop(ctx, p);
               } else {
-                ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
-                    content: Text('PIN non valido o non coincidente')));
+                ScaffoldMessenger.of(ctx).showSnackBar(
+                  const SnackBar(
+                    content: Text('PIN non valido o non coincidente'),
+                  ),
+                );
               }
             },
             child: const Text('Salva'),
@@ -576,7 +641,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _radioTile(
-      String label, String value, String groupValue, VoidCallback onTap) {
+    String label,
+    String value,
+    String groupValue,
+    VoidCallback onTap,
+  ) {
     return RadioListTile<String>(
       contentPadding: EdgeInsets.zero,
       title: Text(label),
@@ -608,10 +677,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   // ---- Temi raggruppati per categoria ----
   static const _legendaryIds = {
-    'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
-    'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
-    'ercole', 'odino', 'ra', 'ade',
-    'cavaliere', 'cerberus', 'igris', 'sukuna', 'toji',
+    'spartacus',
+    'kratos',
+    'ulisse',
+    'zeus',
+    'cyberpunk',
+    'valkyrie',
+    'ronin',
+    'anubis',
+    'achille',
+    'leonida',
+    'poseidon',
+    'ercole',
+    'odino',
+    'ra',
+    'ade',
+    'cavaliere',
+    'cerberus',
+    'igris',
+    'sukuna',
+    'toji',
   };
 
   List<AppSkin> _themesIn(String category) {
@@ -628,8 +713,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }).toList();
   }
 
-  Widget _themeGrid(BuildContext context, ThemeProvider theme, AppColors c,
-      List<AppSkin> skins) {
+  Widget _themeGrid(
+    BuildContext context,
+    ThemeProvider theme,
+    AppColors c,
+    List<AppSkin> skins,
+  ) {
     if (skins.isEmpty) return const SizedBox.shrink();
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -642,15 +731,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
           childAspectRatio: 1.6,
           mainAxisSpacing: Spacing.sm,
           crossAxisSpacing: Spacing.sm,
-          children:
-              skins.map((skin) => _themeCard(context, theme, c, skin)).toList(),
+          children: skins
+              .map((skin) => _themeCard(context, theme, c, skin))
+              .toList(),
         );
       },
     );
   }
 
   Widget _themeCard(
-      BuildContext context, ThemeProvider theme, AppColors c, AppSkin skin) {
+    BuildContext context,
+    ThemeProvider theme,
+    AppColors c,
+    AppSkin skin,
+  ) {
     final active = theme.themeId == skin.id;
     final locked = skin.premium && !theme.isUnlocked(skin.id);
     final t = context.read<LocaleProvider>().t;
@@ -658,8 +752,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       onTap: () {
         FeedbackService.onTap();
         if (locked) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const StoreScreen()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const StoreScreen()),
+          );
         } else {
           theme.changeTheme(skin.id);
         }
@@ -672,8 +768,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           color: c.card,
           borderRadius: BorderRadius.circular(Radii.md),
           border: Border.all(
-              color: active ? c.primary : c.border.withValues(alpha: 0.5),
-              width: active ? 2 : 1),
+            color: active ? c.primary : c.border.withValues(alpha: 0.5),
+            width: active ? 2 : 1,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -684,10 +781,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(6),
                     child: Image.asset(
-                        subjectPhotoAsset(emblemForTheme(skin.id))!,
-                        width: 26,
-                        height: 26,
-                        fit: BoxFit.cover),
+                      subjectPhotoAsset(emblemForTheme(skin.id))!,
+                      width: 26,
+                      height: 26,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   const SizedBox(width: 6),
                 ] else if (emblemForTheme(skin.id) != null) ...[
@@ -705,8 +803,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
             const Spacer(),
-            Text('${skin.name}${skin.premium ? ' ✦' : ''}',
-                style: const TextStyle(fontWeight: FontWeight.w700)),
+            Text(
+              '${skin.name}${skin.premium ? ' ✦' : ''}',
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
             Text(
               active
                   ? '✓ ${t('active')}'
@@ -714,7 +814,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: active ? c.primary : c.textMuted, fontSize: 11),
+                color: active ? c.primary : c.textMuted,
+                fontSize: 11,
+              ),
             ),
           ],
         ),
@@ -723,15 +825,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _sw(Color color) => Container(
-        width: 20,
-        height: 20,
-        margin: const EdgeInsets.only(right: 6),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: Colors.white24),
-        ),
-      );
+    width: 20,
+    height: 20,
+    margin: const EdgeInsets.only(right: 6),
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(4),
+      border: Border.all(color: Colors.white24),
+    ),
+  );
 }
 
 /// Chip di selezione con feedback aptico immediato e transizione animata
@@ -765,8 +867,10 @@ class _AnimatedSelectChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeOut,
-        padding:
-            const EdgeInsets.symmetric(horizontal: Spacing.md, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Spacing.md,
+          vertical: 8,
+        ),
         decoration: BoxDecoration(
           color: selected ? c.primary : c.cardAlt,
           borderRadius: BorderRadius.circular(Radii.md),
@@ -789,8 +893,7 @@ class _AnimatedSelectChip extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: selected ? _onPrimary(c.primary) : c.text,
-                      fontWeight:
-                          selected ? FontWeight.w800 : FontWeight.w600,
+                      fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
                       fontSize: 13,
                     ),
                   ),
@@ -800,8 +903,10 @@ class _AnimatedSelectChip extends StatelessWidget {
                   Container(
                     width: 7,
                     height: 7,
-                    decoration:
-                        BoxDecoration(color: c.primary, shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: c.primary,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ],
               ],

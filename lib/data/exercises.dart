@@ -1,15 +1,20 @@
 import '../models/exercise.dart';
 import 'gym.dart';
 
-Exercise _cx(String id, String name, String category, String unit, String level) =>
-    Exercise(
-      id: id,
-      name: name,
-      category: category,
-      unit: unit,
-      level: level,
-      discipline: 'calisthenics',
-    );
+Exercise _cx(
+  String id,
+  String name,
+  String category,
+  String unit,
+  String level,
+) => Exercise(
+  id: id,
+  name: name,
+  category: category,
+  unit: unit,
+  level: level,
+  discipline: 'calisthenics',
+);
 
 /// Libreria completa di esercizi calisthenics.
 final List<Exercise> calisthenicsExercises = [
@@ -21,7 +26,13 @@ final List<Exercise> calisthenicsExercises = [
   _cx('diamond-pushup', 'Diamond Push-up', 'Push', 'reps', 'Intermedio'),
   _cx('wide-pushup', 'Push-up presa larga', 'Push', 'reps', 'Base'),
   _cx('archer-pushup', 'Archer Push-up', 'Push', 'reps', 'Avanzato'),
-  _cx('pseudo-planche-pushup', 'Pseudo Planche Push-up', 'Push', 'reps', 'Avanzato'),
+  _cx(
+    'pseudo-planche-pushup',
+    'Pseudo Planche Push-up',
+    'Push',
+    'reps',
+    'Avanzato',
+  ),
   _cx('one-arm-pushup', 'Push-up a un braccio', 'Push', 'reps', 'Avanzato'),
   _cx('dips', 'Dips alle parallele', 'Push', 'reps', 'Intermedio'),
   _cx('bench-dips', 'Bench Dips', 'Push', 'reps', 'Base'),
@@ -80,7 +91,13 @@ final List<Exercise> calisthenicsExercises = [
   _cx('straddle-planche', 'Straddle Planche', 'Skills', 'sec', 'Avanzato'),
   _cx('v-sit', 'V-sit', 'Skills', 'sec', 'Avanzato'),
   _cx('handstand-walk', 'Handstand Walk', 'Skills', 'reps', 'Avanzato'),
-  _cx('pseudo-planche-hold', 'Pseudo Planche Hold', 'Skills', 'sec', 'Intermedio'),
+  _cx(
+    'pseudo-planche-hold',
+    'Pseudo Planche Hold',
+    'Skills',
+    'sec',
+    'Intermedio',
+  ),
   _cx('tuck-front-lever', 'Tuck Front Lever', 'Skills', 'sec', 'Intermedio'),
   // Push (extra)
   _cx('hindu-pushup', 'Hindu Push-up', 'Push', 'reps', 'Base'),
@@ -88,7 +105,13 @@ final List<Exercise> calisthenicsExercises = [
   _cx('clap-pushup', 'Clap Push-up', 'Push', 'reps', 'Avanzato'),
   _cx('ring-dips', 'Ring Dips', 'Push', 'reps', 'Avanzato'),
   _cx('korean-dips', 'Korean Dips', 'Push', 'reps', 'Avanzato'),
-  _cx('tricep-extension-bw', 'Bodyweight Tricep Ext.', 'Push', 'reps', 'Intermedio'),
+  _cx(
+    'tricep-extension-bw',
+    'Bodyweight Tricep Ext.',
+    'Push',
+    'reps',
+    'Intermedio',
+  ),
   // Pull (extra)
   _cx('l-pullup', 'L Pull-up', 'Pull', 'reps', 'Avanzato'),
   _cx('ice-cream-maker', 'Ice Cream Maker', 'Pull', 'reps', 'Avanzato'),
@@ -100,7 +123,13 @@ final List<Exercise> calisthenicsExercises = [
   _cx('cossack-squat', 'Cossack Squat', 'Legs', 'reps', 'Intermedio'),
   _cx('sissy-squat', 'Sissy Squat', 'Legs', 'reps', 'Avanzato'),
   _cx('box-jump', 'Box Jump', 'Legs', 'reps', 'Intermedio'),
-  _cx('single-leg-bridge', 'Single Leg Glute Bridge', 'Legs', 'reps', 'Intermedio'),
+  _cx(
+    'single-leg-bridge',
+    'Single Leg Glute Bridge',
+    'Legs',
+    'reps',
+    'Intermedio',
+  ),
   _cx('natural-leg-ext', 'Natural Leg Extension', 'Legs', 'reps', 'Avanzato'),
   _cx('duck-walk', 'Duck Walk', 'Legs', 'sec', 'Intermedio'),
   // Core (extra)
@@ -109,10 +138,22 @@ final List<Exercise> calisthenicsExercises = [
   _cx('windshield-wiper', 'Windshield Wiper', 'Core', 'reps', 'Avanzato'),
   _cx('ab-rollout-bw', 'Ab Rollout', 'Core', 'reps', 'Avanzato'),
   _cx('plank-reach', 'Plank Reach', 'Core', 'reps', 'Intermedio'),
-  _cx('hanging-windshield', 'Hanging Windshield Wiper', 'Core', 'reps', 'Avanzato'),
+  _cx(
+    'hanging-windshield',
+    'Hanging Windshield Wiper',
+    'Core',
+    'reps',
+    'Avanzato',
+  ),
 ];
 
-const List<String> calisthenicsCategories = ['Push', 'Pull', 'Legs', 'Core', 'Skills'];
+const List<String> calisthenicsCategories = [
+  'Push',
+  'Pull',
+  'Legs',
+  'Core',
+  'Skills',
+];
 
 /// Tutti gli esercizi delle due discipline.
 final List<Exercise> allExercises = [...calisthenicsExercises, ...gymExercises];

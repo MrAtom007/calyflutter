@@ -36,7 +36,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _refreshWidgetRank() {
     if (!mounted) return;
     final disc = context.read<DisciplineProvider>().discipline;
-    final pts = totalPoints(context.read<WorkoutProvider>().forDiscipline(disc));
+    final pts = totalPoints(
+      context.read<WorkoutProvider>().forDiscipline(disc),
+    );
     HomeWidgetService.update(rank: '${rankFor(pts).current.name} · $pts');
   }
 
@@ -70,16 +72,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-        body: SafeArea(
-          top: false,
-          child: _buildBody(context, dash, t, gap),
-        ),
+        body: SafeArea(top: false, child: _buildBody(context, dash, t, gap)),
       ),
     );
   }
 
   Widget _buildBody(
-      BuildContext context, DashboardProvider dash, dynamic t, double gap) {
+    BuildContext context,
+    DashboardProvider dash,
+    dynamic t,
+    double gap,
+  ) {
     final header = Column(
       children: [
         if (!_editing) ...[
@@ -108,8 +111,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               runSpacing: gap,
               children: [
                 for (int i = 0; i < dash.widgets.length; i++)
-                  buildDashWidget(
-                      context, dash.widgets[i], widget.onOpenTab),
+                  buildDashWidget(context, dash.widgets[i], widget.onOpenTab),
               ],
             ),
           ],
@@ -151,7 +153,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _wrap(BuildContext context, DashboardProvider dash, int index, Widget child) {
+  Widget _wrap(
+    BuildContext context,
+    DashboardProvider dash,
+    int index,
+    Widget child,
+  ) {
     final c = context.watch<ThemeProvider>().colors;
     if (!_editing) return child;
     return Stack(
@@ -161,7 +168,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Radii.lg),
-              border: Border.all(color: c.primary.withValues(alpha: 0.5), width: 1.4),
+              border: Border.all(
+                color: c.primary.withValues(alpha: 0.5),
+                width: 1.4,
+              ),
             ),
           ),
         ),
@@ -179,8 +189,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: c.border),
                   ),
-                  child: Icon(Icons.drag_indicator_rounded,
-                      size: 18, color: c.textMuted),
+                  child: Icon(
+                    Icons.drag_indicator_rounded,
+                    size: 18,
+                    color: c.textMuted,
+                  ),
                 ),
               ),
               const SizedBox(width: 6),
@@ -214,7 +227,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context: context,
       backgroundColor: c.card,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.lg))),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.lg)),
+      ),
       builder: (_) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(Spacing.md),
@@ -222,26 +236,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(t('dash_add'),
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w800)),
+              Text(
+                t('dash_add'),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
               const SizedBox(height: Spacing.sm),
               if (available.isEmpty)
                 Padding(
                   padding: const EdgeInsets.all(Spacing.md),
-                  child: Text(t('dash_all_added'),
-                      style: TextStyle(color: c.textMuted)),
+                  child: Text(
+                    t('dash_all_added'),
+                    style: TextStyle(color: c.textMuted),
+                  ),
                 ),
-              ...available.map((w) => ListTile(
-                    leading: Icon(w.icon, color: c.primary),
-                    title: Text(t(w.titleKey)),
-                    trailing: const Icon(Icons.add_circle_outline_rounded),
-                    onTap: () {
-                      FeedbackService.onTap();
-                      dash.add(w);
-                      Navigator.pop(context);
-                    },
-                  )),
+              ...available.map(
+                (w) => ListTile(
+                  leading: Icon(w.icon, color: c.primary),
+                  title: Text(t(w.titleKey)),
+                  trailing: const Icon(Icons.add_circle_outline_rounded),
+                  onTap: () {
+                    FeedbackService.onTap();
+                    dash.add(w);
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
             ],
           ),
         ),

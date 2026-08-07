@@ -34,7 +34,8 @@ class WorkoutDetailScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => NewWorkoutScreen(workoutToEdit: w)),
+                    builder: (_) => NewWorkoutScreen(workoutToEdit: w),
+                  ),
                 );
               },
             ),
@@ -45,29 +46,38 @@ class WorkoutDetailScreen extends StatelessWidget {
           : ListView(
               padding: const EdgeInsets.all(Spacing.md),
               children: [
-                Text(formatDateTime(w.date),
-                    style: TextStyle(color: c.textMuted)),
+                Text(
+                  formatDateTime(w.date),
+                  style: TextStyle(color: c.textMuted),
+                ),
                 const SizedBox(height: Spacing.md),
-                ...w.sets.map((s) => Card(
-                      color: c.card,
-                      margin: const EdgeInsets.only(bottom: Spacing.sm),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(Radii.md),
-                        side: BorderSide(color: c.border),
+                ...w.sets.map(
+                  (s) => Card(
+                    color: c.card,
+                    margin: const EdgeInsets.only(bottom: Spacing.sm),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(Radii.md),
+                      side: BorderSide(color: c.border),
+                    ),
+                    child: ListTile(
+                      title: Text(exerciseName(s.exerciseId)),
+                      trailing: Text(
+                        setValue(s),
+                        style: TextStyle(
+                          color: c.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      child: ListTile(
-                        title: Text(exerciseName(s.exerciseId)),
-                        trailing: Text(setValue(s),
-                            style: TextStyle(
-                                color: c.primary,
-                                fontWeight: FontWeight.w700)),
-                      ),
-                    )),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: Spacing.lg),
                 OutlinedButton.icon(
                   icon: Icon(Icons.delete_outline, color: c.danger),
-                  label: Text(t('delete_workout'),
-                      style: TextStyle(color: c.danger)),
+                  label: Text(
+                    t('delete_workout'),
+                    style: TextStyle(color: c.danger),
+                  ),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: c.danger),
                     padding: const EdgeInsets.symmetric(vertical: 12),
@@ -88,8 +98,9 @@ class WorkoutDetailScreen extends StatelessWidget {
         content: Text(t('confirm_delete_msg')),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(t('cancel'))),
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(t('cancel')),
+          ),
           TextButton(
             onPressed: () {
               FeedbackService.medium();

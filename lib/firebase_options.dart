@@ -58,8 +58,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '851828223422',
     projectId: 'calistrack-a4f69',
     storageBucket: 'calistrack-a4f69.firebasestorage.app',
-    androidClientId: '851828223422-8um19vknrkhq9qfcikgqhvjm6jliova6.apps.googleusercontent.com',
-    iosClientId: '851828223422-ta9b670fekka28gi0pqoso1r5d1acf4m.apps.googleusercontent.com',
+    androidClientId:
+        '851828223422-8um19vknrkhq9qfcikgqhvjm6jliova6.apps.googleusercontent.com',
+    iosClientId:
+        '851828223422-ta9b670fekka28gi0pqoso1r5d1acf4m.apps.googleusercontent.com',
     iosBundleId: 'com.calistrack.calistrack',
   );
 }

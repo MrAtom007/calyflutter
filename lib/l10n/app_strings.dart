@@ -105,7 +105,8 @@ class AppStrings {
       'restart': 'Ricomincia',
       // store
       'neon_store': 'Neon Store',
-      'store_banner': 'Neon Store — Sblocca skin neon esclusive con effetti glow.',
+      'store_banner':
+          'Neon Store — Sblocca skin neon esclusive con effetti glow.',
       'store_icon_included': 'Icona app inclusa',
       'store_unlock_all': 'Sblocca tutto',
       'store_owned': 'Sbloccato',
@@ -301,8 +302,7 @@ class AppStrings {
           'Niente caffeina o alcol nelle 4-6 ore prima di coricarti.',
       'sleep_tip_dark':
           'Tieni la camera buia e silenziosa: usa tende oscuranti o una mascherina.',
-      'sleep_tip_temp':
-          'Mantieni la stanza fresca (18-20°C) e arieggiata.',
+      'sleep_tip_temp': 'Mantieni la stanza fresca (18-20°C) e arieggiata.',
       'sleep_guide_open': 'Guida completa',
       'sleep_guide_title': 'Guida al sonno',
       'sleep_guide_intro':
@@ -351,9 +351,11 @@ class AppStrings {
           'Cambiando tema, l\'icona e il nome dell\'app nel dock si adattano (es. tema Zeus → ZeusTrack).',
       'dock_name': 'Nome nel dock',
       'ob8_t': 'Salute e wearable',
-      'ob8_s': 'Battiti, pressione, passi e sonno dal tuo smartwatch, con grafici spettacolari.',
+      'ob8_s':
+          'Battiti, pressione, passi e sonno dal tuo smartwatch, con grafici spettacolari.',
       'ob9_t': 'Home personalizzabile',
-      'ob9_s': 'Componi la tua dashboard: riordina, aggiungi e rimuovi i widget che vuoi.',
+      'ob9_s':
+          'Componi la tua dashboard: riordina, aggiungi e rimuovi i widget che vuoi.',
       'goals': 'Obiettivi',
       'hz_rest': 'Riposo',
       'hz_light': 'Leggero',
@@ -431,7 +433,8 @@ class AppStrings {
       'pause': 'Pause',
       'restart': 'Restart',
       'neon_store': 'Neon Store',
-      'store_banner': 'Neon Store — Unlock exclusive neon skins with glow effects.',
+      'store_banner':
+          'Neon Store — Unlock exclusive neon skins with glow effects.',
       'store_icon_included': 'App icon included',
       'store_unlock_all': 'Unlock all',
       'store_owned': 'Owned',
@@ -461,8 +464,7 @@ class AppStrings {
       'replay_tutorial': 'Replay the tutorial',
       'data': 'Data',
       'clear_all': 'Delete all workouts',
-      'clear_all_msg':
-          'This will permanently delete all workouts. Continue?',
+      'clear_all_msg': 'This will permanently delete all workouts. Continue?',
       'set_pin': 'Set a PIN',
       'pin_hint': 'PIN (4-6 digits)',
       'confirm_pin': 'Confirm PIN',
@@ -617,8 +619,7 @@ class AppStrings {
           'Go to bed and wake up at the same time, even on weekends.',
       'sleep_tip_screens':
           'Avoid screens and bright lights in the hour before bed.',
-      'sleep_tip_caffeine':
-          'No caffeine or alcohol 4-6 hours before bedtime.',
+      'sleep_tip_caffeine': 'No caffeine or alcohol 4-6 hours before bedtime.',
       'sleep_tip_dark':
           'Keep the room dark and quiet: use blackout curtains or a mask.',
       'sleep_tip_temp': 'Keep the room cool (18-20°C) and well aired.',
@@ -669,9 +670,11 @@ class AppStrings {
           'When you change theme, the app icon and dock name adapt (e.g. Zeus theme → ZeusTrack).',
       'dock_name': 'Dock name',
       'ob8_t': 'Health & wearables',
-      'ob8_s': 'Heart rate, blood pressure, steps and sleep from your smartwatch, with stunning charts.',
+      'ob8_s':
+          'Heart rate, blood pressure, steps and sleep from your smartwatch, with stunning charts.',
       'ob9_t': 'Customizable home',
-      'ob9_s': 'Build your dashboard: reorder, add and remove the widgets you want.',
+      'ob9_s':
+          'Build your dashboard: reorder, add and remove the widgets you want.',
       'goals': 'Goals',
       'hz_rest': 'Rest',
       'hz_light': 'Light',
@@ -749,7 +752,8 @@ class AppStrings {
       'pause': 'Pausa',
       'restart': 'Reiniciar',
       'neon_store': 'Neon Store',
-      'store_banner': 'Neon Store — Desbloquea skins neón exclusivas con efecto glow.',
+      'store_banner':
+          'Neon Store — Desbloquea skins neón exclusivas con efecto glow.',
       'store_icon_included': 'Icono de app incluido',
       'store_unlock_all': 'Desbloquear todo',
       'store_owned': 'Desbloqueado',
@@ -939,8 +943,7 @@ class AppStrings {
           'Nada de cafeína ni alcohol 4-6 horas antes de acostarte.',
       'sleep_tip_dark':
           'Mantén la habitación oscura y en silencio: usa cortinas opacas o antifaz.',
-      'sleep_tip_temp':
-          'Mantén la habitación fresca (18-20°C) y ventilada.',
+      'sleep_tip_temp': 'Mantén la habitación fresca (18-20°C) y ventilada.',
       'sleep_guide_open': 'Guía completa',
       'sleep_guide_title': 'Guía del sueño',
       'sleep_guide_intro':
@@ -988,9 +991,11 @@ class AppStrings {
           'Al cambiar de tema, el icono y el nombre en el dock se adaptan (p. ej. tema Zeus → ZeusTrack).',
       'dock_name': 'Nombre en el dock',
       'ob8_t': 'Salud y wearables',
-      'ob8_s': 'Ritmo cardíaco, presión, pasos y sueño desde tu smartwatch, con gráficos espectaculares.',
+      'ob8_s':
+          'Ritmo cardíaco, presión, pasos y sueño desde tu smartwatch, con gráficos espectaculares.',
       'ob9_t': 'Inicio personalizable',
-      'ob9_s': 'Crea tu panel: reordena, añade y quita los widgets que quieras.',
+      'ob9_s':
+          'Crea tu panel: reordena, añade y quita los widgets que quieras.',
       'goals': 'Objetivos',
       'hz_rest': 'Reposo',
       'hz_light': 'Ligero',

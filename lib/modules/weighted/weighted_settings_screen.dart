@@ -162,21 +162,32 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
               borderRadius: BorderRadius.circular(Radii.md),
               border: Border.all(color: c.border),
             ),
-            child: Text('${_fmt(value)} $unit',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    color: c.primary)),
+            child: Text(
+              '${_fmt(value)} $unit',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                color: c.primary,
+              ),
+            ),
           ),
         ),
-        _roundBtn(c, Icons.add_rounded, () => onChanged(value + step),
-            filled: true),
+        _roundBtn(
+          c,
+          Icons.add_rounded,
+          () => onChanged(value + step),
+          filled: true,
+        ),
       ],
     );
   }
 
-  Widget _roundBtn(AppColors c, IconData icon, VoidCallback onTap,
-      {bool filled = false}) {
+  Widget _roundBtn(
+    AppColors c,
+    IconData icon,
+    VoidCallback onTap, {
+    bool filled = false,
+  }) {
     return Material(
       color: filled ? c.primary : c.cardAlt,
       shape: const CircleBorder(),
@@ -194,25 +205,28 @@ class _WeightedSettingsScreenState extends State<WeightedSettingsScreen> {
             shape: BoxShape.circle,
             border: filled ? null : Border.all(color: c.border),
           ),
-          child: Icon(icon,
-              color: filled
-                  ? (c.bg.computeLuminance() > 0.5
-                      ? Colors.white
-                      : Colors.black)
-                  : c.text),
+          child: Icon(
+            icon,
+            color: filled
+                ? (c.bg.computeLuminance() > 0.5 ? Colors.white : Colors.black)
+                : c.text,
+          ),
         ),
       ),
     );
   }
 
   Widget _section(AppColors c, String label) => Padding(
-        padding: const EdgeInsets.only(bottom: Spacing.sm),
-        child: Text(label,
-            style: TextStyle(
-                color: c.primary,
-                fontSize: 15,
-                fontWeight: FontWeight.w800)),
-      );
+    padding: const EdgeInsets.only(bottom: Spacing.sm),
+    child: Text(
+      label,
+      style: TextStyle(
+        color: c.primary,
+        fontSize: 15,
+        fontWeight: FontWeight.w800,
+      ),
+    ),
+  );
 
   String _fmt(double v) =>
       v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toString();

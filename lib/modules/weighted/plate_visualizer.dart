@@ -95,9 +95,10 @@ class _PlatePainter extends CustomPainter {
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromCenter(
-            center: Offset(size.width / 2, cy),
-            width: size.width * 0.9,
-            height: 8),
+          center: Offset(size.width / 2, cy),
+          width: size.width * 0.9,
+          height: 8,
+        ),
         const Radius.circular(4),
       ),
       barPaint,
@@ -106,9 +107,10 @@ class _PlatePainter extends CustomPainter {
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromCenter(
-            center: Offset(size.width / 2, cy),
-            width: centerSleeveW,
-            height: 16),
+          center: Offset(size.width / 2, cy),
+          width: centerSleeveW,
+          height: 16,
+        ),
         const Radius.circular(4),
       ),
       Paint()..color = colors.textMuted.withValues(alpha: 0.8),
@@ -127,12 +129,21 @@ class _PlatePainter extends CustomPainter {
       final animH = h * progress;
       final color = _plateColor(kg, i);
       // Lato destro
-      _drawPlate(canvas, Rect.fromLTWH(xR, cy - animH / 2, plateW, animH),
-          color, kg, i == 0);
+      _drawPlate(
+        canvas,
+        Rect.fromLTWH(xR, cy - animH / 2, plateW, animH),
+        color,
+        kg,
+        i == 0,
+      );
       // Lato sinistro (specchiato)
-      _drawPlate(canvas,
-          Rect.fromLTWH(xL - plateW, cy - animH / 2, plateW, animH), color, kg,
-          i == 0);
+      _drawPlate(
+        canvas,
+        Rect.fromLTWH(xL - plateW, cy - animH / 2, plateW, animH),
+        color,
+        kg,
+        i == 0,
+      );
       xR += plateW + gap;
       xL -= plateW + gap;
     }
@@ -157,7 +168,10 @@ class _PlatePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     canvas.drawArc(
       Rect.fromCircle(center: Offset(cx, 22), radius: 12),
-      3.6, 4.4, false, hookPaint,
+      3.6,
+      4.4,
+      false,
+      hookPaint,
     );
     canvas.drawLine(Offset(cx, 28), Offset(cx, 44), hookPaint);
 
@@ -167,8 +181,10 @@ class _PlatePainter extends CustomPainter {
     final maxKgWidth = size.width * 0.5;
 
     double y = 46;
-    final maxCount =
-        ((size.height - y - 6) / (plateH + gap)).floor().clamp(1, plates.length);
+    final maxCount = ((size.height - y - 6) / (plateH + gap)).floor().clamp(
+      1,
+      plates.length,
+    );
     final shown = plates.take(maxCount).toList();
     for (var i = 0; i < shown.length; i++) {
       final kg = shown[i];
@@ -177,7 +193,11 @@ class _PlatePainter extends CustomPainter {
       final color = _plateColor(kg, i);
       _drawPlate(
         canvas,
-        Rect.fromCenter(center: Offset(cx, y + plateH / 2), width: animW, height: plateH),
+        Rect.fromCenter(
+          center: Offset(cx, y + plateH / 2),
+          width: animW,
+          height: plateH,
+        ),
         color,
         kg,
         false,
@@ -195,8 +215,14 @@ class _PlatePainter extends CustomPainter {
     return 40 + 80 * ratio; // 40..120 px
   }
 
-  void _drawPlate(Canvas canvas, Rect rect, Color color, double kg, bool label,
-      {bool horizontal = false}) {
+  void _drawPlate(
+    Canvas canvas,
+    Rect rect,
+    Color color,
+    double kg,
+    bool label, {
+    bool horizontal = false,
+  }) {
     final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(4));
     canvas.drawRRect(rrect, Paint()..color = color);
     // Sfumatura per dare volume al disco.
@@ -223,15 +249,19 @@ class _PlatePainter extends CustomPainter {
     );
     // Foro centrale (visibile nei dischi mostrati di faccia, cintura).
     if (horizontal && rect.width > 26) {
-      canvas.drawCircle(rect.center, 4,
-          Paint()..color = colors.bg.withValues(alpha: 0.9));
       canvas.drawCircle(
-          rect.center,
-          4,
-          Paint()
-            ..color = Colors.black.withValues(alpha: 0.3)
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1);
+        rect.center,
+        4,
+        Paint()..color = colors.bg.withValues(alpha: 0.9),
+      );
+      canvas.drawCircle(
+        rect.center,
+        4,
+        Paint()
+          ..color = Colors.black.withValues(alpha: 0.3)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1,
+      );
     }
     // Etichetta peso (solo se lo spazio è sufficiente).
     final show = horizontal ? rect.width > 34 : rect.height > 46;
@@ -253,8 +283,10 @@ class _PlatePainter extends CustomPainter {
         canvas.rotate(-1.5708); // -90°
         tp.paint(canvas, Offset(-tp.width / 2, -tp.height / 2));
       } else {
-        tp.paint(canvas,
-            Offset(rect.center.dx - tp.width / 2, rect.center.dy - tp.height / 2));
+        tp.paint(
+          canvas,
+          Offset(rect.center.dx - tp.width / 2, rect.center.dy - tp.height / 2),
+        );
       }
       canvas.restore();
     }
@@ -265,11 +297,17 @@ class _PlatePainter extends CustomPainter {
       text: TextSpan(
         text: '+$extra',
         style: TextStyle(
-            color: colors.textMuted, fontSize: 11, fontWeight: FontWeight.w700),
+          color: colors.textMuted,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+        ),
       ),
       textDirection: TextDirection.ltr,
     )..layout();
-    tp.paint(canvas, Offset(size.width - tp.width - 4, size.height - tp.height - 2));
+    tp.paint(
+      canvas,
+      Offset(size.width - tp.width - 4, size.height - tp.height - 2),
+    );
   }
 
   void _paintEmpty(Canvas canvas, Size size) {
@@ -280,8 +318,10 @@ class _PlatePainter extends CustomPainter {
       ),
       textDirection: TextDirection.ltr,
     )..layout();
-    tp.paint(canvas,
-        Offset(size.width / 2 - tp.width / 2, size.height / 2 - tp.height / 2));
+    tp.paint(
+      canvas,
+      Offset(size.width / 2 - tp.width / 2, size.height / 2 - tp.height / 2),
+    );
   }
 
   String _fmt(double kg) =>
