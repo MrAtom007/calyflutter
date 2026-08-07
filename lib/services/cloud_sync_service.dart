@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'storage_service.dart';
+import 'analytics_service.dart';
+import 'monetization_service.dart';
 
 /// Salvataggio dei progressi sul cloud (Firestore) legato all'account Google.
 ///
@@ -46,7 +48,14 @@ class CloudSyncService {
         accessToken: accessToken,
       );
       final result = await _auth.signInWithCredential(credential);
-      return result.user;
+      final user = result.user;
+      if (user != null) {
+        // Collega identità per telemetria e monetizzazione (no-op se disattivi).
+        AnalyticsService.setUser(user.uid);
+        AnalyticsService.loginCompleted('google');
+        MonetizationService.identify(user.uid);
+      }
+      return user;
     } catch (_) {
       return null;
     }
@@ -57,6 +66,8 @@ class CloudSyncService {
     _debounce?.cancel();
     try {
       await _auth.signOut();
+      AnalyticsService.setUser(null);
+      MonetizationService.signOut();
     } catch (_) {}
   }
 

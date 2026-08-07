@@ -23,6 +23,8 @@ import 'state/draft_provider.dart';
 import 'services/notification_service.dart';
 import 'services/feedback_service.dart';
 import 'services/home_widget_service.dart';
+import 'services/analytics_service.dart';
+import 'services/monetization_service.dart';
 import 'data/ranks.dart';
 import 'theme/app_theme.dart';
 import 'app.dart';
@@ -48,7 +50,14 @@ void main() async {
       androidProvider:
           kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
     );
+    // Telemetria di prodotto + crash reporting (no-op se non configurato/in debug).
+    await AnalyticsService.init();
+    AnalyticsService.appOpen();
   } catch (_) {}
+
+  // Monetizzazione reale (RevenueCat): attiva solo se è presente una API key
+  // passata via --dart-define, altrimenti resta un no-op e si usa lo sblocco locale.
+  await MonetizationService.init();
 
   final theme = ThemeProvider();
   final discipline = DisciplineProvider();
@@ -135,6 +144,9 @@ class CaliStrackApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
+          ],
+          navigatorObservers: [
+            if (AnalyticsService.observer != null) AnalyticsService.observer!,
           ],
           home: const AppGate(),
         );
