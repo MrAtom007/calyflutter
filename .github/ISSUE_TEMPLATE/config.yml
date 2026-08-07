@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Domanda o supporto
+    url: https://github.com/MrAtom007/calyflutter/discussions
+    about: Per domande generali usa le Discussions invece delle issue.
