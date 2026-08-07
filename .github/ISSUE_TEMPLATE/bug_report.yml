@@ -1,0 +1,62 @@
+name: "\U0001F41B Bug report"
+description: Segnala un problema o un comportamento inatteso
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie per la segnalazione! Compila i campi sotto per aiutarci a riprodurre il problema.
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione del bug
+      description: Cosa succede? Cosa ti aspettavi invece?
+      placeholder: Quando apro X, l'app fa Y invece di Z.
+    validations:
+      required: true
+  - type: textarea
+    id: riproduzione
+    attributes:
+      label: Passi per riprodurre
+      description: Sequenza esatta per riprodurre il problema.
+      placeholder: |
+        1. Vai su '...'
+        2. Tocca su '...'
+        3. Osserva l'errore
+    validations:
+      required: true
+  - type: textarea
+    id: atteso
+    attributes:
+      label: Comportamento atteso
+    validations:
+      required: false
+  - type: input
+    id: dispositivo
+    attributes:
+      label: Dispositivo e OS
+      placeholder: "es. Pixel 7 · Android 15"
+    validations:
+      required: true
+  - type: input
+    id: versione
+    attributes:
+      label: Versione app
+      placeholder: "es. 4.14.0+33 (vedi Impostazioni)"
+    validations:
+      required: false
+  - type: textarea
+    id: log
+    attributes:
+      label: Log / screenshot
+      description: Allega screenshot o log rilevanti (nascondi dati sensibili).
+    validations:
+      required: false
+  - type: checkboxes
+    id: conferme
+    attributes:
+      label: Conferme
+      options:
+        - label: Ho cercato tra le issue esistenti e non è un duplicato
+          required: true

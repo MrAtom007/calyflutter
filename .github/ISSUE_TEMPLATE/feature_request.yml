@@ -1,0 +1,46 @@
+name: "\U00002728 Feature request"
+description: Proponi una nuova funzionalità o un miglioramento
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Problema / motivazione
+      description: Quale esigenza risolve? Perché è utile?
+      placeholder: Mi piacerebbe poter... perché...
+    validations:
+      required: true
+  - type: textarea
+    id: soluzione
+    attributes:
+      label: Soluzione proposta
+      description: Come immagini che funzioni?
+    validations:
+      required: true
+  - type: textarea
+    id: alternative
+    attributes:
+      label: Alternative considerate
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area interessata
+      options:
+        - Allenamenti / Diario
+        - Progressi / Gamification
+        - Salute / Wearable
+        - Personalizzazione / Temi
+        - Store / Monetizzazione
+        - Altro
+    validations:
+      required: false
+  - type: checkboxes
+    id: conferme
+    attributes:
+      label: Conferme
+      options:
+        - label: Ho cercato tra le issue esistenti e non è un duplicato
+          required: true
