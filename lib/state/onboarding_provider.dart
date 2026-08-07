@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/storage_service.dart';
+import '../services/analytics_service.dart';
 
 /// Stato onboarding: null = in caricamento.
 class OnboardingProvider extends ChangeNotifier {
@@ -15,6 +16,7 @@ class OnboardingProvider extends ChangeNotifier {
     await StorageService.setOnboarded(true);
     _onboarded = true;
     notifyListeners();
+    AnalyticsService.onboardingCompleted();
   }
 
   Future<void> replay() async {
