@@ -26,10 +26,14 @@ class MonetizationService {
 
   /// API key iniettate a build-time (nessun segreto nel repo):
   ///   flutter build appbundle --dart-define=RC_ANDROID_KEY=goog_xxx
-  static const String _androidKey =
-      String.fromEnvironment('RC_ANDROID_KEY', defaultValue: '');
-  static const String _iosKey =
-      String.fromEnvironment('RC_IOS_KEY', defaultValue: '');
+  static const String _androidKey = String.fromEnvironment(
+    'RC_ANDROID_KEY',
+    defaultValue: '',
+  );
+  static const String _iosKey = String.fromEnvironment(
+    'RC_IOS_KEY',
+    defaultValue: '',
+  );
 
   static bool _configured = false;
   static bool _hasPremium = false;
@@ -52,7 +56,8 @@ class MonetizationService {
     if (_configured || !isAvailable) return;
     try {
       await Purchases.setLogLevel(
-          kReleaseMode ? LogLevel.error : LogLevel.debug);
+        kReleaseMode ? LogLevel.error : LogLevel.debug,
+      );
       await Purchases.configure(
         PurchasesConfiguration(_apiKey)..appUserID = appUserId,
       );

@@ -34,8 +34,9 @@ class AnalyticsService {
       // Niente telemetria/crash in debug: solo build di release.
       final collect = kReleaseMode;
       await _analytics!.setAnalyticsCollectionEnabled(collect);
-      await FirebaseCrashlytics.instance
-          .setCrashlyticsCollectionEnabled(collect);
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+        collect,
+      );
 
       // Instrada gli errori Flutter e async verso Crashlytics.
       final flutterOnError = FlutterError.onError;
@@ -55,8 +56,7 @@ class AnalyticsService {
   }
 
   /// Logga un evento custom. Sanitizza i nomi parametro (solo eventi definiti qui).
-  static Future<void> log(String name,
-      [Map<String, Object>? params]) async {
+  static Future<void> log(String name, [Map<String, Object>? params]) async {
     if (!_enabled) return;
     try {
       await _analytics?.logEvent(name: name, parameters: params);
@@ -82,12 +82,19 @@ class AnalyticsService {
   }
 
   /// Registra un errore non fatale (es. eccezione catturata in un try/catch).
-  static Future<void> recordError(Object error, StackTrace? stack,
-      {String? reason}) async {
+  static Future<void> recordError(
+    Object error,
+    StackTrace? stack, {
+    String? reason,
+  }) async {
     if (!_enabled) return;
     try {
-      await FirebaseCrashlytics.instance
-          .recordError(error, stack, reason: reason, fatal: false);
+      await FirebaseCrashlytics.instance.recordError(
+        error,
+        stack,
+        reason: reason,
+        fatal: false,
+      );
     } catch (_) {}
   }
 
@@ -100,32 +107,37 @@ class AnalyticsService {
     required int sets,
     required int points,
     bool single = false,
-  }) =>
-      log('workout_saved', {
-        'discipline': discipline,
-        'sets': sets,
-        'points': points,
-        'single': single,
-      });
+  }) => log('workout_saved', {
+    'discipline': discipline,
+    'sets': sets,
+    'points': points,
+    'single': single,
+  });
 
   static Future<void> onboardingCompleted() => log('onboarding_completed');
 
   static Future<void> levelUp(int level, String rankId) =>
       log('level_up', {'level': level, 'rank': rankId});
 
-  static Future<void> storeUnlock(String itemId,
-      {required bool paid, double? price}) {
+  static Future<void> storeUnlock(
+    String itemId, {
+    required bool paid,
+    double? price,
+  }) {
     final params = <String, Object>{'item': itemId, 'paid': paid};
     if (price != null) params['price'] = price;
     return log('store_unlock', params);
   }
 
-  static Future<void> purchase(String productId, double price, String currency) =>
-      log('purchase_completed', {
-        'product': productId,
-        'price': price,
-        'currency': currency,
-      });
+  static Future<void> purchase(
+    String productId,
+    double price,
+    String currency,
+  ) => log('purchase_completed', {
+    'product': productId,
+    'price': price,
+    'currency': currency,
+  });
 
   static Future<void> loginCompleted(String method) =>
       log('login_completed', {'method': method});

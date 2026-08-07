@@ -3,11 +3,11 @@ import 'package:calistrack/models/workout.dart';
 import 'package:calistrack/data/ranks.dart';
 
 Workout _w(String discipline, List<WorkoutSet> sets) => Workout(
-      id: 't',
-      date: DateTime(2026, 1, 1),
-      discipline: discipline,
-      sets: sets,
-    );
+  id: 't',
+  date: DateTime(2026, 1, 1),
+  discipline: discipline,
+  sets: sets,
+);
 
 void main() {
   group('workoutPoints', () {
@@ -29,9 +29,7 @@ void main() {
     });
 
     test('set vuoto non contribuisce', () {
-      final w = _w('calisthenics', const [
-        WorkoutSet(exerciseId: 'x'),
-      ]);
+      final w = _w('calisthenics', const [WorkoutSet(exerciseId: 'x')]);
       expect(workoutPoints(w), 0);
     });
   });
