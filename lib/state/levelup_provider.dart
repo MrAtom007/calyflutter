@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/ranks.dart';
+import '../services/analytics_service.dart';
 
 /// Segnala un level up da mostrare come overlay.
 class LevelUpProvider extends ChangeNotifier {
@@ -10,6 +11,7 @@ class LevelUpProvider extends ChangeNotifier {
     rank = r;
     level = lvl;
     notifyListeners();
+    AnalyticsService.levelUp(lvl, r.id);
   }
 
   void dismiss() {
