@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/workout.dart';
 import '../services/storage_service.dart';
 import '../services/cloud_sync_service.dart';
+import '../services/analytics_service.dart';
+import '../data/ranks.dart';
 
 /// Cache reattiva degli allenamenti.
 class WorkoutProvider extends ChangeNotifier {
@@ -23,6 +25,12 @@ class WorkoutProvider extends ChangeNotifier {
     _all = await StorageService.saveWorkout(w);
     notifyListeners();
     CloudSyncService.backupSoon();
+    AnalyticsService.workoutSaved(
+      discipline: w.discipline,
+      sets: w.sets.length,
+      points: workoutPoints(w).round(),
+      single: w.single,
+    );
   }
 
   Future<void> update(Workout w) async {

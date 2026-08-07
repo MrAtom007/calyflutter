@@ -7,6 +7,8 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
     // Google Services (google-services.json) per Google Sign-In / Firebase.
     id("com.google.gms.google-services")
+    // Crashlytics: upload dei simboli di mapping per stacktrace leggibili.
+    id("com.google.firebase.crashlytics")
 }
 
 // Carica le credenziali di firma da android/key.properties (non versionato).

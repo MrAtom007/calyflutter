@@ -4,6 +4,8 @@ import '../state/theme_provider.dart';
 import '../state/locale_provider.dart';
 import '../services/feedback_service.dart';
 import '../services/app_icon_service.dart';
+import '../services/monetization_service.dart';
+import '../services/analytics_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/emblem.dart';
 
@@ -76,11 +78,19 @@ class StoreScreen extends StatelessWidget {
               width: double.infinity,
               child: FilledButton.icon(
                 style: FilledButton.styleFrom(backgroundColor: c.primary),
-                onPressed: () {
+                onPressed: () async {
+                  final themeProvider = context.read<ThemeProvider>();
                   FeedbackService.onUnlock();
-                  context
-                      .read<ThemeProvider>()
-                      .unlockMany(locked.map((s) => s.id));
+                  // Se RevenueCat è configurato (API key presente) avvia un
+                  // acquisto reale; altrimenti mantiene lo sblocco locale (demo).
+                  if (MonetizationService.isAvailable) {
+                    final ok = await MonetizationService.buyPremium();
+                    if (!ok) return; // acquisto annullato o fallito
+                    AnalyticsService.storeUnlock('all', paid: true, price: 9.99);
+                  } else {
+                    AnalyticsService.storeUnlock('all', paid: false);
+                  }
+                  themeProvider.unlockMany(locked.map((s) => s.id));
                 },
                 icon: const Icon(Icons.lock_open_rounded, size: 18),
                 label: Text('${t('store_unlock_all')}  ·  9,99 €'),
