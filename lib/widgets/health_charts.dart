@@ -28,10 +28,8 @@ class _HeartWaveState extends State<HeartWave>
   @override
   void initState() {
     super.initState();
-    _c = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..repeat();
+    _c = AnimationController(vsync: this, duration: const Duration(seconds: 3))
+      ..repeat();
   }
 
   @override
@@ -118,11 +116,7 @@ class _WavePainter extends CustomPainter {
     final headY = ecg
         ? mid - _ecg(headLocal) * (size.height * 0.4)
         : mid - sin(headLocal * 2 * pi) * (size.height * 0.32);
-    canvas.drawCircle(
-      Offset(headX, headY),
-      3.2,
-      Paint()..color = color,
-    );
+    canvas.drawCircle(Offset(headX, headY), 3.2, Paint()..color = color);
     canvas.drawCircle(
       Offset(headX, headY),
       7,
@@ -271,7 +265,7 @@ class Sparkline extends StatelessWidget {
             LineChartBarData(
               spots: [
                 for (int i = 0; i < values.length; i++)
-                  FlSpot(i.toDouble(), values[i])
+                  FlSpot(i.toDouble(), values[i]),
               ],
               isCurved: true,
               curveSmoothness: 0.35,
@@ -321,24 +315,24 @@ class DualLineChart extends StatelessWidget {
     final minY = all.reduce(min);
     final pad = (maxY - minY).abs() * 0.15 + 2;
     LineChartBarData bar(List<double> v, Color c) => LineChartBarData(
-          spots: [for (int i = 0; i < v.length; i++) FlSpot(i.toDouble(), v[i])],
-          isCurved: true,
-          color: c,
-          barWidth: 2.8,
-          dotData: FlDotData(
-            show: true,
-            getDotPainter: (s, p, b, i) =>
-                FlDotCirclePainter(radius: 2.6, color: c, strokeWidth: 0),
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [c.withValues(alpha: 0.18), c.withValues(alpha: 0.0)],
-            ),
-          ),
-        );
+      spots: [for (int i = 0; i < v.length; i++) FlSpot(i.toDouble(), v[i])],
+      isCurved: true,
+      color: c,
+      barWidth: 2.8,
+      dotData: FlDotData(
+        show: true,
+        getDotPainter: (s, p, b, i) =>
+            FlDotCirclePainter(radius: 2.6, color: c, strokeWidth: 0),
+      ),
+      belowBarData: BarAreaData(
+        show: true,
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [c.withValues(alpha: 0.18), c.withValues(alpha: 0.0)],
+        ),
+      ),
+    );
     return SizedBox(
       height: height,
       child: LineChart(
@@ -360,17 +354,23 @@ class DualLineChart extends StatelessWidget {
             touchTooltipData: LineTouchTooltipData(
               getTooltipColor: (_) => Colors.black.withValues(alpha: 0.8),
               getTooltipItems: (spots) => spots
-                  .map((s) => LineTooltipItem(
-                        s.y.round().toString(),
-                        TextStyle(
-                            color: s.bar.color ?? Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12),
-                      ))
+                  .map(
+                    (s) => LineTooltipItem(
+                      s.y.round().toString(),
+                      TextStyle(
+                        color: s.bar.color ?? Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
           ),
-          lineBarsData: [bar(primary, colorPrimary), bar(secondary, colorSecondary)],
+          lineBarsData: [
+            bar(primary, colorPrimary),
+            bar(secondary, colorSecondary),
+          ],
         ),
       ),
     );

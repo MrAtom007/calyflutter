@@ -27,7 +27,6 @@ jobs:
 
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed lib test
-        continue-on-error: true
 
       - name: Static analysis
         run: flutter analyze

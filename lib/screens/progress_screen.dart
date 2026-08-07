@@ -21,8 +21,7 @@ class ProgressScreen extends StatelessWidget {
     final c = context.watch<ThemeProvider>().colors;
     final t = context.watch<LocaleProvider>().t;
     final discipline = context.watch<DisciplineProvider>().discipline;
-    final workouts =
-        context.watch<WorkoutProvider>().forDiscipline(discipline);
+    final workouts = context.watch<WorkoutProvider>().forDiscipline(discipline);
     final isGym = discipline == 'gym';
 
     // Statistiche principali
@@ -39,15 +38,23 @@ class ProgressScreen extends StatelessWidget {
 
     // Ultimi 7 giorni
     final now = DateTime.now();
-    final days = List.generate(7, (i) => DateTime(now.year, now.month, now.day)
-        .subtract(Duration(days: 6 - i)));
+    final days = List.generate(
+      7,
+      (i) => DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).subtract(Duration(days: 6 - i)),
+    );
     final dayFmt = DateFormat('E', 'it_IT');
     final dayCounts = days.map((d) {
       return workouts
-          .where((w) =>
-              w.date.year == d.year &&
-              w.date.month == d.month &&
-              w.date.day == d.day)
+          .where(
+            (w) =>
+                w.date.year == d.year &&
+                w.date.month == d.month &&
+                w.date.day == d.day,
+          )
           .length
           .toDouble();
     }).toList();
@@ -56,7 +63,9 @@ class ProgressScreen extends StatelessWidget {
     final volById = <String, double>{};
     for (final w in workouts) {
       for (final s in w.sets) {
-        final v = isGym ? (s.weight ?? 0) * (s.reps ?? 0) : (s.reps ?? 0).toDouble();
+        final v = isGym
+            ? (s.weight ?? 0) * (s.reps ?? 0)
+            : (s.reps ?? 0).toDouble();
         volById[s.exerciseId] = (volById[s.exerciseId] ?? 0) + v;
       }
     }
@@ -70,7 +79,9 @@ class ProgressScreen extends StatelessWidget {
     final series = ordered.map((w) {
       double v = 0;
       for (final s in w.sets) {
-        v += isGym ? (s.weight ?? 0) * (s.reps ?? 0) : (s.reps ?? 0) + (s.sec ?? 0);
+        v += isGym
+            ? (s.weight ?? 0) * (s.reps ?? 0)
+            : (s.reps ?? 0) + (s.sec ?? 0);
       }
       return v;
     }).toList();
@@ -86,16 +97,18 @@ class ProgressScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: _stat(
-                    c,
-                    isGym ? '${totVolume.toInt()}' : '$totReps',
-                    isGym ? t('volume_kg') : t('total_reps')),
+                  c,
+                  isGym ? '${totVolume.toInt()}' : '$totReps',
+                  isGym ? t('volume_kg') : t('total_reps'),
+                ),
               ),
               const SizedBox(width: Spacing.sm),
               Expanded(
                 child: _stat(
-                    c,
-                    isGym ? '${workouts.length}' : "${(totSec / 60).round()}'",
-                    isGym ? t('sessions') : t('static_holds')),
+                  c,
+                  isGym ? '${workouts.length}' : "${(totSec / 60).round()}'",
+                  isGym ? t('sessions') : t('static_holds'),
+                ),
               ),
             ],
           ),
@@ -122,32 +135,39 @@ class ProgressScreen extends StatelessWidget {
               maxColumns: 2,
               runSpacing: 8,
               children: top
-                  .map((e) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                  child: Text(getExercise(e.key)?.name ?? e.key,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis)),
-                              Text('${e.value.toInt()}',
-                                  style: TextStyle(color: c.textMuted)),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: LinearProgressIndicator(
-                              value: e.value / maxVol,
-                              minHeight: 8,
-                              backgroundColor: c.cardAlt,
-                              valueColor: AlwaysStoppedAnimation(c.primary),
+                  .map(
+                    (e) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                getExercise(e.key)?.name ?? e.key,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
+                            Text(
+                              '${e.value.toInt()}',
+                              style: TextStyle(color: c.textMuted),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: e.value / maxVol,
+                            minHeight: 8,
+                            backgroundColor: c.cardAlt,
+                            valueColor: AlwaysStoppedAnimation(c.primary),
                           ),
-                        ],
-                      ))
+                        ),
+                      ],
+                    ),
+                  )
                   .toList(),
             ),
             const SizedBox(height: Spacing.lg),
@@ -181,33 +201,38 @@ class ProgressScreen extends StatelessWidget {
 
   void _export(BuildContext context, List<Workout> w, String fmt) async {
     if (w.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nessun dato da esportare')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Nessun dato da esportare')));
       return;
     }
     await ExportService.export(w, fmt);
   }
 
-  Widget _sectionTitle(AppColors c, String t) => Text(t,
-      style: TextStyle(color: c.textMuted, fontWeight: FontWeight.w700));
+  Widget _sectionTitle(AppColors c, String t) => Text(
+    t,
+    style: TextStyle(color: c.textMuted, fontWeight: FontWeight.w700),
+  );
 
   Widget _stat(AppColors c, String value, String label) => Container(
-        padding: const EdgeInsets.all(Spacing.md),
-        decoration: BoxDecoration(
-          color: c.card,
-          borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: c.border),
+    padding: const EdgeInsets.all(Spacing.md),
+    decoration: BoxDecoration(
+      color: c.card,
+      borderRadius: BorderRadius.circular(Radii.md),
+      border: Border.all(color: c.border),
+    ),
+    child: Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            color: c.primary,
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
+          ),
         ),
-        child: Column(
-          children: [
-            Text(value,
-                style: TextStyle(
-                    color: c.primary,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800)),
-            Text(label, style: TextStyle(color: c.textMuted, fontSize: 12)),
-          ],
-        ),
-      );
+        Text(label, style: TextStyle(color: c.textMuted, fontSize: 12)),
+      ],
+    ),
+  );
 }

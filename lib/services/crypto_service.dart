@@ -30,8 +30,12 @@ class CryptoService {
       hex = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
       await _secure.write(key: _keyName, value: hex);
     }
-    final keyBytes = Uint8List.fromList(List<int>.generate(
-        32, (i) => int.parse(hex!.substring(i * 2, i * 2 + 2), radix: 16)));
+    final keyBytes = Uint8List.fromList(
+      List<int>.generate(
+        32,
+        (i) => int.parse(hex!.substring(i * 2, i * 2 + 2), radix: 16),
+      ),
+    );
     return enc.Key(keyBytes);
   }
 

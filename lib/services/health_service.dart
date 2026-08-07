@@ -99,24 +99,24 @@ class HealthService {
       // Elenco dei dispositivi/app che hanno scritto dati (per la scelta UI).
       final available = <String>{
         for (final p in rawPoints)
-          if (p.sourceName.trim().isNotEmpty) p.sourceName.trim()
-      }.toList()
-        ..sort();
+          if (p.sourceName.trim().isNotEmpty) p.sourceName.trim(),
+      }.toList()..sort();
 
       // Filtra per sorgente selezionata, se valida e presente.
       final effectiveSource =
           (selectedSource != null && available.contains(selectedSource))
-              ? selectedSource
-              : null;
+          ? selectedSource
+          : null;
       final points = effectiveSource == null
           ? rawPoints
-          : rawPoints.where((p) => p.sourceName.trim() == effectiveSource).toList();
+          : rawPoints
+                .where((p) => p.sourceName.trim() == effectiveSource)
+                .toList();
       if (points.isEmpty) return null;
 
-      double? num(HealthDataPoint p) =>
-          p.value is NumericHealthValue
-              ? (p.value as NumericHealthValue).numericValue.toDouble()
-              : null;
+      double? num(HealthDataPoint p) => p.value is NumericHealthValue
+          ? (p.value as NumericHealthValue).numericValue.toDouble()
+          : null;
 
       List<HealthDataPoint> byType(HealthDataType t) =>
           points.where((p) => p.type == t).toList()
@@ -148,20 +148,34 @@ class HealthService {
         final today = [
           for (final p in pts)
             if (num(p) != null && p.dateFrom.isAfter(todayStart))
-              HealthSample(p.dateFrom, num(p)!)
+              HealthSample(p.dateFrom, num(p)!),
         ];
-        series[m] = MetricSeries(metric: m, today: today, daily: _dailyAvg(pts, num));
+        series[m] = MetricSeries(
+          metric: m,
+          today: today,
+          daily: _dailyAvg(pts, num),
+        );
       }
 
-      simpleDaily(HealthMetric.restingHeartRate, HealthDataType.RESTING_HEART_RATE);
-      simpleDaily(HealthMetric.hrv, HealthDataType.HEART_RATE_VARIABILITY_RMSSD);
+      simpleDaily(
+        HealthMetric.restingHeartRate,
+        HealthDataType.RESTING_HEART_RATE,
+      );
+      simpleDaily(
+        HealthMetric.hrv,
+        HealthDataType.HEART_RATE_VARIABILITY_RMSSD,
+      );
       simpleDaily(HealthMetric.spo2, HealthDataType.BLOOD_OXYGEN);
 
       // Passi e calorie: somma giornaliera.
       void dailySum(HealthMetric m, HealthDataType t) {
         final pts = byType(t);
         if (pts.isEmpty) return;
-        series[m] = MetricSeries(metric: m, today: const [], daily: _dailySum(pts, num));
+        series[m] = MetricSeries(
+          metric: m,
+          today: const [],
+          daily: _dailySum(pts, num),
+        );
       }
 
       dailySum(HealthMetric.steps, HealthDataType.STEPS);
@@ -183,7 +197,13 @@ class HealthService {
               break;
             }
           }
-          daily.add(HealthSample(s.dateFrom, sv, value2: match != null ? num(match) : null));
+          daily.add(
+            HealthSample(
+              s.dateFrom,
+              sv,
+              value2: match != null ? num(match) : null,
+            ),
+          );
         }
         series[HealthMetric.bloodPressure] = MetricSeries(
           metric: HealthMetric.bloodPressure,
@@ -203,13 +223,22 @@ class HealthService {
         }
         final daily = [
           for (final e in byDay.entries)
-            HealthSample(DateTime.parse(e.key.replaceAllMapped(
-                RegExp(r'(\d+)-(\d+)-(\d+)'),
-                (m) => '${m[1]}-${m[2]!.padLeft(2, '0')}-${m[3]!.padLeft(2, '0')}')),
-                e.value / 60.0)
+            HealthSample(
+              DateTime.parse(
+                e.key.replaceAllMapped(
+                  RegExp(r'(\d+)-(\d+)-(\d+)'),
+                  (m) =>
+                      '${m[1]}-${m[2]!.padLeft(2, '0')}-${m[3]!.padLeft(2, '0')}',
+                ),
+              ),
+              e.value / 60.0,
+            ),
         ]..sort((a, b) => a.time.compareTo(b.time));
-        series[HealthMetric.sleep] =
-            MetricSeries(metric: HealthMetric.sleep, today: const [], daily: daily);
+        series[HealthMetric.sleep] = MetricSeries(
+          metric: HealthMetric.sleep,
+          today: const [],
+          daily: daily,
+        );
       }
 
       if (series.isEmpty) return null;
@@ -226,7 +255,9 @@ class HealthService {
   }
 
   static List<HealthSample> _dailyAvg(
-      List<HealthDataPoint> pts, double? Function(HealthDataPoint) num) {
+    List<HealthDataPoint> pts,
+    double? Function(HealthDataPoint) num,
+  ) {
     final byDay = <String, List<double>>{};
     for (final p in pts) {
       final v = num(p);
@@ -237,15 +268,21 @@ class HealthService {
     final out = <HealthSample>[];
     byDay.forEach((k, vals) {
       final parts = k.split('-').map(int.parse).toList();
-      out.add(HealthSample(DateTime(parts[0], parts[1], parts[2]),
-          vals.reduce((a, b) => a + b) / vals.length));
+      out.add(
+        HealthSample(
+          DateTime(parts[0], parts[1], parts[2]),
+          vals.reduce((a, b) => a + b) / vals.length,
+        ),
+      );
     });
     out.sort((a, b) => a.time.compareTo(b.time));
     return out;
   }
 
   static List<HealthSample> _dailySum(
-      List<HealthDataPoint> pts, double? Function(HealthDataPoint) num) {
+    List<HealthDataPoint> pts,
+    double? Function(HealthDataPoint) num,
+  ) {
     final byDay = <String, double>{};
     for (final p in pts) {
       final v = num(p);

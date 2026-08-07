@@ -60,7 +60,12 @@ final List<Exercise> gymExercises = [
   _e('back-extension', 'Iperestensioni', 'Core', 'Base'),
   // Petto (extra)
   _e('cable-crossover', 'Cable crossover', 'Petto', 'Base'),
-  _e('incline-db-press', 'Distensioni inclinate manubri', 'Petto', 'Intermedio'),
+  _e(
+    'incline-db-press',
+    'Distensioni inclinate manubri',
+    'Petto',
+    'Intermedio',
+  ),
   _e('machine-press', 'Chest press machine', 'Petto', 'Base'),
   _e('svend-press', 'Svend press', 'Petto', 'Base'),
   // Schiena (extra)
@@ -91,5 +96,10 @@ final List<Exercise> gymExercises = [
 ];
 
 const List<String> gymCategories = [
-  'Petto', 'Schiena', 'Gambe', 'Spalle', 'Braccia', 'Core'
+  'Petto',
+  'Schiena',
+  'Gambe',
+  'Spalle',
+  'Braccia',
+  'Core',
 ];

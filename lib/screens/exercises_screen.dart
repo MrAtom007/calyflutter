@@ -33,8 +33,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     final filtered = _query.isEmpty
         ? library
         : library
-            .where((e) => e.name.toLowerCase().contains(_query.toLowerCase()))
-            .toList();
+              .where((e) => e.name.toLowerCase().contains(_query.toLowerCase()))
+              .toList();
 
     return Scaffold(
       appBar: AppBar(title: Text(t('library'))),
@@ -53,7 +53,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                 prefixIcon: const Icon(Icons.search),
                 isDense: true,
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(Radii.md)),
+                  borderRadius: BorderRadius.circular(Radii.md),
+                ),
               ),
             ),
           ),
@@ -64,8 +65,10 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
               children: [
                 if (discipline == 'calisthenics') ...[
                   _SkillTreeBanner(
-                    onTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const SkillsScreen())),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SkillsScreen()),
+                    ),
                   ),
                   const SizedBox(height: Spacing.sm),
                 ],
@@ -81,7 +84,11 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   }
 
   List<Widget> _buildCategory(
-      BuildContext context, String cat, List<Exercise> list, AppColors c) {
+    BuildContext context,
+    String cat,
+    List<Exercise> list,
+    AppColors c,
+  ) {
     final items = list.where((e) => e.category == cat).toList();
     if (items.isEmpty) return [];
     return [
@@ -91,9 +98,10 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           children: [
             Icon(categoryIcon(cat), color: c.primary, size: 18),
             const SizedBox(width: 8),
-            Text('$cat (${items.length})',
-                style: TextStyle(
-                    color: c.textMuted, fontWeight: FontWeight.w700)),
+            Text(
+              '$cat (${items.length})',
+              style: TextStyle(color: c.textMuted, fontWeight: FontWeight.w700),
+            ),
           ],
         ),
       ),
@@ -101,40 +109,49 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
         minTileWidth: 340,
         maxColumns: 2,
         children: items
-            .map((ex) => Card(
-                  color: c.card,
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Radii.md),
-                    side: BorderSide(color: c.border),
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: c.primary.withValues(alpha: 0.14),
-                      child: Icon(categoryIcon(ex.category),
-                          color: c.primary, size: 20),
-                    ),
-                    title: Text(ex.name),
-                    subtitle:
-                        Text(_meta(ex), style: TextStyle(color: c.textMuted)),
-                    trailing: ex.unit == 'sec'
-                        ? IconButton(
-                            icon: Icon(Icons.timer_outlined, color: c.primary),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        TimerScreen(exerciseName: ex.name))),
-                          )
-                        : Icon(Icons.chevron_right, color: c.textMuted),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                              ExerciseDetailScreen(exerciseId: ex.id)),
+            .map(
+              (ex) => Card(
+                color: c.card,
+                margin: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Radii.md),
+                  side: BorderSide(color: c.border),
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: c.primary.withValues(alpha: 0.14),
+                    child: Icon(
+                      categoryIcon(ex.category),
+                      color: c.primary,
+                      size: 20,
                     ),
                   ),
-                ))
+                  title: Text(ex.name),
+                  subtitle: Text(
+                    _meta(ex),
+                    style: TextStyle(color: c.textMuted),
+                  ),
+                  trailing: ex.unit == 'sec'
+                      ? IconButton(
+                          icon: Icon(Icons.timer_outlined, color: c.primary),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  TimerScreen(exerciseName: ex.name),
+                            ),
+                          ),
+                        )
+                      : Icon(Icons.chevron_right, color: c.textMuted),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ExerciseDetailScreen(exerciseId: ex.id),
+                    ),
+                  ),
+                ),
+              ),
+            )
             .toList(),
       ),
     ];
@@ -144,8 +161,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     final unit = ex.unit == 'weight'
         ? 'kg×reps'
         : ex.unit == 'sec'
-            ? 'secondi'
-            : 'ripetizioni';
+        ? 'secondi'
+        : 'ripetizioni';
     return '${ex.level} · $unit';
   }
 }
@@ -186,9 +203,13 @@ class _SkillTreeBanner extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(t('skills_open'),
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w800)),
+              child: Text(
+                t('skills_open'),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ),
             Icon(Icons.chevron_right_rounded, color: c.textMuted),
           ],

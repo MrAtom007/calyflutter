@@ -14,10 +14,26 @@ class StoreScreen extends StatelessWidget {
 
   // Temi considerati "leggendari" (gli altri premium sono palette Neon).
   static const _legendaryIds = {
-    'spartacus', 'kratos', 'ulisse', 'zeus', 'cyberpunk',
-    'valkyrie', 'ronin', 'anubis', 'achille', 'leonida', 'poseidon',
-    'ercole', 'odino', 'ra', 'ade',
-    'cavaliere', 'cerberus', 'igris', 'sukuna', 'toji',
+    'spartacus',
+    'kratos',
+    'ulisse',
+    'zeus',
+    'cyberpunk',
+    'valkyrie',
+    'ronin',
+    'anubis',
+    'achille',
+    'leonida',
+    'poseidon',
+    'ercole',
+    'odino',
+    'ra',
+    'ade',
+    'cavaliere',
+    'cerberus',
+    'igris',
+    'sukuna',
+    'toji',
   };
 
   @override
@@ -27,8 +43,9 @@ class StoreScreen extends StatelessWidget {
     final t = context.watch<LocaleProvider>().t;
 
     final premium = themeList.where((s) => s.premium).toList();
-    final legendary = premium.where((s) => _legendaryIds.contains(s.id)).toList()
-      ..sort((a, b) => a.name.compareTo(b.name));
+    final legendary =
+        premium.where((s) => _legendaryIds.contains(s.id)).toList()
+          ..sort((a, b) => a.name.compareTo(b.name));
     final neon = premium.where((s) => !_legendaryIds.contains(s.id)).toList()
       ..sort((a, b) => a.name.compareTo(b.name));
 
@@ -50,15 +67,21 @@ class StoreScreen extends StatelessWidget {
             ...neon.map((s) => _tile(context, theme, c, t.call, s)),
           ],
           const SizedBox(height: Spacing.md),
-          Text(t('demo_purchases'),
-              style: TextStyle(color: c.textMuted, fontSize: 12)),
+          Text(
+            t('demo_purchases'),
+            style: TextStyle(color: c.textMuted, fontSize: 12),
+          ),
         ],
       ),
     );
   }
 
-  Widget _banner(BuildContext context, AppColors c, String Function(String) t,
-      List<AppSkin> locked) {
+  Widget _banner(
+    BuildContext context,
+    AppColors c,
+    String Function(String) t,
+    List<AppSkin> locked,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: Spacing.md),
       padding: const EdgeInsets.all(Spacing.md),
@@ -70,8 +93,10 @@ class StoreScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(t('store_banner'),
-              style: TextStyle(color: c.text, fontWeight: FontWeight.w600)),
+          Text(
+            t('store_banner'),
+            style: TextStyle(color: c.text, fontWeight: FontWeight.w600),
+          ),
           if (locked.isNotEmpty) ...[
             const SizedBox(height: Spacing.sm),
             SizedBox(
@@ -86,7 +111,11 @@ class StoreScreen extends StatelessWidget {
                   if (MonetizationService.isAvailable) {
                     final ok = await MonetizationService.buyPremium();
                     if (!ok) return; // acquisto annullato o fallito
-                    AnalyticsService.storeUnlock('all', paid: true, price: 9.99);
+                    AnalyticsService.storeUnlock(
+                      'all',
+                      paid: true,
+                      price: 9.99,
+                    );
                   } else {
                     AnalyticsService.storeUnlock('all', paid: false);
                   }
@@ -107,28 +136,36 @@ class StoreScreen extends StatelessWidget {
       padding: const EdgeInsets.only(top: Spacing.sm, bottom: Spacing.sm),
       child: Row(
         children: [
-          Text(label.toUpperCase(),
-              style: TextStyle(
-                  color: c.textMuted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.2)),
+          Text(
+            label.toUpperCase(),
+            style: TextStyle(
+              color: c.textMuted,
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.2,
+            ),
+          ),
           const SizedBox(width: 6),
-          Text('$count',
-              style: TextStyle(color: c.textMuted, fontSize: 12)),
+          Text('$count', style: TextStyle(color: c.textMuted, fontSize: 12)),
         ],
       ),
     );
   }
 
-  Widget _tile(BuildContext context, ThemeProvider theme, AppColors c,
-      String Function(String) t, AppSkin skin) {
+  Widget _tile(
+    BuildContext context,
+    ThemeProvider theme,
+    AppColors c,
+    String Function(String) t,
+    AppSkin skin,
+  ) {
     final owned = theme.isUnlocked(skin.id);
     final active = theme.themeId == skin.id;
     final glow = skin.glow ?? skin.colors.primary;
     final subject = emblemForTheme(skin.id);
-    final hasIcon = AppIconService.styles
-        .any((ic) => ic.premium && ic.themeId == skin.id);
+    final hasIcon = AppIconService.styles.any(
+      (ic) => ic.premium && ic.themeId == skin.id,
+    );
 
     void buy() {
       FeedbackService.onUnlock();
@@ -148,8 +185,9 @@ class StoreScreen extends StatelessWidget {
         color: skin.colors.card,
         borderRadius: BorderRadius.circular(Radii.md),
         border: Border.all(
-            color: active ? glow : glow.withValues(alpha: 0.35),
-            width: active ? 2 : 1),
+          color: active ? glow : glow.withValues(alpha: 0.35),
+          width: active ? 2 : 1,
+        ),
       ),
       child: Row(
         children: [
@@ -169,11 +207,11 @@ class StoreScreen extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             child: subject != null
                 ? Center(
-                    child: EmblemView(
-                        subject: subject, size: 30, color: glow))
+                    child: EmblemView(subject: subject, size: 30, color: glow),
+                  )
                 : Center(
-                    child: Icon(Icons.palette_rounded,
-                        color: glow, size: 22)),
+                    child: Icon(Icons.palette_rounded, color: glow, size: 22),
+                  ),
           ),
           const SizedBox(width: Spacing.sm),
           // Testo
@@ -181,13 +219,16 @@ class StoreScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(skin.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: skin.colors.text,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800)),
+                Text(
+                  skin.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: skin.colors.text,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
                 Text(
                   hasIcon
                       ? '${skin.description} · ${t('store_icon_included')}'
@@ -207,34 +248,47 @@ class StoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _actionButton(String Function(String) t, Color glow, bool owned,
-      bool active, VoidCallback buy, VoidCallback apply) {
+  Widget _actionButton(
+    String Function(String) t,
+    Color glow,
+    bool owned,
+    bool active,
+    VoidCallback buy,
+    VoidCallback apply,
+  ) {
     if (active) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(Icons.check_circle_rounded, size: 16, color: glow),
-          const SizedBox(width: 4),
-          Text(t('active'),
-              style: TextStyle(color: glow, fontWeight: FontWeight.w700)),
-        ]),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check_circle_rounded, size: 16, color: glow),
+            const SizedBox(width: 4),
+            Text(
+              t('active'),
+              style: TextStyle(color: glow, fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
       );
     }
     if (owned) {
       return OutlinedButton(
         style: OutlinedButton.styleFrom(
-            foregroundColor: glow,
-            side: BorderSide(color: glow),
-            visualDensity: VisualDensity.compact),
+          foregroundColor: glow,
+          side: BorderSide(color: glow),
+          visualDensity: VisualDensity.compact,
+        ),
         onPressed: apply,
         child: Text(t('apply')),
       );
     }
     return FilledButton(
       style: FilledButton.styleFrom(
-          backgroundColor: glow,
-          visualDensity: VisualDensity.compact,
-          padding: const EdgeInsets.symmetric(horizontal: 14)),
+        backgroundColor: glow,
+        visualDensity: VisualDensity.compact,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+      ),
       onPressed: buy,
       child: const Text('2,99 €'),
     );

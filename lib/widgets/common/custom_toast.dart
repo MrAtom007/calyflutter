@@ -26,7 +26,12 @@ class CustomToast {
         duration: const Duration(seconds: 2),
         margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
         padding: EdgeInsets.zero,
-        content: _ToastBody(message: message, icon: icon, color: c, accent: accent),
+        content: _ToastBody(
+          message: message,
+          icon: icon,
+          color: c,
+          accent: accent,
+        ),
       ),
     );
   }
@@ -70,9 +75,10 @@ class _ToastBody extends StatelessWidget {
               child: Text(
                 message,
                 style: TextStyle(
-                    color: color.text,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14),
+                  color: color.text,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
               ),
             ),
           ],

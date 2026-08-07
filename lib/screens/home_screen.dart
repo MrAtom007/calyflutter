@@ -61,17 +61,38 @@ class _HomeScreenState extends State<HomeScreen> {
     final workouts = wp.forDiscipline(dp.discipline);
     final pts = totalPoints(workouts);
     final info = rankFor(pts);
-    final totalSets =
-        workouts.fold<int>(0, (a, w) => a + w.sets.length);
+    final totalSets = workouts.fold<int>(0, (a, w) => a + w.sets.length);
 
     return Scaffold(
-      body: GradientBackground(child: _body(context, theme, c, t, dp, wp, workouts, pts, info, totalSets)),
+      body: GradientBackground(
+        child: _body(
+          context,
+          theme,
+          c,
+          t,
+          dp,
+          wp,
+          workouts,
+          pts,
+          info,
+          totalSets,
+        ),
+      ),
     );
   }
 
-  Widget _body(BuildContext context, ThemeProvider theme, AppColors c,
-      dynamic t, DisciplineProvider dp, WorkoutProvider wp, List workouts,
-      int pts, RankInfo info, int totalSets) {
+  Widget _body(
+    BuildContext context,
+    ThemeProvider theme,
+    AppColors c,
+    dynamic t,
+    DisciplineProvider dp,
+    WorkoutProvider wp,
+    List workouts,
+    int pts,
+    RankInfo info,
+    int totalSets,
+  ) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -79,11 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
         title: ShaderMask(
           shaderCallback: (r) =>
               LinearGradient(colors: [c.primary, c.text]).createShader(r),
-          child: const Text('CaliStrack',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.5)),
+          child: const Text(
+            'CaliStrack',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
         ),
         actions: [
           PopupMenuButton<String>(
@@ -91,11 +115,15 @@ class _HomeScreenState extends State<HomeScreen> {
             onSelected: (v) {
               FeedbackService.selection();
               if (v == 'store') {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const StoreScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const StoreScreen()),
+                );
               } else if (v == 'timer') {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const TimerScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const TimerScreen()),
+                );
               }
             },
             itemBuilder: (_) => [
@@ -105,19 +133,27 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: c.primary,
-        foregroundColor: theme.skin.isDark ? Colors.black : Colors.white,
-        onPressed: () {
-          FeedbackService.onTap();
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const NewWorkoutScreen()));
-        },
-        icon: const Icon(Icons.add, size: 26),
-        label: Text(t('new_workout'),
-            style: const TextStyle(fontWeight: FontWeight.w700)),
-      ).animate().scale(
-          duration: 400.ms, curve: Curves.easeOutBack, begin: const Offset(0.6, 0.6)),
+      floatingActionButton:
+          FloatingActionButton.extended(
+            backgroundColor: c.primary,
+            foregroundColor: theme.skin.isDark ? Colors.black : Colors.white,
+            onPressed: () {
+              FeedbackService.onTap();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const NewWorkoutScreen()),
+              );
+            },
+            icon: const Icon(Icons.add, size: 26),
+            label: Text(
+              t('new_workout'),
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ).animate().scale(
+            duration: 400.ms,
+            curve: Curves.easeOutBack,
+            begin: const Offset(0.6, 0.6),
+          ),
       body: ListView(
         padding: const EdgeInsets.all(Spacing.md),
         children: [
@@ -129,28 +165,37 @@ class _HomeScreenState extends State<HomeScreen> {
               .slideY(begin: 0.1, curve: Curves.easeOut),
           const SizedBox(height: Spacing.md),
           Row(
-            children: [
-              Expanded(
-                  child: _StatBox(
+                children: [
+                  Expanded(
+                    child: _StatBox(
                       label: t('workouts'),
                       animatedValue: workouts.length,
-                      icon: Icons.event_available)),
-              const SizedBox(width: Spacing.sm),
-              Expanded(
-                  child: _StatBox(
+                      icon: Icons.event_available,
+                    ),
+                  ),
+                  const SizedBox(width: Spacing.sm),
+                  Expanded(
+                    child: _StatBox(
                       label: t('total_sets'),
                       animatedValue: totalSets,
-                      icon: Icons.repeat)),
-              const SizedBox(width: Spacing.sm),
-              Expanded(
-                child: PressableScale(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const TimerScreen())),
-                  child: _StatBox(label: t('timer'), icon: Icons.timer_outlined),
-                ),
-              ),
-            ],
-          )
+                      icon: Icons.repeat,
+                    ),
+                  ),
+                  const SizedBox(width: Spacing.sm),
+                  Expanded(
+                    child: PressableScale(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const TimerScreen()),
+                      ),
+                      child: _StatBox(
+                        label: t('timer'),
+                        icon: Icons.timer_outlined,
+                      ),
+                    ),
+                  ),
+                ],
+              )
               .animate()
               .fadeIn(delay: 100.ms, duration: 400.ms)
               .slideY(begin: 0.1),
@@ -162,7 +207,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Icon(Icons.fitness_center, size: 56, color: c.textMuted)
                       .animate(onPlay: (c) => c.repeat(reverse: true))
-                      .scaleXY(end: 1.1, duration: 1200.ms, curve: Curves.easeInOut),
+                      .scaleXY(
+                        end: 1.1,
+                        duration: 1200.ms,
+                        curve: Curves.easeInOut,
+                      ),
                   const SizedBox(height: Spacing.md),
                   Text(
                     t('no_workouts'),
@@ -180,35 +229,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 final i = entry.key;
                 final w = entry.value;
                 return GlowCard(
-                  padding: EdgeInsets.zero,
-                  radius: Radii.md,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => WorkoutDetailScreen(id: w.id)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Spacing.md, vertical: 4),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: CircleAvatar(
-                        backgroundColor: c.primary.withValues(alpha: 0.15),
-                        child: Icon(
-                            dp.discipline == 'gym'
-                                ? Icons.fitness_center
-                                : Icons.sports_gymnastics,
-                            color: c.primary,
-                            size: 20),
+                      padding: EdgeInsets.zero,
+                      radius: Radii.md,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => WorkoutDetailScreen(id: w.id),
+                        ),
                       ),
-                      title: Text(formatDate(w.date),
-                          style: const TextStyle(fontWeight: FontWeight.w700)),
-                      subtitle: Text(workoutSummary(w),
-                          style: TextStyle(color: c.textMuted)),
-                      trailing: Icon(Icons.chevron_right, color: c.textMuted),
-                    ),
-                  ),
-                )
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Spacing.md,
+                          vertical: 4,
+                        ),
+                        child: ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: CircleAvatar(
+                            backgroundColor: c.primary.withValues(alpha: 0.15),
+                            child: Icon(
+                              dp.discipline == 'gym'
+                                  ? Icons.fitness_center
+                                  : Icons.sports_gymnastics,
+                              color: c.primary,
+                              size: 20,
+                            ),
+                          ),
+                          title: Text(
+                            formatDate(w.date),
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          subtitle: Text(
+                            workoutSummary(w),
+                            style: TextStyle(color: c.textMuted),
+                          ),
+                          trailing: Icon(
+                            Icons.chevron_right,
+                            color: c.textMuted,
+                          ),
+                        ),
+                      ),
+                    )
                     .animate()
                     .fadeIn(delay: (60 * i).ms, duration: 350.ms)
                     .slideX(begin: 0.08, curve: Curves.easeOut);
@@ -246,21 +306,27 @@ class _RankCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${t('level')} ${levelOf(info.current.id)}/$maxLevel',
-                    style: TextStyle(color: c.textMuted, fontSize: 12)),
-                Text(info.current.name,
-                    style: TextStyle(
-                        color: info.current.color,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800)),
+                Text(
+                  '${t('level')} ${levelOf(info.current.id)}/$maxLevel',
+                  style: TextStyle(color: c.textMuted, fontSize: 12),
+                ),
+                Text(
+                  info.current.name,
+                  style: TextStyle(
+                    color: info.current.color,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
                 Row(
                   children: [
                     AnimatedNumber(
                       value: points,
                       style: TextStyle(
-                          color: c.text,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700),
+                        color: c.text,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
                       format: (v) => '${fmtCompact(v.round())} pt',
                     ),
                     Flexible(
@@ -286,8 +352,7 @@ class _RankCard extends StatelessWidget {
                       value: v,
                       minHeight: 6,
                       backgroundColor: c.cardAlt,
-                      valueColor:
-                          AlwaysStoppedAnimation(info.current.color),
+                      valueColor: AlwaysStoppedAnimation(info.current.color),
                     ),
                   ),
                 ),
@@ -326,16 +391,19 @@ class _StatBox extends StatelessWidget {
             AnimatedNumber(
               value: animatedValue!,
               style: TextStyle(
-                  color: c.primary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800),
+                color: c.primary,
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+              ),
             )
           else if (icon != null)
             Icon(icon, color: c.primary, size: 26),
           const SizedBox(height: 4),
-          Text(label,
-              style: TextStyle(color: c.textMuted, fontSize: 11),
-              textAlign: TextAlign.center),
+          Text(
+            label,
+            style: TextStyle(color: c.textMuted, fontSize: 11),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

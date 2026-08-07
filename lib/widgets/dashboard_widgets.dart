@@ -66,11 +66,27 @@ class _ShortcutsWidget extends StatelessWidget {
     final t = context.watch<LocaleProvider>().t;
     final items = <(IconData, String, VoidCallback)>[
       (Icons.menu_book_rounded, t('diary'), () => onOpenTab('diary')),
-      (Icons.assignment_outlined, t('nav_routines'),
-          () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NewWorkoutScreen()))),
-      (Icons.show_chart_rounded, t('nav_progress'), () => onOpenTab('progress')),
-      (Icons.military_tech_outlined, t('nav_medals'),
-          () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RanksScreen()))),
+      (
+        Icons.assignment_outlined,
+        t('nav_routines'),
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const NewWorkoutScreen()),
+        ),
+      ),
+      (
+        Icons.show_chart_rounded,
+        t('nav_progress'),
+        () => onOpenTab('progress'),
+      ),
+      (
+        Icons.military_tech_outlined,
+        t('nav_medals'),
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const RanksScreen()),
+        ),
+      ),
       (Icons.fitness_center, t('nav_exercises'), () => onOpenTab('exercises')),
       (Icons.monitor_heart_rounded, t('nav_health'), () => onOpenTab('health')),
     ];
@@ -128,13 +144,16 @@ class PressableScaleShortcut extends StatelessWidget {
           children: [
             Icon(icon, color: color, size: 22),
             const SizedBox(height: 5),
-            Text(label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w600,
-                    color: c.text)),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 10.5,
+                fontWeight: FontWeight.w600,
+                color: c.text,
+              ),
+            ),
           ],
         ),
       ),
@@ -164,24 +183,32 @@ class _HeartWaveWidget extends StatelessWidget {
             children: [
               Icon(Icons.favorite_rounded, color: accent, size: 18),
               const SizedBox(width: 8),
-              Text(t('hm_heart_rate'),
-                  style: const TextStyle(fontWeight: FontWeight.w700)),
+              Text(
+                t('hm_heart_rate'),
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
               const Spacer(),
               if (bpm != null)
                 RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
                         text: bpm.round().toString(),
                         style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900,
-                            color: accent)),
-                    TextSpan(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                          color: accent,
+                        ),
+                      ),
+                      TextSpan(
                         text: ' bpm',
                         style: TextStyle(
-                            fontSize: 12,
-                            color: accent.withValues(alpha: 0.8))),
-                  ]),
+                          fontSize: 12,
+                          color: accent.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
             ],
           ),
@@ -201,8 +228,10 @@ Widget _needData(BuildContext context, dynamic t) {
   return Container(
     height: 60,
     alignment: Alignment.center,
-    child: Text(t('health_no_data_short'),
-        style: TextStyle(color: c.textMuted, fontSize: 12)),
+    child: Text(
+      t('health_no_data_short'),
+      style: TextStyle(color: c.textMuted, fontSize: 12),
+    ),
   );
 }
 
@@ -217,7 +246,8 @@ class _ActivityRingsWidget extends StatelessWidget {
     final c = context.watch<ThemeProvider>().colors;
     final t = context.watch<LocaleProvider>().t;
     final health = context.watch<HealthProvider>();
-    final steps = health.series(HealthMetric.steps)?.daily.lastOrNull?.value ?? 0;
+    final steps =
+        health.series(HealthMetric.steps)?.daily.lastOrNull?.value ?? 0;
     final kcal =
         health.series(HealthMetric.calories)?.daily.lastOrNull?.value ?? 0;
     final stepGoal = health.goalSteps;
@@ -232,8 +262,11 @@ class _ActivityRingsWidget extends StatelessWidget {
             color: stepColor,
             trackColor: c.cardAlt,
             size: 70,
-            center: Icon(Icons.directions_walk_rounded,
-                size: 20, color: stepColor),
+            center: Icon(
+              Icons.directions_walk_rounded,
+              size: 20,
+              color: stepColor,
+            ),
           ),
           const SizedBox(width: 14),
           RingGauge(
@@ -241,8 +274,11 @@ class _ActivityRingsWidget extends StatelessWidget {
             color: kcalColor,
             trackColor: c.cardAlt,
             size: 70,
-            center: Icon(Icons.local_fire_department_rounded,
-                size: 20, color: kcalColor),
+            center: Icon(
+              Icons.local_fire_department_rounded,
+              size: 20,
+              color: kcalColor,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -251,8 +287,12 @@ class _ActivityRingsWidget extends StatelessWidget {
               children: [
                 _kv(context, t('hm_steps'), '${steps.round()}', stepColor),
                 const SizedBox(height: 8),
-                _kv(context, t('hm_calories'), '${kcal.round()} kcal',
-                    kcalColor),
+                _kv(
+                  context,
+                  t('hm_calories'),
+                  '${kcal.round()} kcal',
+                  kcalColor,
+                ),
               ],
             ),
           ),
@@ -267,9 +307,14 @@ class _ActivityRingsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(k, style: TextStyle(fontSize: 11, color: c.textMuted)),
-        Text(v,
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w800, color: color)),
+        Text(
+          v,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: color,
+          ),
+        ),
       ],
     );
   }
@@ -294,7 +339,10 @@ class _VitalsWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SectionHeader(title: t('vitals').toUpperCase(), icon: Icons.monitor_heart_rounded),
+          SectionHeader(
+            title: t('vitals').toUpperCase(),
+            icon: Icons.monitor_heart_rounded,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -309,7 +357,8 @@ class _VitalsWidget extends StatelessWidget {
               ),
               StatTile(
                 label: 'SpO₂',
-                value: spo2?.latest?.round().toString() ??
+                value:
+                    spo2?.latest?.round().toString() ??
                     spo2?.daily.lastOrNull?.value.round().toString() ??
                     '--',
                 unit: '%',
@@ -354,28 +403,39 @@ class _SleepWidget extends StatelessWidget {
             children: [
               Icon(Icons.bedtime_rounded, color: accent, size: 18),
               const SizedBox(width: 8),
-              Text(t('hm_sleep'),
-                  style: const TextStyle(fontWeight: FontWeight.w700)),
+              Text(
+                t('hm_sleep'),
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
               const Spacer(),
               Text(
                 last != null
                     ? '${last.floor()}h ${((last % 1) * 60).round()}m'
                     : '--',
                 style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.w900, color: accent),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: accent,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 6),
           if (s != null && s.daily.length > 1)
             Sparkline(
-                values: s.daily.map((e) => e.value).toList(), color: accent)
+              values: s.daily.map((e) => e.value).toList(),
+              color: accent,
+            )
           else
             SizedBox(
-                height: 40,
-                child: Center(
-                    child: Text(t('health_no_data_short'),
-                        style: TextStyle(color: c.textMuted, fontSize: 12)))),
+              height: 40,
+              child: Center(
+                child: Text(
+                  t('health_no_data_short'),
+                  style: TextStyle(color: c.textMuted, fontSize: 12),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -412,17 +472,18 @@ class _WorkoutStatsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SectionHeader(
-              title: '${t('nav_progress')} · 7${t('day_short')}',
-              icon: Icons.insights_rounded),
+            title: '${t('nav_progress')} · 7${t('day_short')}',
+            icon: Icons.insights_rounded,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              StatTile(
-                  label: t('sessions'), value: week.length.toString()),
+              StatTile(label: t('sessions'), value: week.length.toString()),
               StatTile(label: t('total_sets'), value: sets.toString()),
               StatTile(
-                  label: disc == 'gym' ? t('volume_kg') : t('total_reps'),
-                  value: fmtNum(volume)),
+                label: disc == 'gym' ? t('volume_kg') : t('total_reps'),
+                value: fmtNum(volume),
+              ),
             ],
           ),
         ],
@@ -447,7 +508,9 @@ class _RankWidget extends StatelessWidget {
     final info = rankFor(pts);
     return SurfaceCard(
       onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (_) => const RanksScreen())),
+        context,
+        MaterialPageRoute(builder: (_) => const RanksScreen()),
+      ),
       child: Row(
         children: [
           Medal(rank: info.current, size: 54),
@@ -456,14 +519,20 @@ class _RankWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(info.current.name,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w800)),
+                Text(
+                  info.current.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text('${fmtCompact(pts)} ${t('points')}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: c.textMuted, fontSize: 12)),
+                Text(
+                  '${fmtCompact(pts)} ${t('points')}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: c.textMuted, fontSize: 12),
+                ),
                 const SizedBox(height: 8),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
@@ -471,8 +540,7 @@ class _RankWidget extends StatelessWidget {
                     value: info.progress,
                     minHeight: 7,
                     backgroundColor: c.cardAlt,
-                    valueColor:
-                        AlwaysStoppedAnimation(info.current.glow),
+                    valueColor: AlwaysStoppedAnimation(info.current.glow),
                   ),
                 ),
               ],
@@ -498,7 +566,10 @@ class _QuickTimerWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SectionHeader(title: t('timer').toUpperCase(), icon: Icons.timer_rounded),
+          SectionHeader(
+            title: t('timer').toUpperCase(),
+            icon: Icons.timer_rounded,
+          ),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -507,20 +578,28 @@ class _QuickTimerWidget extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     FeedbackService.onTap();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const TimerScreen()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const TimerScreen()),
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: c.cardAlt,
                       borderRadius: BorderRadius.circular(Radii.md),
                       border: Border.all(color: c.border),
                     ),
-                    child: Text('${s}s',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, color: c.primary)),
+                    child: Text(
+                      '${s}s',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: c.primary,
+                      ),
+                    ),
                   ),
                 ),
             ],
@@ -555,8 +634,10 @@ class DashboardHero extends StatelessWidget {
       transitionBuilder: (child, anim) => FadeTransition(
         opacity: anim,
         child: SlideTransition(
-          position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-              .animate(anim),
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(anim),
           child: child,
         ),
       ),
@@ -576,12 +657,13 @@ class _HeroCard extends StatelessWidget {
   final int resumeCount;
   final DateTime? startedAt;
   final void Function(String tab) onOpenTab;
-  const _HeroCard(
-      {super.key,
-      required this.last,
-      required this.onOpenTab,
-      this.resumeCount = 0,
-      this.startedAt});
+  const _HeroCard({
+    super.key,
+    required this.last,
+    required this.onOpenTab,
+    this.resumeCount = 0,
+    this.startedAt,
+  });
 
   String _elapsed() {
     if (startedAt == null) return '';
@@ -602,9 +684,11 @@ class _HeroCard extends StatelessWidget {
     void startWorkout() {
       FeedbackService.onTap();
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => NewWorkoutScreen(resumeDraft: resuming)));
+        context,
+        MaterialPageRoute(
+          builder: (_) => NewWorkoutScreen(resumeDraft: resuming),
+        ),
+      );
     }
 
     final onPrimary = theme.skin.isDark ? Colors.black : Colors.white;
@@ -626,7 +710,9 @@ class _HeroCard extends StatelessWidget {
             ? glowShadow(c.primary, blur: 18)
             : [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: theme.skin.isDark ? 0.3 : 0.06),
+                  color: Colors.black.withValues(
+                    alpha: theme.skin.isDark ? 0.3 : 0.06,
+                  ),
                   blurRadius: 14,
                   offset: const Offset(0, 6),
                 ),
@@ -653,167 +739,198 @@ class _HeroCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(Spacing.md),
             child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: c.primary.withValues(alpha: 0.18),
-                  borderRadius: BorderRadius.circular(Radii.md),
-                ),
-                child: Icon(
-                  resuming
-                      ? Icons.play_circle_fill_rounded
-                      : (last == null
-                          ? Icons.bolt_rounded
-                          : Icons.history_rounded),
-                  color: c.primary,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Text(
-                      resuming
-                          ? t('hero_in_progress')
-                          : (last == null
-                              ? t('hero_no_sessions')
-                              : t('hero_last_session')),
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: c.textMuted),
+                    Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: c.primary.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(Radii.md),
+                      ),
+                      child: Icon(
+                        resuming
+                            ? Icons.play_circle_fill_rounded
+                            : (last == null
+                                  ? Icons.bolt_rounded
+                                  : Icons.history_rounded),
+                        color: c.primary,
+                      ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      resuming
-                          ? t.p('hero_draft_sets', {'n': '$resumeCount'})
-                          : (last == null
-                              ? t('hero_subtitle')
-                              : formatDate(last!.date)),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w800),
-                    ),
-                    if (resuming) ...[
-                      const SizedBox(height: 2),
-                      Row(
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.schedule_rounded,
-                              size: 12, color: c.textMuted),
-                          const SizedBox(width: 4),
                           Text(
-                            t.p('hero_since', {'t': _elapsed()}),
-                            style:
-                                TextStyle(fontSize: 12, color: c.textMuted),
+                            resuming
+                                ? t('hero_in_progress')
+                                : (last == null
+                                      ? t('hero_no_sessions')
+                                      : t('hero_last_session')),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: c.textMuted,
+                            ),
                           ),
+                          const SizedBox(height: 2),
+                          Text(
+                            resuming
+                                ? t.p('hero_draft_sets', {'n': '$resumeCount'})
+                                : (last == null
+                                      ? t('hero_subtitle')
+                                      : formatDate(last!.date)),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          if (resuming) ...[
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.schedule_rounded,
+                                  size: 12,
+                                  color: c.textMuted,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  t.p('hero_since', {'t': _elapsed()}),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: c.textMuted,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ] else if (last != null) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              workoutSummary(last!),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: c.textMuted,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
-                    ] else if (last != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        workoutSummary(last!),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 12, color: c.textMuted),
-                      ),
-                    ],
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: Spacing.sm),
-          // Frase motivazionale del giorno.
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.format_quote_rounded, size: 16, color: c.primary),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  motivationalQuote(context.watch<LocaleProvider>().code),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    height: 1.25,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w600,
-                    color: c.text.withValues(alpha: 0.82),
+                const SizedBox(height: Spacing.sm),
+                // Frase motivazionale del giorno.
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.format_quote_rounded,
+                      size: 16,
+                      color: c.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        motivationalQuote(context.watch<LocaleProvider>().code),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          height: 1.25,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                          color: c.text.withValues(alpha: 0.82),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Spacing.md),
+                // CTA grande e tattile (min 52dp) facile da premere in palestra.
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: PressableScale(
+                    onTap: startWorkout,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: c.primary,
+                        borderRadius: BorderRadius.circular(Radii.md),
+                        boxShadow: theme.glowActive
+                            ? glowShadow(c.primary, blur: 12)
+                            : null,
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              resuming
+                                  ? Icons.play_arrow_rounded
+                                  : Icons.play_arrow_rounded,
+                              color: onPrimary,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              resuming ? t('hero_resume') : t('hero_start'),
+                              style: TextStyle(
+                                color: onPrimary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: Spacing.md),
-          // CTA grande e tattile (min 52dp) facile da premere in palestra.
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: PressableScale(
-              onTap: startWorkout,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: c.primary,
-                  borderRadius: BorderRadius.circular(Radii.md),
-                  boxShadow: theme.glowActive
-                      ? glowShadow(c.primary, blur: 12)
-                      : null,
-                ),
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                if (resuming) ...[
+                  const SizedBox(height: Spacing.sm),
+                  Row(
                     children: [
-                      Icon(
-                          resuming
-                              ? Icons.play_arrow_rounded
-                              : Icons.play_arrow_rounded,
-                          color: onPrimary),
-                      const SizedBox(width: 8),
-                      Text(
-                        resuming ? t('hero_resume') : t('hero_start'),
-                        style: TextStyle(
-                            color: onPrimary,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800),
+                      Expanded(
+                        child: _heroAction(
+                          context,
+                          c,
+                          Icons.timer_outlined,
+                          t('timer'),
+                          () {
+                            FeedbackService.onTap();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const TimerScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: Spacing.sm),
+                      Expanded(
+                        child: _heroAction(
+                          context,
+                          c,
+                          Icons.menu_book_rounded,
+                          t('diary'),
+                          () {
+                            FeedbackService.onTap();
+                            onOpenTab('diary');
+                          },
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ),
-            ),
-          ),
-          if (resuming) ...[
-            const SizedBox(height: Spacing.sm),
-            Row(
-              children: [
-                Expanded(
-                  child: _heroAction(context, c, Icons.timer_outlined,
-                      t('timer'), () {
-                    FeedbackService.onTap();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const TimerScreen()));
-                  }),
-                ),
-                const SizedBox(width: Spacing.sm),
-                Expanded(
-                  child: _heroAction(context, c, Icons.menu_book_rounded,
-                      t('diary'), () {
-                    FeedbackService.onTap();
-                    onOpenTab('diary');
-                  }),
-                ),
+                ],
               ],
-            ),
-          ],
-        ],
             ),
           ),
         ],
@@ -821,8 +938,13 @@ class _HeroCard extends StatelessWidget {
     );
   }
 
-  Widget _heroAction(BuildContext context, AppColors c, IconData icon,
-      String label, VoidCallback onTap) {
+  Widget _heroAction(
+    BuildContext context,
+    AppColors c,
+    IconData icon,
+    String label,
+    VoidCallback onTap,
+  ) {
     return Material(
       color: c.cardAlt,
       borderRadius: BorderRadius.circular(Radii.md),
@@ -841,9 +963,14 @@ class _HeroCard extends StatelessWidget {
             children: [
               Icon(icon, size: 18, color: c.primary),
               const SizedBox(width: 6),
-              Text(label,
-                  style: TextStyle(
-                      color: c.text, fontWeight: FontWeight.w700, fontSize: 13)),
+              Text(
+                label,
+                style: TextStyle(
+                  color: c.text,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
+              ),
             ],
           ),
         ),
@@ -869,8 +996,10 @@ class _NextRoutineWidget extends StatelessWidget {
     return SurfaceCard(
       onTap: () {
         FeedbackService.onTap();
-        Navigator.push(context,
-            MaterialPageRoute(builder: (_) => NewWorkoutScreen(preset: r.sets)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => NewWorkoutScreen(preset: r.sets)),
+        );
       },
       child: Row(
         children: [
@@ -888,15 +1017,23 @@ class _NextRoutineWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(t('dw_routine'),
-                    style: TextStyle(fontSize: 11, color: c.textMuted)),
-                Text(r.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.w800)),
-                Text('${r.duration} · ${r.level}',
-                    style: TextStyle(fontSize: 12, color: c.textMuted)),
+                Text(
+                  t('dw_routine'),
+                  style: TextStyle(fontSize: 11, color: c.textMuted),
+                ),
+                Text(
+                  r.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Text(
+                  '${r.duration} · ${r.level}',
+                  style: TextStyle(fontSize: 12, color: c.textMuted),
+                ),
               ],
             ),
           ),

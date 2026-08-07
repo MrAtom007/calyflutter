@@ -25,7 +25,7 @@ class SimpleLineChart extends StatelessWidget {
       );
     }
     final spots = <FlSpot>[
-      for (int i = 0; i < values.length; i++) FlSpot(i.toDouble(), values[i])
+      for (int i = 0; i < values.length; i++) FlSpot(i.toDouble(), values[i]),
     ];
     final maxY = values.reduce((a, b) => a > b ? a : b);
     final minY = values.reduce((a, b) => a < b ? a : b);
@@ -42,14 +42,16 @@ class SimpleLineChart extends StatelessWidget {
           borderData: FlBorderData(show: false),
           lineTouchData: const LineTouchData(enabled: false),
           extraLinesData: refLine != null
-              ? ExtraLinesData(horizontalLines: [
-                  HorizontalLine(
-                    y: refLine!,
-                    color: color.withValues(alpha: 0.4),
-                    dashArray: [6, 4],
-                    strokeWidth: 1,
-                  )
-                ])
+              ? ExtraLinesData(
+                  horizontalLines: [
+                    HorizontalLine(
+                      y: refLine!,
+                      color: color.withValues(alpha: 0.4),
+                      dashArray: [6, 4],
+                      strokeWidth: 1,
+                    ),
+                  ],
+                )
               : const ExtraLinesData(),
           lineBarsData: [
             LineChartBarData(
@@ -59,11 +61,8 @@ class SimpleLineChart extends StatelessWidget {
               barWidth: 3,
               dotData: FlDotData(
                 show: true,
-                getDotPainter: (s, p, b, i) => FlDotCirclePainter(
-                  radius: 3,
-                  color: color,
-                  strokeWidth: 0,
-                ),
+                getDotPainter: (s, p, b, i) =>
+                    FlDotCirclePainter(radius: 3, color: color, strokeWidth: 0),
               ),
               belowBarData: BarAreaData(
                 show: true,
@@ -112,12 +111,15 @@ class SimpleBarChart extends StatelessWidget {
           borderData: FlBorderData(show: false),
           barTouchData: BarTouchData(enabled: false),
           titlesData: FlTitlesData(
-            leftTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -126,8 +128,10 @@ class SimpleBarChart extends StatelessWidget {
                   if (i < 0 || i >= labels.length) return const SizedBox();
                   return Padding(
                     padding: const EdgeInsets.only(top: 4),
-                    child: Text(labels[i],
-                        style: TextStyle(fontSize: 10, color: muted)),
+                    child: Text(
+                      labels[i],
+                      style: TextStyle(fontSize: 10, color: muted),
+                    ),
                   );
                 },
               ),
@@ -135,14 +139,17 @@ class SimpleBarChart extends StatelessWidget {
           ),
           barGroups: [
             for (int i = 0; i < values.length; i++)
-              BarChartGroupData(x: i, barRods: [
-                BarChartRodData(
-                  toY: values[i],
-                  color: color,
-                  width: 14,
-                  borderRadius: BorderRadius.circular(4),
-                )
-              ]),
+              BarChartGroupData(
+                x: i,
+                barRods: [
+                  BarChartRodData(
+                    toY: values[i],
+                    color: color,
+                    width: 14,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ],
+              ),
           ],
         ),
       ),

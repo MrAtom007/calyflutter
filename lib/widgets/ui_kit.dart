@@ -59,7 +59,10 @@ class GlowCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [c.card, Color.alphaBlend(c.primary.withValues(alpha: 0.03), c.cardAlt)],
+          colors: [
+            c.card,
+            Color.alphaBlend(c.primary.withValues(alpha: 0.03), c.cardAlt),
+          ],
         ),
         borderRadius: BorderRadius.circular(radius),
         border: Border.all(color: border),
@@ -67,7 +70,9 @@ class GlowCard extends StatelessWidget {
             ? glowShadow(c.primary, blur: 16)
             : [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: theme.skin.isDark ? 0.35 : 0.06),
+                  color: Colors.black.withValues(
+                    alpha: theme.skin.isDark ? 0.35 : 0.06,
+                  ),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),

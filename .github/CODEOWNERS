@@ -1,0 +1,6 @@
+# Code owners per CaliStrack.
+# Ogni Pull Request richiede automaticamente la revisione del proprietario:
+# nessuna modifica entra in `main` senza la sua autorizzazione.
+# (Efficace insieme alla branch protection: PR obbligatoria + review dei code owner.)
+
+* @MrAtom007

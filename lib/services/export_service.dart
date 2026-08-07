@@ -15,7 +15,13 @@ class ExportService {
 
   static String toCsv(List<Workout> workouts) {
     const headers = [
-      'data', 'disciplina', 'esercizio', 'categoria', 'reps', 'secondi', 'peso_kg'
+      'data',
+      'disciplina',
+      'esercizio',
+      'categoria',
+      'reps',
+      'secondi',
+      'peso_kg',
     ];
     final lines = [headers.join(',')];
     for (final w in workouts) {
@@ -36,13 +42,13 @@ class ExportService {
     return lines.join('\n');
   }
 
-  static String toJson(List<Workout> workouts) => const JsonEncoder.withIndent('  ')
-      .convert({
-    'app': 'CaliStrack',
-    'exportedAt': DateTime.now().toIso8601String(),
-    'count': workouts.length,
-    'workouts': workouts.map((w) => w.toJson()).toList(),
-  });
+  static String toJson(List<Workout> workouts) =>
+      const JsonEncoder.withIndent('  ').convert({
+        'app': 'CaliStrack',
+        'exportedAt': DateTime.now().toIso8601String(),
+        'count': workouts.length,
+        'workouts': workouts.map((w) => w.toJson()).toList(),
+      });
 
   /// Esporta in CSV o JSON e apre il foglio di condivisione.
   static Future<bool> export(List<Workout> workouts, String format) async {
@@ -52,8 +58,9 @@ class ExportService {
     final filename = 'calistrack-${_stamp()}.${isJson ? 'json' : 'csv'}';
     final file = File('${dir.path}/$filename');
     await file.writeAsString(isJson ? toJson(workouts) : toCsv(workouts));
-    await Share.shareXFiles([XFile(file.path)],
-        subject: 'Esporta allenamenti CaliStrack');
+    await Share.shareXFiles([
+      XFile(file.path),
+    ], subject: 'Esporta allenamenti CaliStrack');
     return true;
   }
 }

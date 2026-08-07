@@ -27,78 +27,90 @@ class RoutinesScreen extends StatelessWidget {
         children: [
           const DisciplineSwitch(),
           const SizedBox(height: Spacing.sm),
-          ...routines.map((r) => Container(
-                margin: const EdgeInsets.only(bottom: Spacing.md),
-                padding: const EdgeInsets.all(Spacing.md),
-                decoration: BoxDecoration(
-                  color: c.card,
-                  borderRadius: BorderRadius.circular(Radii.lg),
-                  border: Border.all(color: c.border),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(r.name,
-                              style: const TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.w800)),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: c.cardAlt,
-                            borderRadius: BorderRadius.circular(Radii.sm),
+          ...routines.map(
+            (r) => Container(
+              margin: const EdgeInsets.only(bottom: Spacing.md),
+              padding: const EdgeInsets.all(Spacing.md),
+              decoration: BoxDecoration(
+                color: c.card,
+                borderRadius: BorderRadius.circular(Radii.lg),
+                border: Border.all(color: c.border),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          r.name,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
                           ),
-                          child: Text(r.level,
-                              style: TextStyle(
-                                  color: c.primary, fontSize: 11)),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(r.description,
-                        style: TextStyle(color: c.textMuted)),
-                    const SizedBox(height: 6),
-                    Text('${r.duration} • ${t.p('exercises_count', {'n': '${r.sets.length}'})}',
-                        style: TextStyle(color: c.textMuted, fontSize: 12)),
-                    const SizedBox(height: Spacing.sm),
-                    ...r.sets.map((s) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Row(
-                            children: [
-                              Icon(Icons.circle, size: 6, color: c.primary),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                  child: Text(exerciseName(s.exerciseId))),
-                              Text(_target(s),
-                                  style: TextStyle(color: c.textMuted)),
-                            ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: c.cardAlt,
+                          borderRadius: BorderRadius.circular(Radii.sm),
+                        ),
+                        child: Text(
+                          r.level,
+                          style: TextStyle(color: c.primary, fontSize: 11),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(r.description, style: TextStyle(color: c.textMuted)),
+                  const SizedBox(height: 6),
+                  Text(
+                    '${r.duration} • ${t.p('exercises_count', {'n': '${r.sets.length}'})}',
+                    style: TextStyle(color: c.textMuted, fontSize: 12),
+                  ),
+                  const SizedBox(height: Spacing.sm),
+                  ...r.sets.map(
+                    (s) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Row(
+                        children: [
+                          Icon(Icons.circle, size: 6, color: c.primary),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text(exerciseName(s.exerciseId))),
+                          Text(
+                            _target(s),
+                            style: TextStyle(color: c.textMuted),
                           ),
-                        )),
-                    const SizedBox(height: Spacing.md),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        style:
-                            FilledButton.styleFrom(backgroundColor: c.primary),
-                        onPressed: () {
-                          FeedbackService.onTap();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) =>
-                                    NewWorkoutScreen(preset: r.sets)),
-                          );
-                        },
-                        child: Text(t('start_routine')),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              )),
+                  ),
+                  const SizedBox(height: Spacing.md),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(backgroundColor: c.primary),
+                      onPressed: () {
+                        FeedbackService.onTap();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => NewWorkoutScreen(preset: r.sets),
+                          ),
+                        );
+                      },
+                      child: Text(t('start_routine')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

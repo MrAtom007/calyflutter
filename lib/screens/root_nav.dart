@@ -96,8 +96,10 @@ class _RootNavState extends State<RootNav> {
       transitionBuilder: (child, anim) => FadeTransition(
         opacity: anim,
         child: SlideTransition(
-          position: Tween(begin: const Offset(0, 0.02), end: Offset.zero)
-              .animate(anim),
+          position: Tween(
+            begin: const Offset(0, 0.02),
+            end: Offset.zero,
+          ).animate(anim),
           child: child,
         ),
       ),
@@ -160,7 +162,9 @@ class _RootNavState extends State<RootNav> {
         items: [
           for (var i = 0; i < _navIcons.length; i++)
             BottomNavigationBarItem(
-                icon: Icon(_navIcons[i]), label: t(_navKeys[i])),
+              icon: Icon(_navIcons[i]),
+              label: t(_navKeys[i]),
+            ),
         ],
       ),
     );
@@ -207,11 +211,14 @@ class _DesktopRail extends StatelessWidget {
                 Icon(Icons.bolt_rounded, color: c.primary, size: 26),
                 if (extended) ...[
                   const SizedBox(width: 8),
-                  Text('CaliStrack',
-                      style: TextStyle(
-                          color: c.text,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16)),
+                  Text(
+                    'CaliStrack',
+                    style: TextStyle(
+                      color: c.text,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                    ),
+                  ),
                 ],
               ],
             ),
@@ -266,7 +273,9 @@ class _RailItem extends StatelessWidget {
           onTap: onTap,
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: extended ? 14 : 0, vertical: 12),
+              horizontal: extended ? 14 : 0,
+              vertical: 12,
+            ),
             child: Row(
               mainAxisAlignment: extended
                   ? MainAxisAlignment.start
@@ -276,14 +285,18 @@ class _RailItem extends StatelessWidget {
                 if (extended) ...[
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: selected ? c.text : c.textMuted,
-                            fontWeight:
-                                selected ? FontWeight.w700 : FontWeight.w500,
-                            fontSize: 14)),
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: selected ? c.text : c.textMuted,
+                        fontWeight: selected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
                 ],
               ],

@@ -30,8 +30,9 @@ class HealthLayoutProvider extends ChangeNotifier {
   bool isEnabled(HealthMetric m) => _enabled.contains(m);
 
   Future<void> load() async {
-    final saved =
-        await StorageService.getStringList(StorageService.healthWidgetsKey);
+    final saved = await StorageService.getStringList(
+      StorageService.healthWidgetsKey,
+    );
     if (saved.isNotEmpty) {
       final parsed = <HealthMetric>[];
       for (final s in saved) {

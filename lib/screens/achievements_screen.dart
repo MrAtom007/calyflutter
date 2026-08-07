@@ -29,7 +29,10 @@ class AchievementsScreen extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   Color.alphaBlend(c.primary.withValues(alpha: 0.22), c.card),
-                  Color.alphaBlend(c.primary.withValues(alpha: 0.05), c.cardAlt),
+                  Color.alphaBlend(
+                    c.primary.withValues(alpha: 0.05),
+                    c.cardAlt,
+                  ),
                 ],
               ),
               borderRadius: BorderRadius.circular(Radii.lg),
@@ -43,11 +46,17 @@ class AchievementsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$unlocked / ${badgeDefs.length}',
-                          style: const TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.w900)),
-                      Text(t('achievements_unlocked'),
-                          style: TextStyle(color: c.textMuted, fontSize: 13)),
+                      Text(
+                        '$unlocked / ${badgeDefs.length}',
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      Text(
+                        t('achievements_unlocked'),
+                        style: TextStyle(color: c.textMuted, fontSize: 13),
+                      ),
                       const SizedBox(height: 8),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(6),
@@ -74,8 +83,13 @@ class AchievementsScreen extends StatelessWidget {
     );
   }
 
-  Widget _badgeTile(BuildContext context, AppColors c, dynamic t, BadgeDef b,
-      BadgeStats stats) {
+  Widget _badgeTile(
+    BuildContext context,
+    AppColors c,
+    dynamic t,
+    BadgeDef b,
+    BadgeStats stats,
+  ) {
     final done = b.unlocked(stats);
     final cur = b.current(stats);
     final prog = b.progress(stats);
@@ -86,7 +100,8 @@ class AchievementsScreen extends StatelessWidget {
         color: c.card,
         borderRadius: BorderRadius.circular(Radii.md),
         border: Border.all(
-            color: done ? b.color.withValues(alpha: 0.7) : c.border),
+          color: done ? b.color.withValues(alpha: 0.7) : c.border,
+        ),
       ),
       child: Row(
         children: [
@@ -97,8 +112,11 @@ class AchievementsScreen extends StatelessWidget {
               color: (done ? b.color : c.textMuted).withValues(alpha: 0.18),
               shape: BoxShape.circle,
             ),
-            child: Icon(done ? b.icon : Icons.lock_rounded,
-                color: done ? b.color : c.textMuted, size: 24),
+            child: Icon(
+              done ? b.icon : Icons.lock_rounded,
+              color: done ? b.color : c.textMuted,
+              size: 24,
+            ),
           ),
           const SizedBox(width: Spacing.md),
           Expanded(
@@ -108,9 +126,10 @@ class AchievementsScreen extends StatelessWidget {
                 Text(
                   t.p(b.descKey, {'n': '${b.threshold}'}),
                   style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 14,
-                      color: done ? c.text : c.text.withValues(alpha: 0.9)),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 14,
+                    color: done ? c.text : c.text.withValues(alpha: 0.9),
+                  ),
                 ),
                 const SizedBox(height: 6),
                 ClipRRect(
@@ -120,12 +139,15 @@ class AchievementsScreen extends StatelessWidget {
                     minHeight: 6,
                     backgroundColor: c.cardAlt,
                     valueColor: AlwaysStoppedAnimation(
-                        done ? b.color : c.textMuted),
+                      done ? b.color : c.textMuted,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text('$cur / ${b.threshold}',
-                    style: TextStyle(color: c.textMuted, fontSize: 11)),
+                Text(
+                  '$cur / ${b.threshold}',
+                  style: TextStyle(color: c.textMuted, fontSize: 11),
+                ),
               ],
             ),
           ),

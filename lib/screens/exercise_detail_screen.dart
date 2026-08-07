@@ -105,8 +105,10 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
       body: ListView(
         padding: const EdgeInsets.all(Spacing.md),
         children: [
-          Text('${ex.category} · ${ex.level}',
-              style: TextStyle(color: c.textMuted)),
+          Text(
+            '${ex.category} · ${ex.level}',
+            style: TextStyle(color: c.textMuted),
+          ),
           const SizedBox(height: Spacing.md),
           // Media banner
           GestureDetector(
@@ -114,7 +116,9 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
               context,
               MaterialPageRoute(
                 builder: (_) => WebViewScreen(
-                    url: demoSearchUrl(ex), title: 'Tutorial: ${ex.name}'),
+                  url: demoSearchUrl(ex),
+                  title: 'Tutorial: ${ex.name}',
+                ),
               ),
             ),
             child: ClipRRect(
@@ -127,19 +131,25 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                     height: 180,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    placeholder: (_, _) => Container(
-                        height: 180, color: c.cardAlt),
+                    placeholder: (_, _) =>
+                        Container(height: 180, color: c.cardAlt),
                     errorWidget: (_, _, _) => Container(
                       height: 180,
                       color: c.cardAlt,
-                      child: Icon(Icons.image_not_supported,
-                          color: c.textMuted),
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: c.textMuted,
+                      ),
                     ),
                   ),
                   const CircleAvatar(
                     radius: 28,
                     backgroundColor: Colors.black54,
-                    child: Icon(Icons.play_arrow, color: Colors.white, size: 34),
+                    child: Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                      size: 34,
+                    ),
                   ),
                 ],
               ),
@@ -148,12 +158,11 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
           const SizedBox(height: Spacing.md),
           Row(
             children: [
-              Expanded(
-                  child: _stat(c, '$count', t('times'))),
+              Expanded(child: _stat(c, '$count', t('times'))),
               const SizedBox(width: Spacing.sm),
               Expanded(
-                  child:
-                      _stat(c, _recordLabel(ex, record), t('personal_record'))),
+                child: _stat(c, _recordLabel(ex, record), t('personal_record')),
+              ),
             ],
           ),
           if (ex.unit == 'sec')
@@ -165,18 +174,19 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => TimerScreen(exerciseName: ex.name)),
+                    builder: (_) => TimerScreen(exerciseName: ex.name),
+                  ),
                 ),
               ),
             ),
           const SizedBox(height: Spacing.md),
           if (last10.length >= 2) ...[
-            Text(t('trend'),
-                style: TextStyle(
-                    color: c.textMuted, fontWeight: FontWeight.w700)),
+            Text(
+              t('trend'),
+              style: TextStyle(color: c.textMuted, fontWeight: FontWeight.w700),
+            ),
             const SizedBox(height: Spacing.sm),
-            SimpleLineChart(
-                values: last10, color: c.primary, refLine: record),
+            SimpleLineChart(values: last10, color: c.primary, refLine: record),
             const SizedBox(height: Spacing.md),
           ],
           // Quick log
@@ -190,8 +200,10 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(t('record_now'),
-                    style: const TextStyle(fontWeight: FontWeight.w700)),
+                Text(
+                  t('record_now'),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
                 const SizedBox(height: Spacing.sm),
                 Row(
                   children: [
@@ -205,8 +217,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                       Expanded(child: _field(_reps, 'reps')),
                     const SizedBox(width: 8),
                     FilledButton(
-                      style:
-                          FilledButton.styleFrom(backgroundColor: c.primary),
+                      style: FilledButton.styleFrom(backgroundColor: c.primary),
                       onPressed: () => _quickLog(ex),
                       child: Text(t('save')),
                     ),
@@ -216,19 +227,24 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
             ),
           ),
           const SizedBox(height: Spacing.lg),
-          Text(t('history'),
-              style:
-                  TextStyle(color: c.textMuted, fontWeight: FontWeight.w700)),
+          Text(
+            t('history'),
+            style: TextStyle(color: c.textMuted, fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: Spacing.sm),
           if (history.isEmpty)
             Text(t('no_history'), style: TextStyle(color: c.textMuted))
           else
-            ...history.reversed.map((e) => ListTile(
-                  dense: true,
-                  title: Text(formatDate(e.key)),
-                  trailing: Text(_recordLabel(ex, e.value),
-                      style: TextStyle(color: c.primary)),
-                )),
+            ...history.reversed.map(
+              (e) => ListTile(
+                dense: true,
+                title: Text(formatDate(e.key)),
+                trailing: Text(
+                  _recordLabel(ex, e.value),
+                  style: TextStyle(color: c.primary),
+                ),
+              ),
+            ),
           const SizedBox(height: 40),
         ],
       ),
@@ -242,34 +258,38 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   }
 
   Widget _stat(AppColors c, String value, String label) => Container(
-        padding: const EdgeInsets.all(Spacing.md),
-        decoration: BoxDecoration(
-          color: c.cardAlt,
-          borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: c.border),
+    padding: const EdgeInsets.all(Spacing.md),
+    decoration: BoxDecoration(
+      color: c.cardAlt,
+      borderRadius: BorderRadius.circular(Radii.md),
+      border: Border.all(color: c.border),
+    ),
+    child: Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            color: c.primary,
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+          ),
         ),
-        child: Column(
-          children: [
-            Text(value,
-                style: TextStyle(
-                    color: c.primary,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800)),
-            Text(label,
-                style: TextStyle(color: c.textMuted, fontSize: 11)),
-          ],
-        ),
-      );
+        Text(label, style: TextStyle(color: c.textMuted, fontSize: 11)),
+      ],
+    ),
+  );
 
-  Widget _field(TextEditingController ctrl, String hint,
-          {bool decimal = false}) =>
-      TextField(
-        controller: ctrl,
-        keyboardType: TextInputType.numberWithOptions(decimal: decimal),
-        decoration: InputDecoration(
-          hintText: hint,
-          isDense: true,
-          border: const OutlineInputBorder(),
-        ),
-      );
+  Widget _field(
+    TextEditingController ctrl,
+    String hint, {
+    bool decimal = false,
+  }) => TextField(
+    controller: ctrl,
+    keyboardType: TextInputType.numberWithOptions(decimal: decimal),
+    decoration: InputDecoration(
+      hintText: hint,
+      isDense: true,
+      border: const OutlineInputBorder(),
+    ),
+  );
 }

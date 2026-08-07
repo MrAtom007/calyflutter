@@ -52,7 +52,9 @@ class ThemeProvider extends ChangeNotifier {
     FeedbackService.setPack(soundPackForTheme(_themeId));
     final g = await StorageService.getBool(StorageService.glowKey);
     if (g != null) _glow = g;
-    final saved = await StorageService.getStringList(StorageService.unlockedKey);
+    final saved = await StorageService.getStringList(
+      StorageService.unlockedKey,
+    );
     _unlocked = {...freeThemeIds, ...saved};
     final icon = await StorageService.getString(StorageService.appIconKey);
     if (icon != null) _appIconId = icon;
@@ -75,8 +77,10 @@ class ThemeProvider extends ChangeNotifier {
       !icon.premium || (icon.themeId != null && isUnlocked(icon.themeId!));
 
   bool isIconIdUnlocked(String iconId) {
-    final icon = AppIconService.styles.firstWhere((s) => s.id == iconId,
-        orElse: () => AppIconService.styles.first);
+    final icon = AppIconService.styles.firstWhere(
+      (s) => s.id == iconId,
+      orElse: () => AppIconService.styles.first,
+    );
     return isIconUnlocked(icon);
   }
 
@@ -92,8 +96,9 @@ class ThemeProvider extends ChangeNotifier {
 
   /// Applica un tema casuale tra quelli sbloccati (diverso dall'attuale).
   Future<void> randomTheme() async {
-    final ids =
-        appThemes.keys.where((id) => id != _themeId && isUnlocked(id)).toList();
+    final ids = appThemes.keys
+        .where((id) => id != _themeId && isUnlocked(id))
+        .toList();
     if (ids.isEmpty) return;
     ids.shuffle();
     await changeTheme(ids.first);
