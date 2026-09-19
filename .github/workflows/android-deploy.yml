@@ -34,6 +34,8 @@ jobs:
     timeout-minutes: 30
     env:
       FLUTTER_VERSION: '3.24.3'
+      # Default track for tag pushes
+      DEFAULT_TRACK: internal
 
     steps:
       - name: Checkout
@@ -91,6 +93,16 @@ jobs:
           echo "version_code=${VCODE}" >> $GITHUB_OUTPUT
           echo "Deploying version: ${VNAME}+${VCODE}"
 
+      - name: Resolve track
+        id: resolve_track
+        run: |
+          # On workflow_dispatch use input, on tag push use default
+          if [ -n "${{ github.event.inputs.track }}" ]; then
+            echo "track=${{ github.event.inputs.track }}" >> $GITHUB_OUTPUT
+          else
+            echo "track=${{ env.DEFAULT_TRACK }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create key.properties from secrets
         if: env.KEY_STORE_FILE != ''
         env:
@@ -138,8 +150,8 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY }}
           packageName: com.calistrack.calistrack
           releaseFiles: ${{ steps.aab.outputs.aab_path }}
-          track: ${{ github.event.inputs.track }}
-          status: ${{ github.event.inputs.track == 'production' && 'completed' || 'draft' }}
+          track: ${{ steps.resolve_track.outputs.track }}
+          status: ${{ steps.resolve_track.outputs.track == 'production' && 'completed' || 'draft' }}
           inAppUpdatePriority: 0
           releaseName: ${{ steps.final_version.outputs.version_name }}
           userFraction: 1.0
@@ -164,7 +176,7 @@ jobs:
           fastlane supply \
             --package com.calistrack.calistrack \
             --aab ${{ steps.aab.outputs.aab_path }} \
-            --track ${{ github.event.inputs.track }} \
+            --track ${{ steps.resolve_track.outputs.track }} \
             --skip_upload_metadata \
             --skip_upload_images \
             --skip_upload_screenshots \
@@ -174,10 +186,8 @@ jobs:
 
       - name: Summary
         run: |
-          TRACK="${{ github.event.inputs.track }}"
-          if [ -z "$TRACK" ]; then TRACK="internal"; fi
           echo "## Deploy Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Version:** ${{ steps.final_version.outputs.version_name }}+${{ steps.final_version.outputs.version_code }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Track:** $TRACK" >> $GITHUB_STEP_SUMMARY
+          echo "- **Track:** ${{ steps.resolve_track.outputs.track }}" >> $GITHUB_STEP_SUMMARY
           echo "- **AAB:** ${{ steps.aab.outputs.aab_path }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Artifact:** [Download AAB](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
