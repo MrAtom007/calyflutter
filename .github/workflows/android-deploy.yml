@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      FLUTTER_VERSION: '3.24.3'
+      FLUTTER_VERSION: '3.27.1'  # stable with Dart 3.6.0+ (supports ^3.12.2)
       DEFAULT_TRACK: internal
 
     steps:
