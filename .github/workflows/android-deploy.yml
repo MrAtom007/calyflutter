@@ -1,0 +1,178 @@
+name: Android Build & Deploy to Play Console
+
+on:
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 'Play Console track'
+        type: choice
+        required: true
+        default: 'internal'
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+      version_name:
+        description: 'Version name (override pubspec.yaml)'
+        required: false
+      version_code:
+        description: 'Version code (override pubspec.yaml)'
+        required: false
+  push:
+    tags:
+      - 'v*'  # deploy on version tags like v4.14.0
+
+permissions:
+  contents: read
+  id-token: write  # for OIDC if using google-github-actions/auth
+
+jobs:
+  build-and-deploy:
+    name: Build AAB & Deploy to ${{ github.event.inputs.track || 'internal' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FLUTTER_VERSION: '3.24.3'  # stable channel as of 2024
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed for version detection from tags
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Static analysis
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test --reporter expanded --coverage
+
+      - name: Extract version from pubspec.yaml
+        id: version
+        run: |
+          VERSION_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
+          VERSION_CODE=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2)
+          echo "version_name=${VERSION_NAME}" >> $GITHUB_OUTPUT
+          echo "version_code=${VERSION_CODE}" >> $GITHUB_OUTPUT
+          echo "Full version: ${VERSION_NAME}+${VERSION_CODE}"
+
+      - name: Override version if provided
+        if: github.event.inputs.version_name != '' || github.event.inputs.version_code != ''
+        run: |
+          if [ -n "${{ github.event.inputs.version_name }}" ]; then
+            echo "version_name=${{ github.event.inputs.version_name }}" >> $GITHUB_OUTPUT
+          fi
+          if [ -n "${{ github.event.inputs.version_code }}" ]; then
+            echo "version_code=${{ github.event.inputs.version_code }}" >> $GITHUB_OUTPUT
+          fi
+        id: version_override
+
+      - name: Determine final version
+        id: final_version
+        run: |
+          VNAME="${{ steps.version_override.outputs.version_name || steps.version.outputs.version_name }}"
+          VCODE="${{ steps.version_override.outputs.version_code || steps.version.outputs.version_code }}"
+          echo "version_name=${VNAME}" >> $GITHUB_OUTPUT
+          echo "version_code=${VCODE}" >> $GITHUB_OUTPUT
+          echo "Deploying version: ${VNAME}+${VCODE}"
+
+      - name: Create key.properties from secrets
+        env:
+          KEY_STORE_FILE: ${{ secrets.KEY_STORE_FILE }}  # base64 encoded .jks/.keystore
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "${KEY_STORE_FILE}" | base64 -d > android/app/keystore.jks
+          cat > android/key.properties <<EOF
+          storeFile=../app/keystore.jks
+          storePassword=${KEY_STORE_PASSWORD}
+          keyAlias=${KEY_ALIAS}
+          keyPassword=${KEY_PASSWORD}
+          EOF
+          echo "key.properties created"
+
+      - name: Build signed AAB
+        run: |
+          flutter build appbundle --release \
+            --build-name="${{ steps.final_version.outputs.version_name }}" \
+            --build-number="${{ steps.final_version.outputs.version_code }}"
+        env:
+          JAVA_OPTS: "-Xmx4g"
+
+      - name: Verify AAB
+        run: |
+          AAB_PATH=$(find build/app/outputs/bundle/release -name "*.aab" | head -1)
+          echo "AAB: $AAB_PATH"
+          ls -lh "$AAB_PATH"
+          echo "aab_path=$AAB_PATH" >> $GITHUB_OUTPUT
+        id: aab
+
+      - name: Upload AAB as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: ${{ steps.aab.outputs.aab_path }}
+          retention-days: 30
+
+      - name: Deploy to Play Console (Internal Testing)
+        if: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY != '' }}
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY }}
+          packageName: com.calistrack.calistrack
+          releaseFiles: ${{ steps.aab.outputs.aab_path }}
+          track: ${{ github.event.inputs.track || 'internal' }}
+          status: ${{ github.event.inputs.track == 'production' && 'completed' || 'draft' }}
+          inAppUpdatePriority: 0
+          releaseName: ${{ steps.final_version.outputs.version_name }}
+          userFraction: 1.0
+          mappingFile: build/app/outputs/mapping/release/mapping.txt
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g"
+
+      - name: Deploy to Play Console (fastlane alternative)
+        if: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY == '' && secrets.FASTLANE_KEY != '' }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: ./android
+
+      - name: fastlane deploy (if configured)
+        if: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY == '' && secrets.FASTLANE_KEY != '' }}
+        run: |
+          gem install fastlane -v 2.225.0
+          echo "${{ secrets.FASTLANE_KEY }}" | base64 -d > fastlane_key.json
+          export SUPPLY_JSON_KEY=fastlane_key.json
+          fastlane supply \
+            --package com.calistrack.calistrack \
+            --aab ${{ steps.aab.outputs.aab_path }} \
+            --track ${{ github.event.inputs.track || 'internal' }} \
+            --skip_upload_metadata \
+            --skip_upload_images \
+            --skip_upload_screenshots \
+            --skip_upload_changelogs \
+            --json_key fastlane_key.json
+        working-directory: ./android
+
+      - name: Summary
+        run: |
+          echo "## Deploy Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** ${{ steps.final_version.outputs.version_name }}+${{ steps.final_version.outputs.version_code }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Track:** ${{ github.event.inputs.track || 'internal' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **AAB:** ${{ steps.aab.outputs.aab_path }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Artifact:** [Download AAB](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
