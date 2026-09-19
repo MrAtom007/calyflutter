@@ -144,7 +144,7 @@ jobs:
           retention-days: 30
 
       - name: Deploy to Play Console (r0adkll action)
-        if: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY != '' }}
+        if: secrets.PLAY_SERVICE_ACCOUNT_KEY != ''
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY }}
@@ -160,7 +160,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g"
 
       - name: Deploy via fastlane (fallback)
-        if: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY == '' && secrets.FASTLANE_KEY != '' }}
+        if: secrets.PLAY_SERVICE_ACCOUNT_KEY == '' && secrets.FASTLANE_KEY != ''
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
@@ -168,7 +168,7 @@ jobs:
           working-directory: ./android
 
       - name: fastlane deploy
-        if: ${{ secrets.PLAY_SERVICE_ACCOUNT_KEY == '' && secrets.FASTLANE_KEY != '' }}
+        if: secrets.PLAY_SERVICE_ACCOUNT_KEY == '' && secrets.FASTLANE_KEY != ''
         run: |
           gem install fastlane -v 2.225.0
           echo "${{ secrets.FASTLANE_KEY }}" | base64 -d > fastlane_key.json
